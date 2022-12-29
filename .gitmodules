@@ -1,0 +1,3 @@
+[submodule "POS4/client"]
+	path = POS4/client
+	url = https://github.com/kistamet/EasyFood
