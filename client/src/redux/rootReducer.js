@@ -1,16 +1,27 @@
 const initailState = {
-    loading: false,
-    cartItems: [],
-  };
+  loading: false,
+  cartItems: [],
+};
 
-  export const rootReducer = (state = initailState, action) => {
-    switch (action.type) {
-
-      case 'addToCart' : return{
+export const rootReducer = (state = initailState, action) => {
+  switch (action.type) {
+    case "addToCart":
+      return {
         ...state,
         cartItems: [...state.cartItems, action.payload],
-      }
+      };
 
-      default : return state
-    }
-}
+    case "updateCart":
+      return {
+        ...state,
+        cartItems: state.cartItems.map((item) =>
+          item._id === action.payload._id
+            ? { ...item, quantity: action.payload.quantity }
+            : item
+        ),
+      };
+
+    default:
+      return state;
+  }
+};

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 function Item({item}) {
     const dispatch = useDispatch()
     function addToCart(){
-        dispatch({type:'addToCart' , payload : item})
+        dispatch({type:'addToCart' , payload : {...item , quantity :1}})
     }
     return (
         <div className='item'>
