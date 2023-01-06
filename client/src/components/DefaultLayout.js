@@ -11,12 +11,13 @@ import {
 
 } from "@ant-design/icons";
 import '../resourses/layout.css'
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const { Header, Sider, Content } = Layout;
 
 const DefaultLayout = (props) => {
+    const navigate = useNavigate()
     const [collapsed, setCollapsed] = useState(false);
     const { cartItems } = useSelector(state => state.rootReducer);
     const toggle = () => {
@@ -63,7 +64,7 @@ const DefaultLayout = (props) => {
                         className: 'trigger',
                         onClick: toggle,
                     })}
-                    <div className="cart-count d-flex align-items-center">
+                    <div className="cart-count d-flex align-items-center" onClick={()=>navigate('/cart')}>
                         <b><p className="mt-3 mr-2">{cartItems.length}</p></b>
                         <ShoppingCartOutlined />
                     </div>
