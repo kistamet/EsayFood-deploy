@@ -5,26 +5,30 @@ import { Col, Row } from "antd";
 import Item from '../components/Item';
 import '../resourses/items.css'
 import { useDispatch } from 'react-redux';
-function Homepage() {
-    const [itemsData, setItemsData] = useState([]);
-    const dispatch = useDispatch();
-    const getAllItems = () => {
-      dispatch({ type: "showLoading" });
-      axios
-        .get("/api/items/get-all-items")
-        .then((response) => {
-          dispatch({ type: "hideLoading" });
-          setItemsData(response.data);
-        })
-        .catch((error) => {
-          dispatch({ type: "hideLoading" });
-          console.log(error);
-        });
-    };
+import { useCallback } from 'react';
 
-    useEffect(() => {
-        getAllItems();
-    }, []);
+function Homepage() {
+  const [itemsData, setItemsData] = useState([]);
+  const dispatch = useDispatch();
+  const getAllItems = useCallback(() => {
+    dispatch({ type: "showLoading" });
+    axios
+      .get("/api/items/get-all-items")
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        setItemsData(response.data);
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        console.log(error);
+      });
+  }, [dispatch]);
+
+  useEffect(() => {
+    getAllItems();
+  }, [getAllItems]);
+
+  // rest of the component
 
     return (
         <DefaultLayout>
