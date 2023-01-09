@@ -4,15 +4,21 @@ import axios from 'axios'
 import { Col, Row } from "antd";
 import Item from '../components/Item';
 import '../resourses/items.css'
+import { useDispatch } from 'react-redux';
 function Homepage() {
-
     const [itemsData, setItemsData] = useState([]);
+    const dispatch = useDispatch();
     const getAllItems = () => {
-        axios.get("/api/items/get-all-items").then((response) => {
-            setItemsData(response.data)
-
-        }).catch((error) => {
-            console.log(error);
+      dispatch({ type: "showLoading" });
+      axios
+        .get("/api/items/get-all-items")
+        .then((response) => {
+          dispatch({ type: "hideLoading" });
+          setItemsData(response.data);
+        })
+        .catch((error) => {
+          dispatch({ type: "hideLoading" });
+          console.log(error);
         });
     };
 
