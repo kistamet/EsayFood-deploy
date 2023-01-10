@@ -7,10 +7,11 @@ import {
     EditOutlined
   } from "@ant-design/icons";
 import { useCallback } from 'react';
-import { Table } from "antd";
+import { Button, Table , Modal} from "antd";
 
 function Items() {
     const [itemsData, setItemsData] = useState([]);
+    const [addEditModalVisibilty, setAddEditModalVisibilty] = useState(false);
     const dispatch = useDispatch();
     const getAllItems = useCallback(() => {
       dispatch({ type: "showLoading" });
@@ -45,6 +46,9 @@ function Items() {
         {
         title: "Category",
         dataIndex: "category",
+      },        {
+        title: "คงเหลือ",
+        dataIndex: "category",
       },
         {
           title: "Actions",
@@ -60,10 +64,16 @@ function Items() {
         getAllItems();
       }, [getAllItems]);
     return (
-
         <DefaultLayout>
+        <div className="d-flex justify-content-between">
             <h3>Items</h3>
+            <Button type="primary" onClick={()=>setAddEditModalVisibilty(true)}>Add Item</Button>
+        </div>
+            
             <Table columns={columns} dataSource={itemsData} bordered />
+            <Modal onCancel={()=>setAddEditModalVisibilty(false)} visible={addEditModalVisibilty} title='Add New Item' footer={false}>
+            sdfsdf
+            </Modal>
         </DefaultLayout>
 
     )
