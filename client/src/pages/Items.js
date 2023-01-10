@@ -7,7 +7,7 @@ import {
     EditOutlined
   } from "@ant-design/icons";
 import { useCallback } from 'react';
-import { Button, Table , Modal, Form , Input, Select} from "antd";
+import { Button, Table , Modal, Form , Input, Select ,message} from "antd";
 
 function Items() {
     const [itemsData, setItemsData] = useState([]);
@@ -70,9 +70,13 @@ function Items() {
           .post("/api/items/add-item" , values)
           .then((response) => {
             dispatch({ type: "hideLoading" });
+            message.success('Item add successfully')
+            setAddEditModalVisibilty(false)
+            getAllItems()
           })
           .catch((error) => {
             dispatch({ type: "hideLoading" });
+            message.success('Somthing went wrong')
             console.log(error);
           });
 

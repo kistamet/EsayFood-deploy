@@ -11,6 +11,17 @@ router.get("/get-all-items", async (req, res) => {
     }
 });
 
+router.post("/add-item", async (req, res) => {
+    try {
+        const newitem = new ItemModel(req.body)
+        await newitem.save()
+        res.send('Item added successfull')
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+
+
 
 
 
