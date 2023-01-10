@@ -74,3 +74,14 @@
   .cart-count{
     cursor: pointer ;
   }
+  .spinner{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+}
+
+.spinner-border{
+    height: 100px;
+    width: 100px;
+}

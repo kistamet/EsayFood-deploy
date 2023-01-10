@@ -7,7 +7,7 @@ import {
     EditOutlined
   } from "@ant-design/icons";
 import { useCallback } from 'react';
-import { Button, Table , Modal} from "antd";
+import { Button, Table , Modal, Form , Input, Select} from "antd";
 
 function Items() {
     const [itemsData, setItemsData] = useState([]);
@@ -63,6 +63,20 @@ function Items() {
       useEffect(() => {
         getAllItems();
       }, [getAllItems]);
+
+      const onFinish=(values)=>{
+        dispatch({ type: "showLoading" });
+        axios
+          .post("/api/items/add-item" , values)
+          .then((response) => {
+            dispatch({ type: "hideLoading" });
+          })
+          .catch((error) => {
+            dispatch({ type: "hideLoading" });
+            console.log(error);
+          });
+
+      }
     return (
         <DefaultLayout>
         <div className="d-flex justify-content-between">
@@ -72,7 +86,31 @@ function Items() {
             
             <Table columns={columns} dataSource={itemsData} bordered />
             <Modal onCancel={()=>setAddEditModalVisibilty(false)} visible={addEditModalVisibilty} title='Add New Item' footer={false}>
-            sdfsdf
+            <Form layout="vertical" onFinish={onFinish}>
+                <Form.Item name='name' label='Name'>
+                    <Input placeholder="Name" />
+                </Form.Item>
+
+                <Form.Item name='price' label='Price'>
+                    <Input placeholder="price" />
+                </Form.Item>
+
+                <Form.Item name='image' label='Image URL'>
+                    <Input placeholder="image" />
+                </Form.Item>
+
+                <Form.Item name='category' label='Category'>
+                    <Select>
+                        <Select.Option value='fruits'>fruits</Select.Option>
+                        <Select.Option value='vegetables'>Vegetables</Select.Option>
+
+                        <Select.Option value='meat'>Meat</Select.Option>
+                    </Select>
+                </Form.Item>
+                <div className="d-flex justify-content-end">
+                    <Button htmlType="submit" type="primary">SAVE</Button>
+                </div>
+            </Form>
             </Modal>
         </DefaultLayout>
 

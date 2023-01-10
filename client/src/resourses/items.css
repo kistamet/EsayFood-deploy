@@ -21,14 +21,17 @@
      color: white !important;
 }
 
-.spinner{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50% , -50%);
+input{
+    border: 1px solid rgb(0, 39, 31) !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
-
-.spinner-border{
-    height: 100px;
-    width: 100px;
+input:focus{
+    box-shadow: none !important;
+    outline: none !important;
+}
+.ant-select-selector{
+    border: 1px solid rgb(0, 39, 31) !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
