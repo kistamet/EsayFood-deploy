@@ -28,6 +28,22 @@ function Items() {
       });
   }, [dispatch]);
 
+  const deleteItem = (record) => {
+    dispatch({ type: "showLoading" });
+    axios
+      .post("/api/items/delete-item" , {itemId : record._id})
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        message.success('Item deleted successdully')
+        getAllItems()
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        message.error('Something went wrong')
+        console.log(error);
+      });
+  };
+
   const columns = [
     {
       title: "Name",
@@ -59,7 +75,7 @@ function Items() {
           setEditingItem(record)
           setAddEditModalVisibilty(true)
         }} />
-        <DeleteOutlined className="mx-2" />
+        <DeleteOutlined className="mx-2" onClick={()=> deleteItem(record)} />
 
       </div>
     },
