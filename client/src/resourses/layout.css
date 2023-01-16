@@ -24,16 +24,19 @@
 
 .ant-layout-has-sider {
     padding: 15px !important;
+    
 }
 
 .ant-layout-sider {
     border-radius: 10px !important;
+    color: #1890ff !important;
 }
 
 .ant-layout-sider-children {
     padding-top: 15px !important;
     padding-right: 20px !important;
     height: 95vh !important;
+    
 }
 
 .ant-layout-header {

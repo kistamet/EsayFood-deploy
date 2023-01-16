@@ -58,10 +58,10 @@ const DefaultLayout = (props) => {
             <Link to="/Bills">Bills</Link>
           </Menu.Item>
           <Menu.Item key="/Items" icon={<CopyOutlined />}>
-            <Link to="/Items">Items</Link>
+            <Link to="/Items">คลังสินค้า</Link>
           </Menu.Item>
           <Menu.Item key="/Customers" icon={<UnorderedListOutlined />}>
-            <Link to="/Customers">Customers</Link>
+            <Link to="/Customers">ประวัติการขาย</Link>
           </Menu.Item>
           <Menu.Item key="/Logout" icon={<LoginOutlined />}>
             Logout

@@ -124,8 +124,8 @@ function Items() {
   return (
     <DefaultLayout>
       <div className="d-flex justify-content-between">
-        <h3>Items</h3>
-        <Button type="primary" onClick={() => setAddEditModalVisibilty(true)}>Add Item</Button>
+        <h3>คลังสินค้า</h3>
+        <Button type="primary" onClick={() => setAddEditModalVisibilty(true)}>เพิ่มสินค้า</Button>
       </div>
 
       <Table columns={columns} dataSource={itemsData} bordered />
@@ -135,17 +135,17 @@ function Items() {
           setAddEditModalVisibilty(false)
         }} 
         visible={addEditModalVisibilty} 
-        title={`${editingItem !==null ? 'Edit Item' : 'Add New Item'}`}
+        title={`${editingItem !==null ? 'แก้ไขสินค้า' : 'เพิ่มสินค้า'}`}
         footer={false}
         >
           <Form
             initialValues={editingItem}
             layout="vertical" onFinish={onFinish}>
-            <Form.Item name='name' label='Name'>
+            <Form.Item name='name' label='ชื่อ'>
               <Input placeholder="Name" />
             </Form.Item>
 
-            <Form.Item name='price' label='Price'>
+            <Form.Item name='price' label='ราคา'>
               <Input placeholder="price" />
             </Form.Item>
 
@@ -153,19 +153,20 @@ function Items() {
               <Input placeholder="image" />
             </Form.Item>
 
-            <Form.Item name='category' label='Category'>
+            <Form.Item name='category' label='ประเภท'>
               <Select>
-                <Select.Option value='fruits'>fruits</Select.Option>
-                <Select.Option value='vegetables'>Vegetables</Select.Option>
+                <Select.Option value='อาหารจานเดียว'>อาหารจานเดียว</Select.Option>
+                <Select.Option value='กับข้าว'>กับข้าว</Select.Option>
 
-                <Select.Option value='meat'>Meat</Select.Option>
+                <Select.Option value='ประเภททอด'>ประเภททอด</Select.Option>
+                <Select.Option value='ประเภทต้ม'>ประเภทต้ม</Select.Option>
               </Select>
             </Form.Item>
             <Form.Item name='stock' label='Stock'>
               <Input placeholder="stock" />
             </Form.Item>
             <div className="d-flex justify-content-end">
-              <Button htmlType="submit" type="primary">SAVE</Button>
+              <Button htmlType="submit" type="primary">บันทึก</Button>
             </div>
           </Form>
         </Modal>
