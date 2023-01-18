@@ -162,9 +162,6 @@ function Items() {
                 <Select.Option value='ประเภทต้ม'>ประเภทต้ม</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item name='stock' label='Stock'>
-              <Input placeholder="stock" />
-            </Form.Item>
             <div className="d-flex justify-content-end">
               <Button htmlType="submit" type="primary">บันทึก</Button>
             </div>
