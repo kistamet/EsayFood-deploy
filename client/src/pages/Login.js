@@ -1,13 +1,29 @@
-import React from 'react'
-import { Button,Form, Input, Row, message ,Col} from "antd";
-import { Link } from 'react-router-dom';
-// import '.../resourses/authentication.css'
+import React, { useEffect } from 'react'
+import { Button,Form, Input, Row,message ,Col} from "antd";
+import '../resourses/authentication.css'
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 function Login() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const onFinish=(values)=>{
+    dispatch({type:'showLoading'})
+      axios.post('/api/users/login', values).then((res)=>{
+        message.success('Login successfull')
+      localStorage.setItem('pos-user', JSON.stringify(res.data))
+      navigate('/home')
+    }).catch(()=>{
+        dispatch({type:'hideLoading'})
+        message.error('Something went wrong')
+      })
+  }
 
-    const onFinish=(Values)=>{
-        console.log(Values)
-    }
+  useEffect(()=>{
+    if(localStorage.getItem('pos-user'))
+    navigate('/home')
+  },[])
   return (
     <div className='authentication'>
         <Row>
@@ -20,7 +36,7 @@ function Login() {
               <hr/>
               <h3>Login</h3>
 
-            <Form.Item name='userid' label='user ID'>
+            <Form.Item name='userId' label='user ID'>
               <Input  />
             </Form.Item>
 
@@ -30,7 +46,7 @@ function Login() {
             <div className="d-flex justify-content-between align-items-center">
               <Link to='/register'> Not yet Register ? Click to Login </Link>
               <Button htmlType="submit" type="primary" >
-                Register</Button>
+                Login</Button>
             </div>
           </Form>
           </Col>
