@@ -4,15 +4,21 @@ const router = express.Router();
 
 router.post("/login", async (req, res) => {
     try {
-    await UserModel.findOne({userid : req.body.userid, password : req.body.password, verified:true})
+    const user = await UserModel.findOne({userId : req.body.userId, password : req.body.password, verified:true})
+    if(user)
+    {
         res.send('Login successfull')
+    }
+    else{
+    res.status(400).json({message : "Login fail", user});
+    }
     } catch (error) {
         res.status(400).json(error);
     }
 });
 router.post("/register", async (req, res) => {
     try {
-        const newuser = new ItemModel(req.body)
+        const newuser = new UserModel({...req.body , verified:false})
         await newuser.save()
         res.send('User regisered successfull')
     } catch (error) {
