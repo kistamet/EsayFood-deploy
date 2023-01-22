@@ -12,18 +12,21 @@ function Register() {
     const navigate = useNavigate()
     const onFinish=(values)=>{
       dispatch({type:'showLoading'})
-      axios.post('/api/users/register' , values).then((res)=>{
-       dispatch({type:'hideLoading'})
-        message.success('Registration successfull , please wait for verification')
-      }).catch(()=>{
-       dispatch({type:'hideLoading'})
-        message.error('Something went wrong')
-      })
-}
+        axios.post('/api/users/register', values).then((res)=>{
+          message.success('Registration successfull , please wait for verification')
+        }).catch((err) => {
+          if (err.response.data.message === "UserId already exists") {
+              message.error("UserId already exists");
+          } else {
+              message.error("Something went wrong");
+          }
+          dispatch({ type: "hideLoading" });
+      });
+  }
   useEffect(()=>{
     if(localStorage.getItem('pos-user'))
     navigate('/home')
-  },[])
+  },[navigate])
   return (
     <div className='authentication'>
         <Row>

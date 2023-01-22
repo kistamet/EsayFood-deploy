@@ -4,10 +4,10 @@ const dbConnect = require('./dbConnect');
 const app = express();
 app.use(express.json());
 const itemsRoute = require('./routes/itemsRoute');
-const usersRoute = require('./routes/userRoute');
+const userRoute = require("./routes/userRoute");
 
 app.use('/api/items/', itemsRoute);
-app.use('/api/users/', userRoute);
+app.use("/api/users/", userRoute);
 const port = 5000;
 
 app.get('/', (req, res) => {
