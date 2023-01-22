@@ -58,7 +58,7 @@ const DefaultLayout = (props) => {
             <Link to="/Bills">Bills</Link>
           </Menu.Item>
           <Menu.Item key="/Items" icon={<CopyOutlined />}>
-            <Link to="/Items">คลังสินค้า</Link>
+            <Link to="/Items">สินค้าคงคลัง</Link>
           </Menu.Item>
           <Menu.Item key="/Customers" icon={<UnorderedListOutlined />}>
             <Link to="/Customers">ประวัติการขาย</Link>

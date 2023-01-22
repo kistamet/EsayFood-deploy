@@ -7,7 +7,7 @@ const itemsRoute = require('./routes/itemsRoute');
 const userRoute = require('./routes/userRoute');
 
 app.use('/api/items/', itemsRoute);
-app.use('/api/users/', usersRoute);
+app.use('/api/users/', userRoute);
 const port = 5000;
 
 app.get('/', (req, res) => {

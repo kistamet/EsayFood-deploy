@@ -125,7 +125,7 @@ function Items() {
     <DefaultLayout>
       <div className="d-flex justify-content-between">
         <h3>คลังสินค้า</h3>
-        <Button type="primary" onClick={() => setAddEditModalVisibilty(true)}>เพิ่มสินค้า</Button>
+        <Button type="primary" onClick={() => setAddEditModalVisibilty(true)} >เพิ่มสินค้า</Button>
       </div>
 
       <Table columns={columns} dataSource={itemsData} bordered />

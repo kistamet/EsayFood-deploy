@@ -2,7 +2,7 @@ import React from 'react'
 import { Button,Form, Input, Row, message ,Col} from "antd";
 import axios from 'axios'
 import { Link } from 'react-router-dom';
-// import '.../resourses/authentication.css'
+import '../resourses/authentication.css'
 
 function Register() {
 
