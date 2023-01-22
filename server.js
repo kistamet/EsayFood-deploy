@@ -1,13 +1,13 @@
 const express = require('express');
-const dbConnect = require('./dbConnect');
+const dbConnect = require("./dbConnect");
 
 const app = express();
 app.use(express.json());
 const itemsRoute = require('./routes/itemsRoute');
-const userRoute = require('./routes/userRoute');
+const usersRoute = require("./routes/userRoute");
 
 app.use('/api/items/', itemsRoute);
-app.use('/api/users/', userRoute);
+app.use('/api/users/', usersRoute);
 const port = 5000;
 
 app.get('/', (req, res) => {

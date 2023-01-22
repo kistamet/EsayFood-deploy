@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.post("/login", async (req, res) => {
     try {
-    await UserModel.findOne({userid : req.body.userid, password : req.body.password, verified:true})
+    await UserModel.findOne({userId : req.body.userid, password : req.body.password, verified:true})
         res.send('Login successfull')
     } catch (error) {
         res.status(400).json(error);

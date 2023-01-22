@@ -1,7 +1,6 @@
 .authentication{
     display : flex;
     align-items:center;
-    justify-content: center;
     height: 100vh;
     background-image: url('./auth.svg');
     background-size: 100% 100%;
