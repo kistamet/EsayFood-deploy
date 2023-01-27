@@ -10,6 +10,7 @@ import CustomerCartpage from './pages/CustomerCartpage';
 
 
 import { Navigate } from "react-router-dom";
+import RegisterRestaurant from './pages/RegisterRestaurant';
 function App() {
   return (
     <div className="App">
@@ -22,6 +23,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/CustomersHomepage' element={<CustomerHomepage />} />
           <Route path='/CustomerCartpage' element={<CustomerCartpage />} />
+          <Route path='/RegisterRestaurant' element={<RegisterRestaurant />} />
           <Route path='/' element={<Login />} />
         </Routes>
       </BrowserRouter>

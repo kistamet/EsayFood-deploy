@@ -1,14 +1,14 @@
-import React, { useEffect} from "react";
-import { Button, Layout} from "antd";
+import React, { useEffect } from "react";
+import { Button, Layout } from "antd";
 import {
   ShoppingCartOutlined,
   LeftOutlined
 } from "@ant-design/icons";
 import "../resourses/CustomersLayout.css";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const { Header,  Content } = Layout;
+const { Header, Content } = Layout;
 
 const CustomersLayout = (props) => {
   const navigate = useNavigate();
@@ -22,15 +22,17 @@ const CustomersLayout = (props) => {
       {loading && (
         <div className="spinner">
           <div
-          class="spinner-border"
-          role="status"
-        >
-        </div>
+            class="spinner-border"
+            role="status"
+          >
+          </div>
         </div>
       )}
       <Layout className="site-layout-customers">
-        <Header className="site-layout-background-customers" style={{ padding: 10 } }>
-        <Button icon={<LeftOutlined style={{fontSize:'70px', height:'25px' , backgroundColor: 'orange'}} />}         onClick={() => navigate("/CustomersHomepage")}></Button>
+        <Header className="site-layout-background-customers" style={{ padding: 10 }}>
+          <Button style={{backgroundColor: 'orange' }} icon={<LeftOutlined style={{ fontSize: '70px', height: '25px', backgroundColor: 'orange' }} />}
+            onClick={() => navigate("/CustomersHomepage")}>
+          </Button>
           <div
             className="cart-count d-flex align-items-center"
             onClick={() => navigate("/CustomerCartpage")}
