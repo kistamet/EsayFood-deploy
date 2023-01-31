@@ -22,9 +22,9 @@ const DefaultLayout = (props) => {
   const toggle = () => {
     setCollapsed(!collapsed);
   };
-
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    
   }, [cartItems]);
   return (
     <Layout>
@@ -65,7 +65,7 @@ const DefaultLayout = (props) => {
           </Menu.Item>
           <Menu.Item key="/Logout" icon={<LoginOutlined />}onClick={()=>{
           localStorage.removeItem('pos-user')
-          navigate('/login')
+          navigate('/LoginRestaurant')
           }}>
             Logout
           </Menu.Item>

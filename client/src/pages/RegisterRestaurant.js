@@ -37,23 +37,20 @@ function RegisterRestaurant() {
                         layout="vertical"
                         onFinish={onFinish}
                     >
-                        <h1><b>Easy POS</b></h1>
+                        <h1><b>Register Restaurant</b></h1>
                         <hr />
-                        <Form.Item name='namerestaurant' label='Name'>
+                        <Form.Item name='namerestaurant' label='Name Restaurant'>
                             <Input />
                         </Form.Item>
-                        <Form.Item name='name' label='Menu'>
+                        <Form.Item name='restaurantId' label='Restaurant ID'>
                             <Input />
                         </Form.Item>
-                        <Form.Item name='price' label='Menu'>
-                            <Input />
-                        </Form.Item>
-                        <Form.Item name='category' label='category'>
-                            <Input />
+                        <Form.Item name='restaurantpassword' label='password'>
+                            <Input type='password' />
                         </Form.Item>
 
                         <div className="d-flex justify-content-between align-items-center">
-                            <Link to='/login'>Already Register ? Click to login</Link>
+                            <Link to='/LoginRestaurant'>Already Register ? Click to login</Link>
                             <Button htmlType="submit" type="primary">Register</Button>
                         </div>
                     </Form>

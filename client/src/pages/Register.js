@@ -35,14 +35,14 @@ function Register() {
             layout="vertical"
             onFinish={onFinish}
             >
-              <h1><b>Easy POS</b></h1>
+              <h1><b>Easy Food</b></h1>
               <hr/>
               <h3>Register</h3>
             <Form.Item name='name' label='Name'>
             <Input  />
             </Form.Item>
 
-            <Form.Item name='userId' label='user ID'>
+            <Form.Item name='userId' label='User ID'>
               <Input  />
             </Form.Item>
 

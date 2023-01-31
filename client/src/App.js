@@ -7,7 +7,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import CustomerHomepage from './pages/CustomersHomepage';
 import CustomerCartpage from './pages/CustomerCartpage';
-
+import LoginRestaurant from './pages/LoginRestaurant';
 
 import { Navigate } from "react-router-dom";
 import RegisterRestaurant from './pages/RegisterRestaurant';
@@ -24,6 +24,8 @@ function App() {
           <Route path='/CustomersHomepage' element={<CustomerHomepage />} />
           <Route path='/CustomerCartpage' element={<CustomerCartpage />} />
           <Route path='/RegisterRestaurant' element={<RegisterRestaurant />} />
+          <Route path='/LoginRestaurant' element={<LoginRestaurant />} />
+
           <Route path='/' element={<Login />} />
         </Routes>
       </BrowserRouter>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Row } from "antd";
+import { Col, Row } from "antd";
 import '../resourses/CustomersItems.css'
 import CustomersLayout from '../components/CustomersLayout'
 import { useDispatch } from 'react-redux';

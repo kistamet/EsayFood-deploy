@@ -5,15 +5,15 @@ import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-function Login() {
+function LoginRestaurant() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const onFinish=(values)=>{
     dispatch({type:'showLoading'})
-      axios.post('/api/users/login', values).then((res)=>{
+      axios.post('/api/restaurants/loginRestaurant', values).then((res)=>{
         message.success('Login successfull')
       localStorage.setItem('pos-user', JSON.stringify(res.data))
-      navigate('/CustomersHomepage')
+      navigate('/home')
     }).catch(()=>{
         dispatch({type:'hideLoading'})
         message.error('Something went wrong')
@@ -22,7 +22,7 @@ function Login() {
 
   useEffect(() => {
     if (localStorage.getItem("pos-user")) {
-      navigate("/CustomersHomepage");
+      navigate("/home");
     }
   }, [navigate]);
   return (
@@ -33,19 +33,19 @@ function Login() {
             layout="vertical"
             onFinish={onFinish}
             >
-              <h1><b>Easy Food</b></h1>
+              <h1><b>Restaurant</b></h1>
               <hr/>
               <h3>Login</h3>
 
-            <Form.Item name='userId' label='user ID'>
+            <Form.Item name='restaurantId' label='Restaurant ID'>
               <Input  />
             </Form.Item>
 
-            <Form.Item name='password' label='Password'>
+            <Form.Item name='restaurantpassword' label='Password'>
               <Input  type='password'/>
             </Form.Item>
             <div className="d-flex justify-content-between align-items-center">
-              <Link to='/register'> Not yet Register ? Click to Login </Link>
+              <Link to='/RegisterRestaurant'> Not yet Register ? Click to Login </Link>
               <Button htmlType="submit" type="primary" >
                 Login</Button>
             </div>
@@ -56,4 +56,4 @@ function Login() {
   )
 }
 
-export default Login
+export default LoginRestaurant
