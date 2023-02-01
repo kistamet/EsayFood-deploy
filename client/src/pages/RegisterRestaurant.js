@@ -16,8 +16,8 @@ function RegisterRestaurant() {
         axios.post('/api/restaurants/RegisterRestaurant', values).then((res) => {
             message.success('Registration successfull , please wait for verification')
         }).catch((err) => {
-            if (err.response.data.message === "UserId already exists") {
-                message.error("UserId already exists");
+            if (err.response.data.message === "Restaurant ID already exists") {
+                message.error("Restaurant ID already exists");
             } else {
                 message.error("Something went wrong");
             }

@@ -22,6 +22,10 @@ router.post("/loginRestaurant", async (req, res) => {
 
 router.post("/RegisterRestaurant", async (req, res) => {
     try {
+        const existingUser = await restaurantModel.findOne({restaurantId: req.body.restaurantId});
+        if (existingUser) {
+            res.status(400).json({ message: "Restaurant ID already exists"});
+        } else {
         const menuItems_name = req.body.name;
         const menuItems_price = req.body.price;
         const menuItems_category = req.body.category;
@@ -47,6 +51,7 @@ router.post("/RegisterRestaurant", async (req, res) => {
         });
         await newuser.save();
         res.send("User Registered successfully");
+    }
     } catch (error) {
         res.status(400).json(error);
     }
