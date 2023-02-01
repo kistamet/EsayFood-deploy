@@ -8,7 +8,7 @@ const menuItemSchema = new mongoose.Schema({
     image: { type: String, required: false },
     stock: { type: Number, required: false },
     namerestaurant:[{type: mongoose.Schema.Types.ObjectId, ref: 'restaurants'}],
-  }, {timestamps : false});
+  }, {timestamps : true});
 
 const menuItemModel = mongoose.model("menuitems", menuItemSchema);
 

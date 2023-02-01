@@ -13,13 +13,13 @@ function LoginRestaurant() {
       axios.post('/api/restaurants/loginRestaurant', values).then((res)=>{
         message.success('Login successfull')
       localStorage.setItem('pos-user', JSON.stringify(res.data))
+      localStorage.setItem('pop-name-restaurant', JSON.stringify(res.data.restaurant.namerestaurant))
       navigate('/home')
     }).catch(()=>{
         dispatch({type:'hideLoading'})
         message.error('Something went wrong')
       })
   }
-
   useEffect(() => {
     if (localStorage.getItem("pos-user")) {
       navigate("/home");
@@ -36,7 +36,6 @@ function LoginRestaurant() {
               <h1><b>Restaurant</b></h1>
               <hr/>
               <h3>Login</h3>
-
             <Form.Item name='restaurantId' label='Restaurant ID'>
               <Input  />
             </Form.Item>

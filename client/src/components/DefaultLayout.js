@@ -22,6 +22,9 @@ const DefaultLayout = (props) => {
   const toggle = () => {
     setCollapsed(!collapsed);
   };
+
+  const namerestaurant = JSON.parse(localStorage.getItem("pop-name-restaurant"));
+  
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
     
@@ -39,7 +42,7 @@ const DefaultLayout = (props) => {
       )}
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo">
-          <h3>Easy POS</h3>
+          <h3>{namerestaurant}</h3>
         </div>
         <Menu
           theme="dark"
@@ -65,6 +68,7 @@ const DefaultLayout = (props) => {
           </Menu.Item>
           <Menu.Item key="/Logout" icon={<LoginOutlined />}onClick={()=>{
           localStorage.removeItem('pos-user')
+          localStorage.removeItem('pop-name-restaurant')
           navigate('/LoginRestaurant')
           }}>
             Logout

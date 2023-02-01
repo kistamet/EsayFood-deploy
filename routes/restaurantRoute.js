@@ -5,15 +5,15 @@ const router = express.Router();
 
 router.post("/loginRestaurant", async (req, res) => {
     try {
-        const user = await restaurantModel.findOne({
+        const restaurant = await restaurantModel.findOne({
             restaurantId: req.body.restaurantId,
             restaurantpassword: req.body.restaurantpassword,
             verified: true
         })
-        if (user) {
-            res.send('Login successfull')
+        if (restaurant) {
+            res.send({ message: 'Login successfull', restaurant });
         } else {
-            res.status(400).json({ message: "Login fail", user });
+            res.status(400).json({ message: "Login fail", restaurant });
         }
     } catch (error) {
         res.status(400).json(error);
@@ -25,11 +25,13 @@ router.post("/RegisterRestaurant", async (req, res) => {
         const menuItems_name = req.body.name;
         const menuItems_price = req.body.price;
         const menuItems_category = req.body.category;
+        const menuItems_namerestaurant = req.body.namerestaurant;
 
         const newMenu = new menuItemModel({ 
             name: menuItems_name , 
             price: menuItems_price ,
-            category: menuItems_category
+            category: menuItems_category,
+            namerestaurant:req.body.namerestaurant
         });
         await newMenu.save();
         const newuser = new restaurantModel({ 
