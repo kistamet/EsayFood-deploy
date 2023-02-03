@@ -8,6 +8,7 @@ import {
   CopyOutlined,
   UnorderedListOutlined,
   LoginOutlined,
+  UserOutlined
 } from "@ant-design/icons";
 import "../resourses/layout.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -42,7 +43,7 @@ const DefaultLayout = (props) => {
       )}
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo">
-          <h3>{namerestaurant}</h3>
+          <h3>Easy POS</h3>
         </div>
         <Menu
           theme="dark"
@@ -66,6 +67,9 @@ const DefaultLayout = (props) => {
           <Menu.Item key="/Customers" icon={<UnorderedListOutlined />}>
             <Link to="/Customers">ประวัติการขาย</Link>
           </Menu.Item>
+          <Menu.Item key="/profile" icon={<UserOutlined />}>
+            <Link to="/profile">Profile</Link>
+          </Menu.Item>
           <Menu.Item key="/Logout" icon={<LoginOutlined />}onClick={()=>{
           localStorage.removeItem('pos-user')
           localStorage.removeItem('pop-name-restaurant')
@@ -76,7 +80,7 @@ const DefaultLayout = (props) => {
         </Menu>
       </Sider>
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 10 }}>
+        <Header className="site-layout-background" style={{ padding: 10 }} >
           {React.createElement(
             collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
             {
@@ -84,6 +88,7 @@ const DefaultLayout = (props) => {
               onClick: toggle,
             }
           )}
+          <h3>{namerestaurant}</h3>
           <div
             className="cart-count d-flex align-items-center"
             onClick={() => navigate("/cart")}
