@@ -67,8 +67,8 @@ const DefaultLayout = (props) => {
           <Menu.Item key="/Customers" icon={<UnorderedListOutlined />}>
             <Link to="/Customers">ประวัติการขาย</Link>
           </Menu.Item>
-          <Menu.Item key="/profile" icon={<UserOutlined />}>
-            <Link to="/profile">Profile</Link>
+          <Menu.Item key="/ProfileRestaurant" icon={<UserOutlined />}>
+            <Link to="/ProfileRestaurant">Profile</Link>
           </Menu.Item>
           <Menu.Item key="/Logout" icon={<LoginOutlined />}onClick={()=>{
           localStorage.removeItem('pos-user')
