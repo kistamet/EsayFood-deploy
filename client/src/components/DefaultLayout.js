@@ -6,9 +6,12 @@ import {
   HomeOutlined,
   ShoppingCartOutlined,
   CopyOutlined,
-  UnorderedListOutlined,
   LoginOutlined,
-  UserOutlined
+  UserOutlined,
+  AppstoreOutlined,
+  ContainerOutlined,
+  HistoryOutlined,
+  SolutionOutlined 
 } from "@ant-design/icons";
 import "../resourses/layout.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -58,13 +61,21 @@ const DefaultLayout = (props) => {
             <Link to="/cart">Cart</Link>
           </Menu.Item>
 
+          <Menu.Item key="/Tabelrestaurant" icon={<AppstoreOutlined />}>
+            <Link to="/Tabelrestaurant">โต๊ะอาหาร</Link>
+          </Menu.Item>
+
+          <Menu.Item key="/Queuecustomers" icon={<SolutionOutlined />}>
+            <Link to="/Queuecustomers">ลำดับคิว</Link>
+          </Menu.Item>
+
           <Menu.Item key="/Bills" icon={<CopyOutlined />}>
             <Link to="/Bills">Bills</Link>
           </Menu.Item>
-          <Menu.Item key="/Items" icon={<CopyOutlined />}>
+          <Menu.Item key="/Items" icon={<ContainerOutlined />}>
             <Link to="/Items">สินค้าคงคลัง</Link>
           </Menu.Item>
-          <Menu.Item key="/Customers" icon={<UnorderedListOutlined />}>
+          <Menu.Item key="/Customers" icon={<HistoryOutlined />}>
             <Link to="/Customers">ประวัติการขาย</Link>
           </Menu.Item>
           <Menu.Item key="/ProfileRestaurant" icon={<UserOutlined />}>

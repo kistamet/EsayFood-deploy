@@ -66,7 +66,7 @@ function CartPage() {
   ];
   return (
     <DefaultLayout>
-      <h3>cart</h3>
+      <h3>Cart</h3>
       <Table columns={columns} dataSource={cartItems} bordered />
     </DefaultLayout>
   );
