@@ -11,7 +11,7 @@ router.post("/loginRestaurant", async (req, res) => {
             verified: true
         })
         if (restaurant) {
-            res.send({ message: 'Login successfull', restaurant });
+            res.send({ message: 'Login successfull', restaurant ,menu: restaurant.menu });
         } else {
             res.status(400).json({ message: "Login fail", restaurant });
         }

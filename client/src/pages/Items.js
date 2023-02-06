@@ -14,13 +14,25 @@ function Items() {
   const [addEditModalVisibilty, setAddEditModalVisibilty] = useState(false);
   const dispatch = useDispatch();
   const [editingItem, setEditingItem] = useState(null)
+  const getmenuitems = JSON.parse(localStorage.getItem("pop-name-restaurant2"));
+  const menuId = getmenuitems[0].menuId;
+
   const getAllItems = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios
       .get("/api/items/get-all-items")
       .then((response) => {
         dispatch({ type: "hideLoading" });
-        setItemsData(response.data);
+        console.log(menuId)
+        console.log(response.data._id)
+        for (let i = 0; i < menuId.length; i++) {
+          const response = menuId[i];
+          if (menuId === response._id) {
+              console.log(i);
+              setItemsData(response);
+              break;
+          }
+      }
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });

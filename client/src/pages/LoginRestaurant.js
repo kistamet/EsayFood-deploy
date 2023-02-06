@@ -14,6 +14,7 @@ function LoginRestaurant() {
         message.success('Login successfull')
       localStorage.setItem('pos-user', JSON.stringify(res.data))
       localStorage.setItem('pop-name-restaurant', JSON.stringify(res.data.restaurant.namerestaurant))
+      localStorage.setItem('pop-name-restaurant2', JSON.stringify(res.data.menu))
       navigate('/home')
     }).catch(()=>{
         dispatch({type:'hideLoading'})
