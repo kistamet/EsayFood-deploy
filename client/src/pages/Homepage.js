@@ -10,6 +10,8 @@ import { useCallback } from 'react';
 function Homepage() {
   const [itemsData, setItemsData] = useState([]);
   const [selectedCategory, setSelectedCategoty] = useState("อาหารจานเดียว");
+  const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
+  const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
   const categories = [
     {
       name: "อาหารจานเดียว",
@@ -47,7 +49,6 @@ function Homepage() {
   }, [getAllItems]);
 
   // rest of the component
-
   return (
     <DefaultLayout>
       <div className="d-flex categories">
@@ -61,11 +62,10 @@ function Homepage() {
         })}
       </div>
       <Row gutter={20}>
-        {itemsData.filter((i) => i.category===selectedCategory).map((item) => {
+        {itemsData.filter((i) => i.category===selectedCategory & i.IDrestaurant===Idrestaurant  ).map((item) => {
           return <Col span={6} xs={24} lg={6} md={12} sm={6}>
 
             <Item item={item} />
-
           </Col>
 
         })}

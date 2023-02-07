@@ -29,15 +29,14 @@ router.post("/RegisterRestaurant", async (req, res) => {
         const menuItems_name = req.body.name;
         const menuItems_price = req.body.price;
         const menuItems_category = req.body.category;
-        const menuItems_namerestaurant = req.body.namerestaurant;
+        const menuItems_IDrestaurant = req.body.restaurantId;
 
         const newMenu = new menuItemModel({ 
             name: menuItems_name , 
             price: menuItems_price ,
             category: menuItems_category,
-            namerestaurant:req.body.namerestaurant
+            IDrestaurant : menuItems_IDrestaurant
         });
-        await newMenu.save();
         const newuser = new restaurantModel({ 
             namerestaurant: req.body.namerestaurant, 
             restaurantId: req.body.restaurantId,

@@ -84,6 +84,7 @@ const DefaultLayout = (props) => {
           <Menu.Item key="/Logout" icon={<LoginOutlined />}onClick={()=>{
           localStorage.removeItem('pos-user')
           localStorage.removeItem('pop-name-restaurant')
+          localStorage.removeItem('pop-name-restaurant2')
           navigate('/LoginRestaurant')
           }}>
             Logout

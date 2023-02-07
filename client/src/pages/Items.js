@@ -14,8 +14,11 @@ function Items() {
   const [addEditModalVisibilty, setAddEditModalVisibilty] = useState(false);
   const dispatch = useDispatch();
   const [editingItem, setEditingItem] = useState(null)
-  const getmenuitems = JSON.parse(localStorage.getItem("pop-name-restaurant2"));
-  const menuId = getmenuitems[0].menuId;
+
+
+  const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
+  const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
+
 
   const getAllItems = useCallback(() => {
     dispatch({ type: "showLoading" });
@@ -23,16 +26,8 @@ function Items() {
       .get("/api/items/get-all-items")
       .then((response) => {
         dispatch({ type: "hideLoading" });
-        console.log(menuId)
-        console.log(response.data._id)
-        for (let i = 0; i < menuId.length; i++) {
-          const response = menuId[i];
-          if (menuId === response._id) {
-              console.log(i);
-              setItemsData(response);
-              break;
-          }
-      }
+        setItemsData(response.data);
+        console.log(response.data)
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -102,10 +97,10 @@ function Items() {
     if(editingItem===null)
     {
       axios
-      .post("/api/items/add-item", values )
+      .post("/api/items/add-item",{...values , Idrestaurant : Idrestaurant } )
       .then((response) => {
         dispatch({ type: "hideLoading" });
-        message.success('Item edited successfully')
+        message.success('Item add successfully')
         setEditingItem(null)
         setAddEditModalVisibilty(false)
         getAllItems()
@@ -121,7 +116,7 @@ function Items() {
       .post("/api/items/edit-item", {...values , itemId : editingItem._id})
       .then((response) => {
         dispatch({ type: "hideLoading" });
-        message.success('Item add successfully')
+        message.success('Item edited successfully')
         setAddEditModalVisibilty(false)
         getAllItems()
       })
@@ -140,7 +135,7 @@ function Items() {
         <Button type="primary" onClick={() => setAddEditModalVisibilty(true)} >เพิ่มสินค้า</Button>
       </div>
 
-      <Table columns={columns} dataSource={itemsData} bordered />
+      <Table columns={columns} dataSource={itemsData.filter((i) => i.IDrestaurant === getIdrestaurant)} bordered />
       {addEditModalVisibilty && (
         <Modal onCancel={() => {
           setEditingItem(null)
@@ -153,8 +148,10 @@ function Items() {
           <Form
             initialValues={editingItem}
             layout="vertical" onFinish={onFinish}>
+            
+
             <Form.Item name='name' label='ชื่อ'>
-              <Input placeholder="Name" />
+              <Input placeholder="name" />
             </Form.Item>
 
             <Form.Item name='price' label='ราคา'>
@@ -163,6 +160,10 @@ function Items() {
 
             <Form.Item name='image' label='Image URL'>
               <Input placeholder="image" />
+            </Form.Item>
+
+            <Form.Item name='stock' label='Stock'>
+              <Input placeholder="Stock" />
             </Form.Item>
 
             <Form.Item name='category' label='ประเภท'>
