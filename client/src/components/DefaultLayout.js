@@ -11,7 +11,8 @@ import {
   AppstoreOutlined,
   ContainerOutlined,
   HistoryOutlined,
-  SolutionOutlined 
+  SolutionOutlined,
+  LaptopOutlined
 } from "@ant-design/icons";
 import "../resourses/layout.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -72,6 +73,11 @@ const DefaultLayout = (props) => {
           <Menu.Item key="/Bills" icon={<CopyOutlined />}>
             <Link to="/Bills">Bills</Link>
           </Menu.Item>
+
+          <Menu.Item key="/Kitchen" icon={<LaptopOutlined />}>
+            <Link to="/Kitchen">ครัว</Link>
+          </Menu.Item>
+
           <Menu.Item key="/Items" icon={<ContainerOutlined />}>
             <Link to="/Items">สินค้าคงคลัง</Link>
           </Menu.Item>

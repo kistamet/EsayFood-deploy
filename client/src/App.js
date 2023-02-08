@@ -11,7 +11,7 @@ import LoginRestaurant from './pages/LoginRestaurant';
 import ProfileRestaurant from './pages/ProfileRestaurant';
 import Tabelrestaurant from './pages/Tabelrestaurant';
 import Queuecustomers from './pages/Queuecustomers';
-
+import Kitchen from './pages/Kitchen';
 
 import { Navigate } from "react-router-dom";
 import RegisterRestaurant from './pages/RegisterRestaurant';
@@ -32,6 +32,7 @@ function App() {
           <Route path='/ProfileRestaurant' element={<ProfileRestaurant />} />
           <Route path='/Tabelrestaurant' element={<Tabelrestaurant />} />
           <Route path='/Queuecustomers' element={<Queuecustomers />} />
+          <Route path='/Kitchen' element={<Kitchen />} />
 
           <Route path='/' element={<Login />} />
         </Routes>
