@@ -70,10 +70,6 @@ const DefaultLayout = (props) => {
             <Link to="/Queuecustomers">ลำดับคิว</Link>
           </Menu.Item>
 
-          <Menu.Item key="/Bills" icon={<CopyOutlined />}>
-            <Link to="/Bills">Bills</Link>
-          </Menu.Item>
-
           <Menu.Item key="/Kitchen" icon={<LaptopOutlined />}>
             <Link to="/Kitchen">ครัว</Link>
           </Menu.Item>
@@ -131,5 +127,4 @@ const DefaultLayout = (props) => {
     </Layout>
   );
 };
-
 export default DefaultLayout;

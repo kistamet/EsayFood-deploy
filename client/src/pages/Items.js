@@ -27,7 +27,6 @@ function Items() {
       .then((response) => {
         dispatch({ type: "hideLoading" });
         setItemsData(response.data);
-        console.log(response.data)
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -99,6 +98,8 @@ function Items() {
       axios
       .post("/api/items/add-item",{...values , Idrestaurant : Idrestaurant } )
       .then((response) => {
+        console.log(Idrestaurant)
+        
         dispatch({ type: "hideLoading" });
         message.success('Item add successfully')
         setEditingItem(null)

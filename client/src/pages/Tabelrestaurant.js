@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import DefaultLayout from '../components/DefaultLayout'
 import { Col, Row, Button } from 'antd';
-import { Link, } from "react-router-dom";
 import "../resourses/Tabel.css";
 
 function Tabelrestaurant() {
