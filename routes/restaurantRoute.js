@@ -72,7 +72,8 @@ router.post("/add-queuerestaurants", async (req, res) => {
             name: req.body.name,
             quantity: req.body.quantity,
             details:req.body.details,
-            IDrestaurant:req.body.Idrestaurant
+            IDrestaurant:req.body.Idrestaurant,
+            Queue:req.body.Queue,
         })
         if (queuerestaurants) {
             res.send({ message: 'Login successfull' , queuerestaurants});

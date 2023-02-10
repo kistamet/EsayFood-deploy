@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const queuerestaurantSchema = new mongoose.Schema({
+    Queue: { type: String, required: false } ,
     name: { type: String, required: true } ,
     quantity: { type: String, required: true },
     details: { type: String, required: true },
