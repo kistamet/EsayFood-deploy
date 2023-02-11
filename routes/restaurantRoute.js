@@ -102,4 +102,12 @@ router.post("/delete-queue", async (req, res) => {
         res.status(400).json(error);
     }
 });
+router.post("/delete-edit-queue", async (req, res) => {
+    try {
+        await menuItemModel.updateMany({});
+        res.send('Queue updated successfully');
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
 module.exports = router;
