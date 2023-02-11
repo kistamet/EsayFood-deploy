@@ -68,6 +68,7 @@ export default function Queuecustomers() {
       title: "ลำดับ",
       dataIndex: 'Queue',
       width: "50px",
+      sorter: (a, b) => a.Queue - b.Queue,
     },
     {
       title: "ชื่อ",
