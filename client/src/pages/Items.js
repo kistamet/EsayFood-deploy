@@ -99,7 +99,6 @@ function Items() {
       .post("/api/items/add-item",{...values , Idrestaurant : Idrestaurant } )
       .then((response) => {
         console.log(Idrestaurant)
-        
         dispatch({ type: "hideLoading" });
         message.success('Item add successfully')
         setEditingItem(null)

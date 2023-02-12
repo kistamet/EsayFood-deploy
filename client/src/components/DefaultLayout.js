@@ -32,7 +32,7 @@ const DefaultLayout = (props) => {
   
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    
+
   }, [cartItems]);
   return (
     <Layout>
@@ -78,7 +78,7 @@ const DefaultLayout = (props) => {
             <Link to="/Items">สินค้าคงคลัง</Link>
           </Menu.Item>
           <Menu.Item key="/Customers" icon={<HistoryOutlined />}>
-            <Link to="/Customers">ประวัติการขาย</Link>
+            <Link to="/HistoryRestaurant">ประวัติการขาย</Link>
           </Menu.Item>
           <Menu.Item key="/ProfileRestaurant" icon={<UserOutlined />}>
             <Link to="/ProfileRestaurant">Profile</Link>
