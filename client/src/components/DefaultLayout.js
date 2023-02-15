@@ -29,7 +29,7 @@ const DefaultLayout = (props) => {
   };
 
   const namerestaurant = JSON.parse(localStorage.getItem("pop-name-restaurant"));
-  
+
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
 
@@ -60,6 +60,10 @@ const DefaultLayout = (props) => {
 
           <Menu.Item key="/cart" icon={<ShoppingCartOutlined />}>
             <Link to="/cart">Cart</Link>
+          </Menu.Item>
+
+          <Menu.Item key="/Bills" icon={<CopyOutlined />}>
+            <Link to="/Bills">Bills</Link>
           </Menu.Item>
 
           <Menu.Item key="/Tabelrestaurant" icon={<AppstoreOutlined />}>

@@ -13,6 +13,7 @@ import Tabelrestaurant from './pages/Tabelrestaurant';
 import Queuecustomers from './pages/Queuecustomers';
 import HistoryRestaurant from './pages/HistoryRestaurant';
 import Kitchen from './pages/Kitchen';
+import Bills from './pages/Bills';
 
 
 import { Navigate } from "react-router-dom";
@@ -35,6 +36,7 @@ function App() {
           <Route path='/Tabelrestaurant' element={<Tabelrestaurant />} />
           <Route path='/Queuecustomers' element={<Queuecustomers />} />
           <Route path='/Kitchen' element={<Kitchen />} />
+          <Route path='/bills' element={<Bills />} />
           <Route path='/HistoryRestaurant' element={<HistoryRestaurant />} />
 
           <Route path='/' element={<Login />} />

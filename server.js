@@ -5,10 +5,12 @@ const app = express();
 app.use(express.json());
 const itemsRoute = require('./routes/itemsRoute');
 const userRoute = require("./routes/userRoute");
+const billsRoute = require("./routes/billsRoute");
 const restaurantRoute = require("./routes/restaurantRoute");
 
 app.use('/api/items/', itemsRoute);
 app.use("/api/users/", userRoute);
+app.use("/api/bills/", billsRoute);
 app.use("/api/restaurants/", restaurantRoute);
 
 const port = 5000;
