@@ -10,6 +10,9 @@ const restaurantSchema = new mongoose.Schema({
         price: Number,
         category: String
     }],
+    menu: [{
+      tabelId: { type: mongoose.Schema.Types.ObjectId, ref: 'tebel' },
+  }],
   }, {timestamps : true});
   
   const restaurantModel = mongoose.model("restaurants", restaurantSchema);

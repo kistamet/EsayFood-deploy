@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DefaultLayout from '../components/DefaultLayout'
-import { Col, Row, Button, Card, Divider, Descriptions, Table } from 'antd';
+import { Col, Row, Button, Card, Divider, Descriptions, Table , message } from 'antd';
 import "../resourses/Tabel.css";
 import {
   PlusCircleOutlined,
@@ -8,20 +8,53 @@ import {
   QrcodeOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
+import axios from "axios";
+import { useDispatch , useSelector } from "react-redux";
 
 function Tabelrestaurant() {
-  const [activeButton, setActiveButton] = useState(null);
+  const dispatch = useDispatch()
+  const [activeTabel, setActiveTabel] = useState(null);
+  const [keepButton, setKeepButton] = useState(null);
   const [buttonColor, setButtonColor] = useState('primary');
+  const [buttonColor2, setButtonColor2] = useState('primary');
+  const { cartItems } = useSelector((state) => state.rootReducer);
+  console.log(cartItems)
+  const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
+  const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
 
   const handleButtonClick = (buttonName) => {
-    if (activeButton === buttonName) {
-      setActiveButton(null);
+    if (activeTabel === buttonName) {
+      setActiveTabel(null);
       setButtonColor('primary');
+      console.log('if')
     } else {
-      setActiveButton(buttonName);
+      setActiveTabel(buttonName);
       setButtonColor('danger');
+      console.log('else')
+      console.log(activeTabel)
+      
     }
   };
+  const handleButtonClick2 = () => {
+    console.log(activeTabel)
+    setActiveTabel(activeTabel);
+    setButtonColor2('red');
+  };
+  const onFinish = (values) => {
+    dispatch({ type: "showLoading" });
+      axios
+      .post("/api/restaurants/add-tabel",{...values , Idrestaurant : Idrestaurant ,tabel : activeTabel ,status:"active" } )
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        message.success('Tabel add successfully')
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        message.success('Somthing went wrong')
+        console.log(error);
+      });
+  }
+
   const data = [];
   for (let i = 0; i < 10; i++) {
     data.push({
@@ -65,24 +98,27 @@ function Tabelrestaurant() {
         <Col span={12}><h3>โต๊ะอาหาร</h3>
           <Row gutter={16}>
             <Col span={22}  >
-              <div>
-                <Button className={`${activeButton === 'button1' ? buttonColor : ''} button`} onClick={() => handleButtonClick('button1')}>
+              <div >
+                <Button className={`${activeTabel === 'A1' ? buttonColor : ''} button`} onClick={() => handleButtonClick('A1')} >
                   A1
                 </Button>
-                <Button className={`${activeButton === 'button2' ? buttonColor : ''} button`} onClick={() => handleButtonClick('button2')}>
+                <Button className={`${activeTabel === 'A2' ? buttonColor : ''} button`} onClick={() => handleButtonClick('A2')}  >
                   A2
                 </Button>
-                <Button className={`${activeButton === 'button3' ? buttonColor : ''} button`} onClick={() => handleButtonClick('button3')}>
+                <Button className={`${activeTabel === 'A3' ? buttonColor : ''} button`} onClick={() => handleButtonClick('A3')}>
                   A3
                 </Button>
-                <Button className={`${activeButton === 'button4' ? buttonColor : ''} button`} onClick={() => handleButtonClick('button4')}>
+                <Button className={`${activeTabel === 'B1' ? buttonColor : ''} button`} onClick={() => handleButtonClick('B1')}>
                   B1
                 </Button>
-                <Button className={`${activeButton === 'button5' ? buttonColor : ''} button`} onClick={() => handleButtonClick('button5')}>
+                <Button className={`${activeTabel === 'B2' ? buttonColor : ''} button`} onClick={() => handleButtonClick('B2')}>
                   B2
                 </Button>
-                <Button className={`${activeButton === 'button6' ? buttonColor : ''} button`} onClick={() => handleButtonClick('button6')}>
+                <Button className={`${activeTabel === 'B3' ? buttonColor : ''} button`} onClick={() => handleButtonClick('B3')}>
                   B3
+                </Button>
+                <Button className='button'  style={{ fontSize: '40px' , backgroundColor: buttonColor2 }} onClick={() => handleButtonClick('button7')}  >
+                  7
                 </Button>
               </div>
             </Col>
@@ -98,7 +134,7 @@ function Tabelrestaurant() {
 
                 <Col span={26} >
                   <Descriptions labelStyle={{ fontSize: '20px' }}>
-                    <Descriptions.Item label="โต๊ะ" style={{ fontSize: '20px' }}>A1</Descriptions.Item>
+                    <Descriptions.Item label="โต๊ะ" style={{ fontSize: '20px' }}>{activeTabel}</Descriptions.Item>
                     <Descriptions.Item label="รายการ">2</Descriptions.Item>
                     <Descriptions.Item label="ราคา">300</Descriptions.Item>
                     <Descriptions.Item label="จำนวนคน">2</Descriptions.Item>
@@ -112,7 +148,7 @@ function Tabelrestaurant() {
           <Col span={24}>
             <Row gutter={[8, 8]}>
               <Col span={6} >
-                <Button className="custom-button">
+                <Button className="custom-button" onClick={() => onFinish()}>
                   <PlusCircleOutlined style={{ fontSize: '40px' }} />
                   <span>เพิ่ม</span>
                 </Button>

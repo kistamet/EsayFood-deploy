@@ -14,6 +14,10 @@ function CartPage() {
   const [subTotal, setSubTotal] = useState(0)
   const dispatch = useDispatch();
 
+  const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
+  const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
+  console.log(Idrestaurant)
+  
   const increaseQuantity = (record) => {
     dispatch({
       type: "updateCart",
@@ -45,8 +49,10 @@ function CartPage() {
       tax: ((subTotal / 100) * 10),
       totalAmount: subTotal,
       userID: JSON.parse(localStorage.getItem('pos-user'))._id,
+      Idrestaurant : Idrestaurant
     };
-    axios.post('/api/bills/charge-bill', reqObject).then(() => {
+    axios.post('/api/restaurants/charge-bill', reqObject )
+    .then(() => {
       message.success("Bill charged Successfully");
     }).catch(() => {
       message.error("Something went wrong");

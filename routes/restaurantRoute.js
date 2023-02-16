@@ -2,6 +2,8 @@ const express = require("express");
 const restaurantModel = require("../models/restaurantModel");
 const menuItemModel = require("../models/menuItemModel");
 const queueModel = require("../models/queueModel");
+const tabelModel = require("../models/tabelModel");
+const BillModel = require("../models/billModel");
 
 const router = express.Router();
 
@@ -106,6 +108,57 @@ router.post("/delete-edit-queue", async (req, res) => {
     try {
         await menuItemModel.updateMany({});
         res.send('Queue updated successfully');
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+
+router.post("/charge-bill", async (req, res) => {
+    try {
+      const newbill = new BillModel({
+        customerName: req.body.customerName,
+        customerPhoneNumber: req.body.customerPhoneNumber,
+        totalAmount: req.body.totalAmount,
+        tax: req.body.tax,
+        subTotal: req.body.subTotal,
+        paymentMode: req.body.paymentMode,
+        cartItems: req.body.cartItems,
+        IDrestaurant:req.body.Idrestaurant,
+      });
+      await newbill.save();
+      res.send('Bill charged successfully' );
+    } catch (error) {
+      res.status(400).json(error);
+    }
+  });
+router.get("/get-all-bills", async (req, res) => {
+    try {
+        const bills = await BillModel.find();
+        res.send(bills);
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+
+
+router.post("/add-tabel", async (req, res) => {
+    try {
+        const tabelrestaurants = new tabelModel({ 
+            username: req.body.name,
+            tabel: req.body.tabel,
+            items:req.body.items,
+            price:req.body.price,
+            people:req.body.people,
+            time:req.body.time,
+            status:req.body.status,
+            IDrestaurant:req.body.Idrestaurant,
+        })
+        if (tabelrestaurants) {
+            res.send({ message: 'Login successfull' , tabelrestaurants});
+            await tabelrestaurants.save()
+        } else {
+            res.status(400).json({ message: "Login fail",  });
+        }
     } catch (error) {
         res.status(400).json(error);
     }

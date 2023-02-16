@@ -8,6 +8,7 @@ const billSchema = mongoose.Schema({
   subTotal: { type: Number, required: true },
   paymentMode: { type: String, required: true },
   cartItems: { type: Array, required: true },
+  IDrestaurant:{ type: String, required: false },
 }, {timestamps : true});
 
 const billModel = mongoose.model("bills", billSchema);

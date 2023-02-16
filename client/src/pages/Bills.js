@@ -15,10 +15,8 @@ function Bills() {
   const [editingItem, setEditingItem] = useState(null)
 
 
-  // const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
-  // const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
-
-
+  const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
+  const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
   const getAllBills = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios
@@ -67,7 +65,7 @@ function Bills() {
   useEffect(() => {
     getAllBills();
   }, [getAllBills]);
-
+console.log(billsData)
   return (
     <DefaultLayout>
       <div className="d-flex justify-content-between">
@@ -75,7 +73,7 @@ function Bills() {
         <Button type="primary" onClick={() => setAddEditModalVisibilty(true)} >เพิ่มสินค้า</Button>
       </div>
 
-      <Table columns={columns} dataSource={billsData} bordered />
+      <Table columns={columns} dataSource={billsData.filter((i) => i.IDrestaurant === getIdrestaurant)} bordered />
 
       {addEditModalVisibilty && (
         <Modal onCancel={() => {
