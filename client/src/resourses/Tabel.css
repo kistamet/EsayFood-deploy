@@ -1,20 +1,79 @@
 .button {
-    background-color: rgb(145, 144, 144);
-    margin-top: 30px;
-    margin-right: 15px;
-    color: rgb(247, 236, 236) !important;
-    text-align: left;
-    font-size: 25px;
-    width: 120px;
-    height: 120px;
-    
-    
+  background-color: rgb(145, 144, 144);
+  margin-top: 30px;
+  margin-right:10px;
+  color: rgb(247, 236, 236) !important;
+  text-align: left;
+  font-size: 20px;
+  width: 120px;
+  height: 120px;
+
+
+}
+.button:hover {
+  background-color: #3672f4;
+  cursor: pointer;
+}
+
+.danger {
+  background-color: #3672f4;
+}
+
+.success {
+  background-color: #4caf50;
+}
+
+.custom-card .ant-card-head {
+  background: #13AAFF;
+  color: black;
+  text-align: left;
+  border: 2px solid black;
+  font-size: 30px;
+}
+
+.custom-card .ant-card-body {
+  font-size: 30px;
+  background: linear-gradient(to right, #e8eaeb, #ffffff);
+  color: black;
+  border: 2px solid black;
+}
+.custom-card .ant-descriptions-item-content{
+  font-size: 20px;
+  font-weight: bold;
+}
+.custom-button {
+  font-size: 20px;
+  color: black;
+  background-color: #13AAFF;
+  border: 2px solid black;
+  padding: 5px 5px;
+  width: 190px;
+  height: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 5px;
+}
+@media screen and (max-width: 1400px) {
+  .custom-button {
+    font-size: 20px;
+    color: black;
+    background-color: #13AAFF;
+    border: 2px solid black;
+    padding: 5px 5px;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
   }
-  
-  .danger {
-    background-color: #3672f4;
-  }
-  
-  .success {
-    background-color: #4caf50;
-  }
+}
+.custom-button:hover {
+  background-color: rgb(225, 225, 233);
+  cursor: pointer;
+}
+
+.custom-card-total .ant-card-body {
+  background: #13AAFF;
+}

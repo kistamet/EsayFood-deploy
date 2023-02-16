@@ -92,14 +92,15 @@ export default function Queuecustomers() {
 
       render: (id, record) => <div className="d-flex justify-content-end">
         <Button className="d-flex justify-content-end"
-          icon={<CheckOutlined />}
+          icon={<CheckOutlined style={{ fontSize: "20px" }} />}
           type="primary"
           onClick={() => cancelQueue(record)}
           style={{ marginLeft: "10px", fontSize: "15px", backgroundColor: "green" 
           }}  >เรียกคิว</Button>
 
 
-        <Button className="d-flex justify-content-between" icon={<EditOutlined />}
+        <Button className="d-flex justify-content-between" 
+          icon={<EditOutlined style={{ fontSize: "20px" }} />}
           type="primary"
           onClick={() => {
             setEditingQueue(record)
@@ -109,7 +110,7 @@ export default function Queuecustomers() {
           }}  >แก้ไข</Button>
 
         <Button className="d-flex justify-content-end"
-          icon={<CloseOutlined />}
+          icon={<CloseOutlined style={{ fontSize: "20px" }}  />}
           type="primary"
           onClick={() => cancelQueue(record)}
           style={{ marginLeft: "10px", fontSize: "15px", backgroundColor: "red" 
@@ -165,8 +166,8 @@ export default function Queuecustomers() {
     <DefaultLayout>
       <div className="d-flex justify-content-between">
         <h3>ลำดับคิว</h3>
-        <div>
-          <Button icon={<PlusOutlined style={{ fontSize: "45px" }} />} type="primary" onClick={() => setAddEditModalVisibilty(true)} style={{ fontSize: "15px" }}  >เพิ่มคิว</Button>
+        <div className="d-flex justify-content-start">
+          <Button className="d-flex justify-content-start" icon={<PlusOutlined style={{ fontSize: "20px" }} />} type="primary" onClick={() => setAddEditModalVisibilty(true)} style={{ fontSize: "15px" }}  >เพิ่มคิว</Button>
           <Button type="primary" onClick={() => setClearnumberqueue(true)} style={{ marginLeft: "5px", backgroundColor: "red" }}>ล้างลำดับคิว</Button>
         </div>
       </div>

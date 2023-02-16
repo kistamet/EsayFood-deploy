@@ -54,40 +54,40 @@ const DefaultLayout = (props) => {
           mode="inline"
           defaultSelectedKeys={window.location.pathname}
         >
-          <Menu.Item key="/home" icon={<HomeOutlined />}>
+          <Menu.Item key="/home" icon={<HomeOutlined style={{ fontSize: '20px' }}  />}>
             <Link to="/home">Home</Link>
           </Menu.Item>
 
-          <Menu.Item key="/cart" icon={<ShoppingCartOutlined />}>
+          <Menu.Item key="/cart" icon={<ShoppingCartOutlined style={{ fontSize: '20px' }} />}>
             <Link to="/cart">Cart</Link>
           </Menu.Item>
 
-          <Menu.Item key="/Bills" icon={<CopyOutlined />}>
+          <Menu.Item key="/Bills" icon={<CopyOutlined style={{ fontSize: '20px' }} />}>
             <Link to="/Bills">Bills</Link>
           </Menu.Item>
 
-          <Menu.Item key="/Tabelrestaurant" icon={<AppstoreOutlined />}>
+          <Menu.Item key="/Tabelrestaurant" icon={<AppstoreOutlined  style={{ fontSize: '20px' }}/>}>
             <Link to="/Tabelrestaurant">โต๊ะอาหาร</Link>
           </Menu.Item>
 
-          <Menu.Item key="/Queuecustomers" icon={<SolutionOutlined />}>
+          <Menu.Item key="/Queuecustomers" icon={<SolutionOutlined style={{ fontSize: '20px' }} />}>
             <Link to="/Queuecustomers">ลำดับคิว</Link>
           </Menu.Item>
 
-          <Menu.Item key="/Kitchen" icon={<LaptopOutlined />}>
+          <Menu.Item key="/Kitchen" icon={<LaptopOutlined style={{ fontSize: '20px' }} />}>
             <Link to="/Kitchen">ครัว</Link>
           </Menu.Item>
 
-          <Menu.Item key="/Items" icon={<ContainerOutlined />}>
+          <Menu.Item key="/Items" icon={<ContainerOutlined style={{ fontSize: '20px' }} />}>
             <Link to="/Items">สินค้าคงคลัง</Link>
           </Menu.Item>
-          <Menu.Item key="/Customers" icon={<HistoryOutlined />}>
+          <Menu.Item key="/Customers" icon={<HistoryOutlined style={{ fontSize: '20px' }} />}>
             <Link to="/HistoryRestaurant">ประวัติการขาย</Link>
           </Menu.Item>
-          <Menu.Item key="/ProfileRestaurant" icon={<UserOutlined />}>
+          <Menu.Item key="/ProfileRestaurant" icon={<UserOutlined style={{ fontSize: '20px' }} />}>
             <Link to="/ProfileRestaurant">Profile</Link>
           </Menu.Item>
-          <Menu.Item key="/Logout" icon={<LoginOutlined />}onClick={()=>{
+          <Menu.Item key="/Logout" icon={<LoginOutlined style={{ fontSize: '20px' }} />}onClick={()=>{
           localStorage.removeItem('pos-user')
           localStorage.removeItem('pop-name-restaurant')
           localStorage.removeItem('pop-name-restaurant2')

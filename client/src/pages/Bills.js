@@ -52,7 +52,7 @@ function Bills() {
       dataIndex: "tax",
     }, {
       title: "Total",
-      dataIndex: "Total",
+      dataIndex: "totalAmount",
     },
     {
       title: "Actions",
