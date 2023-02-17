@@ -45,14 +45,15 @@ const DefaultLayout = (props) => {
         </div>
         </div>
       )}
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+      <Sider  trigger={null} collapsible collapsed={collapsed} >
         <div className="logo">
           <h3>Easy POS</h3>
-        </div>
+        </div >
         <Menu
           theme="dark"
           mode="inline"
           defaultSelectedKeys={window.location.pathname}
+          
         >
           <Menu.Item key="/home" icon={<HomeOutlined style={{ fontSize: '20px' }}  />}>
             <Link to="/home">Home</Link>
@@ -66,8 +67,8 @@ const DefaultLayout = (props) => {
             <Link to="/Bills">Bills</Link>
           </Menu.Item>
 
-          <Menu.Item key="/Tabelrestaurant" icon={<AppstoreOutlined  style={{ fontSize: '20px' }}/>}>
-            <Link to="/Tabelrestaurant">โต๊ะอาหาร</Link>
+          <Menu.Item key="/Tablerestaurant" icon={<AppstoreOutlined  style={{ fontSize: '20px' }}/>}>
+            <Link to="/Tablerestaurant">โต๊ะอาหาร</Link>
           </Menu.Item>
 
           <Menu.Item key="/Queuecustomers" icon={<SolutionOutlined style={{ fontSize: '20px' }} />}>
@@ -98,9 +99,9 @@ const DefaultLayout = (props) => {
         </Menu>
       </Sider>
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 10 }} >
+        <Header className="site-layout-background" style={{ padding: 10, fontSize: '20px' }} >
           {React.createElement(
-            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined ,
             {
               className: "trigger",
               onClick: toggle,
@@ -112,9 +113,9 @@ const DefaultLayout = (props) => {
             onClick={() => navigate("/cart")}
           >
             <b>
-              <p className="mt-3 mr-2">{cartItems.length}</p>
+              <p className="mt-3 mr-2" style={{ fontSize: "20px" }}>{cartItems.length}</p>
             </b>
-            <ShoppingCartOutlined />
+            <ShoppingCartOutlined style={{ fontSize: "30px" }} />
           </div>
         </Header>
         <Content

@@ -9,7 +9,7 @@ import CustomerHomepage from './pages/CustomersHomepage';
 import CustomerCartpage from './pages/CustomerCartpage';
 import LoginRestaurant from './pages/LoginRestaurant';
 import ProfileRestaurant from './pages/ProfileRestaurant';
-import Tabelrestaurant from './pages/Tabelrestaurant';
+import Tablerestaurant from './pages/Tablerestaurant';
 import Queuecustomers from './pages/Queuecustomers';
 import HistoryRestaurant from './pages/HistoryRestaurant';
 import Kitchen from './pages/Kitchen';
@@ -33,7 +33,7 @@ function App() {
           <Route path='/RegisterRestaurant' element={<RegisterRestaurant />} />
           <Route path='/LoginRestaurant' element={<LoginRestaurant />} />
           <Route path='/ProfileRestaurant' element={<ProfileRestaurant />} />
-          <Route path='/Tabelrestaurant' element={<Tabelrestaurant />} />
+          <Route path='/Tablerestaurant' element={<Tablerestaurant />} />
           <Route path='/Queuecustomers' element={<Queuecustomers />} />
           <Route path='/Kitchen' element={<Kitchen />} />
           <Route path='/bills' element={<Bills />} />

@@ -8,6 +8,6 @@ const queuerestaurantSchema = new mongoose.Schema({
     IDrestaurant:{ type: String, required: false },
   }, {timestamps : true});
   
-  const queuerestaurantModel = mongoose.model("queuerestaurants", queuerestaurantSchema);
+  const queuerestaurantModel = mongoose.model("queues", queuerestaurantSchema);
 
 module.exports = queuerestaurantModel 

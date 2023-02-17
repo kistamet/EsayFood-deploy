@@ -3,15 +3,19 @@ const dbConnect = require('./dbConnect');
 
 const app = express();
 app.use(express.json());
-const itemsRoute = require('./routes/itemsRoute');
+const menuItemsRoute = require('./routes/itemsRoute');
 const userRoute = require("./routes/userRoute");
 const billsRoute = require("./routes/billsRoute");
 const restaurantRoute = require("./routes/restaurantRoute");
+const queueRoute = require("./routes/queueRoute");
+const tableRoute = require("./routes/tableRoute");
 
-app.use('/api/items/', itemsRoute);
+app.use('/api/menuitems/', menuItemsRoute);
 app.use("/api/users/", userRoute);
 app.use("/api/bills/", billsRoute);
 app.use("/api/restaurants/", restaurantRoute);
+app.use("/api/tables/", tableRoute);
+app.use("/api/queues/", queueRoute);
 
 const port = 5000;
 

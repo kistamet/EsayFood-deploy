@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import DefaultLayout from '../components/DefaultLayout'
-import { Button, Form, Input, Row, message, Col } from "antd";
+import { Button, Form, Input, Row, message, Col , Divider } from "antd";
 import axios from "axios";
 
 function ProfileRestaurant() {
@@ -25,7 +25,7 @@ function ProfileRestaurant() {
     <DefaultLayout>
       <div className="d-flex justify-content-between">
         <h3>Restaurant Profile</h3>
-      </div>
+      </div><Divider />
       <Col span={8}>
         <Form layout="vertical">
           <Form.Item label="Username" name="username">

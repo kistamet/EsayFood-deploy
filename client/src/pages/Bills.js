@@ -6,7 +6,7 @@ import {
   EyeOutlined
 } from "@ant-design/icons";
 import { useCallback } from 'react';
-import { Button, Table, Modal} from "antd";
+import { Button, Table, Modal , Divider} from "antd";
 
 function Bills() {
   const [billsData, setBillsData] = useState([]);
@@ -65,27 +65,15 @@ function Bills() {
   useEffect(() => {
     getAllBills();
   }, [getAllBills]);
-console.log(billsData)
+
   return (
     <DefaultLayout>
       <div className="d-flex justify-content-between">
         <h3>คลังสินค้า</h3>
-        <Button type="primary" onClick={() => setAddEditModalVisibilty(true)} >เพิ่มสินค้า</Button>
       </div>
-
+      <Divider />
       <Table columns={columns} dataSource={billsData.filter((i) => i.IDrestaurant === getIdrestaurant)} bordered />
 
-      {addEditModalVisibilty && (
-        <Modal onCancel={() => {
-          setEditingItem(null)
-          setAddEditModalVisibilty(false)
-        }}
-        visible={addEditModalVisibilty}
-        title={`${editingItem !==null ? 'แก้ไขสินค้า' : 'เพิ่มสินค้า'}`}
-        footer={false}
-        >
-        </Modal>
-      )}
     </DefaultLayout>
 
   )

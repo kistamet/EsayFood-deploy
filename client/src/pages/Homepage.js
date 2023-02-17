@@ -33,7 +33,7 @@ function Homepage() {
   const getAllItems = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios
-      .get("/api/items/get-all-items")
+      .get("/api/menuitems/get-all-items")
       .then((response) => {
         dispatch({ type: "hideLoading" });
         setItemsData(response.data);

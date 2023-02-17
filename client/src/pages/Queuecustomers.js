@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DefaultLayout from '../components/DefaultLayout'
-import { Button, Form, Input, message, Modal } from "antd";
+import { Button, Form, Input, message, Modal , Divider  } from "antd";
 import { useCallback } from 'react';
 import { Table } from "antd";
 import {
@@ -25,11 +25,11 @@ export default function Queuecustomers() {
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
 
-
+  
   const getAllQueue = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios
-      .get("/api/restaurants/get-all-queue")
+      .get("/api/queues/get-all-queue")
       .then((response) => {
         dispatch({ type: "hideLoading" });
         setQueuesData(response.data);
@@ -49,7 +49,7 @@ export default function Queuecustomers() {
   const cancelQueue = (record) => {
     dispatch({ type: "showLoading" });
     axios
-      .post("/api/restaurants/delete-queue", { queueId: record._id })
+      .post("/api/queues/delete-queue", { queueId: record._id })
       .then((response) => {
         dispatch({ type: "hideLoading" });
         message.success('Queue cancel successfully')
@@ -123,7 +123,7 @@ export default function Queuecustomers() {
     dispatch({ type: "showLoading" });
     if (editingQueue === null) {
       axios
-        .post('/api/restaurants/add-queuerestaurants', { ...values, Idrestaurant: Idrestaurant, Queue: numberqueue })
+        .post('/api/queues/add-queuerestaurants', { ...values, Idrestaurant: Idrestaurant, Queue: numberqueue })
         .then((response) => {
           dispatch({ type: "hideLoading" });
           message.success(`Queue ${queuesData.length + 1} added successfully`)
@@ -131,7 +131,6 @@ export default function Queuecustomers() {
           setNumberqueue(numberqueue + 1)
           setAddEditModalVisibilty(false)
           getAllQueue()
-          console.log(numberqueue)
         })
         .catch((error) => {
           dispatch({ type: "hideLoading" });
@@ -141,7 +140,7 @@ export default function Queuecustomers() {
     }
     else {
       axios
-        .post("/api/restaurants/edit-queue", { ...values, queueId: editingQueue._id })
+        .post("/api/queues/edit-queue", { ...values, queueId: editingQueue._id })
         .then((response) => {
           dispatch({ type: "hideLoading" });
           message.success('Queue edited successfully')
@@ -170,7 +169,7 @@ export default function Queuecustomers() {
           <Button className="d-flex justify-content-start" icon={<PlusOutlined style={{ fontSize: "20px" }} />} type="primary" onClick={() => setAddEditModalVisibilty(true)} style={{ fontSize: "15px" }}  >เพิ่มคิว</Button>
           <Button type="primary" onClick={() => setClearnumberqueue(true)} style={{ marginLeft: "5px", backgroundColor: "red" }}>ล้างลำดับคิว</Button>
         </div>
-      </div>
+      </div><Divider />
       <Table columns={columns} dataSource={queuesData.filter((i) => i.IDrestaurant === getIdrestaurant)} bordered />
       {addEditModalVisibilty && (
         <Modal onCancel={() => {

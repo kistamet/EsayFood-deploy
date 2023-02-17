@@ -1,5 +1,7 @@
 const express = require("express");
 const BillModel = require("../models/billModel");
+const orderModel = require("../models/orderModel");
+
 const router = express.Router();
 
 router.post("/charge-bill", async (req, res) => {
@@ -29,5 +31,13 @@ router.get("/get-all-bills", async (req, res) => {
     }
 });
 
-
+router.post("/bill-order", async (req, res) => {
+  try {
+    const neworder = new orderModel(req.body);
+    await neworder.save();
+    res.send('Bill charged successfully' );
+  } catch (error) {
+    res.status(400).json(error);
+  }
+});
 module.exports = router;

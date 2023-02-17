@@ -7,7 +7,7 @@ import {
   EditOutlined
 } from "@ant-design/icons";
 import { useCallback } from 'react';
-import { Button, Table, Modal, Form, Input, Select, message } from "antd";
+import { Button, Table, Modal, Form, Input, Select, message , Divider } from "antd";
 
 function Items() {
   const [itemsData, setItemsData] = useState([]);
@@ -23,10 +23,11 @@ function Items() {
   const getAllItems = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios
-      .get("/api/items/get-all-items")
+      .get("/api/menuitems/get-all-items")
       .then((response) => {
         dispatch({ type: "hideLoading" });
         setItemsData(response.data);
+
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -37,7 +38,7 @@ function Items() {
   const deleteItem = (record) => {
     dispatch({ type: "showLoading" });
     axios
-      .post("/api/items/delete-item" , {itemId : record._id})
+      .post("/api/menuitems/delete-item" , {itemId : record._id})
       .then((response) => {
         dispatch({ type: "hideLoading" });
         message.success('Item deleted successdully')
@@ -96,7 +97,7 @@ function Items() {
     if(editingItem===null)
     {
       axios
-      .post("/api/items/add-item",{...values , Idrestaurant : Idrestaurant } )
+      .post("/api/menuitems/add-item",{...values , Idrestaurant : Idrestaurant } )
       .then((response) => {
         console.log(Idrestaurant)
         dispatch({ type: "hideLoading" });
@@ -113,7 +114,7 @@ function Items() {
     }
     else {
       axios
-      .post("/api/items/edit-item", {...values , itemId : editingItem._id})
+      .post("/api/menuitems/edit-item", {...values , itemId : editingItem._id})
       .then((response) => {
         dispatch({ type: "hideLoading" });
         message.success('Item edited successfully')
@@ -134,7 +135,7 @@ function Items() {
         <h3>คลังสินค้า</h3>
         <Button type="primary" onClick={() => setAddEditModalVisibilty(true)} >เพิ่มสินค้า</Button>
       </div>
-
+      <Divider />
       <Table columns={columns} dataSource={itemsData.filter((i) => i.IDrestaurant === getIdrestaurant)} bordered />
       {addEditModalVisibilty && (
         <Modal onCancel={() => {
