@@ -10,6 +10,7 @@ router.post("/charge-bill", async (req, res) => {
         customerName: req.body.customerName,
         customerPhoneNumber: req.body.customerPhoneNumber,
         totalAmount: req.body.totalAmount,
+        table: req.body.table,
         tax: req.body.tax,
         subTotal: req.body.subTotal,
         paymentMode: req.body.paymentMode,
@@ -33,7 +34,16 @@ router.get("/get-all-bills", async (req, res) => {
 
 router.post("/bill-order", async (req, res) => {
   try {
-    const neworder = new orderModel(req.body);
+    const neworder = new orderModel({
+      customerName: req.body.customerName,
+      customerPhoneNumber: req.body.customerPhoneNumber,
+      totalAmount: req.body.totalAmount,
+      tax: req.body.tax,
+      subTotal: req.body.subTotal,
+      paymentMode: req.body.paymentMode,
+      cartItems: req.body.cartItems,
+      IDrestaurant:req.body.Idrestaurant,
+    });
     await neworder.save();
     res.send('Bill charged successfully' );
   } catch (error) {

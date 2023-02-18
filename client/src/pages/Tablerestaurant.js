@@ -257,8 +257,8 @@ function Tablerestaurant() {
           title={"Charge Bill"}
           footer={false}
         >
-          <Form
-            layout="vertical"  >
+          <Form 
+            layout="vertical" onFinish={onFinishbilltable}  >
             <div>
               <div className="Charge-bill-amount">
                 <h5>รายการทั้งหมด<b></b></h5>
@@ -273,17 +273,19 @@ function Tablerestaurant() {
             />
                 <h2>ยอดรวม : <b>323</b></h2>
               </div>
-              <Form.Item name='paymentMode' label='จ่ายด้วย' style={{ width: '300px' }}>
+              <div className="d-flex justify-content-start">
+              <h4 >จ่ายด้วย </h4>
+              <Form.Item  name='paymentMode'style={{ width: '200px', marginLeft: '10px' }}>
                 <Select>
                   <Select.Option value='cash' >เงินสด</Select.Option>
                   <Select.Option value='card'>บัตร</Select.Option>
                 </Select>
               </Form.Item>
-
+              
+              </div>
+              <div class="d-flex justify-content-end">
+              <Button htmlType="submit" type="primary"  >ยืนยัน</Button>
             </div>
-            <div class="d-flex justify-content-around">
-              <Button htmlType="submit" type="primary" onClick={onFinishbilltable} >ยืนยัน</Button>
-              <Button htmlType="submit" type="primary" style={{ backgroundColor: "red" }} onClick={onFinishbilltable} >ยกเลิก</Button>
             </div>
           </Form>
         </Modal>
