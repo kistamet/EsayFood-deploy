@@ -14,7 +14,6 @@ function CartPage() {
   const { cartItems } = useSelector((state) => state.rootReducer);
   const [billChargeModal, setBillChargeModal] = useState(false)
 
-  const [getorder, setGetorder] = useState([])
 
   const [subTotal, setSubTotal] = useState(0)
   const dispatch = useDispatch();
@@ -39,24 +38,13 @@ function CartPage() {
   };
   useEffect(() => {
     let temp = 0;
-    let temp2 = [];
     cartItems.forEach((item) => {
       temp = temp + (item.price * item.quantity)
-      temp2.push({ name: item.name, price: item.price });
-      console.log(temp2)
-    })
-    setSubTotal(temp)
-    setGetorder(temp2)
-  }, [cartItems]);
-console.log(getorder)
-
-  useEffect(() => {
-    let temp = 0;
-    cartItems.forEach((item) => {
       console.log(item.name)
     })
     setSubTotal(temp)
   }, [cartItems]);
+
 
   const onFinish = (values) => {
     const reqObject = {
@@ -70,20 +58,20 @@ console.log(getorder)
       userID: JSON.parse(localStorage.getItem('pos-user'))._id,
       Idrestaurant : Idrestaurant
     };
-    axios.post('/api/bills/charge-bill', reqObject )
-    .then(() => {
-      message.success("Bill charged Successfully");
-      navigate('/bills')
-    }).catch(() => {
-      message.error("Something went wrong");
+    // axios.post('/api/bills/charge-bill', reqObject )
+    // .then(() => {
+    //   message.success("Bill charged Successfully");
+    //   navigate('/bills')
+    // }).catch(() => {
+    //   message.error("Something went wrong");
+    // })
+    cartItems.forEach((item) => {
+      axios.post('/api/bills/bill-order', { ...values, order:item.name , status:"ส่งครัว" , Idrestaurant : Idrestaurant , price:Number(item.price) , quantity:Number(item.quantity)} )
+      .then(() => {
+      }).catch(() => {
+        message.error("Something went wrong");
+      })
     })
-    axios.post('/api/bills/bill-order', reqObject )
-    .then(() => {
-      message.success("Bill charged Successfully");
-    }).catch(() => {
-      message.error("Something went wrong");
-    })
-    console.log(reqObject)
 
   };
   const columns = [
@@ -145,10 +133,10 @@ console.log(getorder)
           <Select>
             <Select.Option value='A1'>A1</Select.Option>
             <Select.Option value='A2'>A2</Select.Option>
-            <Select.Option value='A2'>A3</Select.Option>
-            <Select.Option value='A2'>B1</Select.Option>
-            <Select.Option value='A2'>B2</Select.Option>
-            <Select.Option value='A2'>B3</Select.Option>
+            <Select.Option value='A3'>A3</Select.Option>
+            <Select.Option value='B1'>B1</Select.Option>
+            <Select.Option value='B2'>B2</Select.Option>
+            <Select.Option value='B3'>B3</Select.Option>
           </Select>
         </Form.Item>
 

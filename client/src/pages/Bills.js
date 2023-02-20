@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -7,12 +7,13 @@ import {
 } from "@ant-design/icons";
 import { useCallback } from 'react';
 import { Button, Table, Modal, Divider } from "antd";
+import { useReactToPrint } from 'react-to-print';
 
 function Bills() {
   const [billsData, setBillsData] = useState([]);
-  const [printBillModalVisibility, setPrintBillModalVisibility] = useState(false);
+  const [printBillModalVisibility, setPrintBillModalVisibilty] = useState(false);
   const [selectedBill, setSelectedBill] = useState(null)
-
+  const componentRef = useRef();
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
   const dispatch = useDispatch();
@@ -51,7 +52,7 @@ function Bills() {
         <div className="d-flex">
           <EyeOutlined className="mx-2" onClick={() =>{
             setSelectedBill(record)
-            setPrintBillModalVisibility(true)
+            setPrintBillModalVisibilty(true)
           }}/>
         </div>
       ),
@@ -90,7 +91,9 @@ function Bills() {
   useEffect(() => {
     getAllBills();
   }, [getAllBills]);
-
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
   return (
     <DefaultLayout>
       <div className="d-flex justify-content-between">
@@ -101,27 +104,57 @@ function Bills() {
       {printBillModalVisibility && (
         <Modal
           onCancel={() => {
-            setPrintBillModalVisibility(false)
+            setPrintBillModalVisibilty(false);
           }}
           visible={printBillModalVisibility}
-          title='Bill Details'
+          title="Bill Details"
           footer={false}
           width={800}
         >
-          <div className="bill-model">
-            <div className="d-flex justify">
+          <div className="bill-model p-3" ref={componentRef}>
+            <div className="d-flex justify-content-between bill-header pb-2">
               <div>
-                <div className="bill-customer-details my-2">
-                  <p>Name:{selectedBill.customerName}</p>
-                  <p>Date :{selectedBill.createdAt.toString().substring(0,11)}</p>
-                </div>
-                <Table dataSource={selectedBill.cartItems} columns={cartcolumns} pagination={false}></Table>
-                <div className="dotted-border">
-                  <p><b>ยอดรวม</b> : {selectedBill.subTotal} </p>
-                </div>
-
+                <h1>
+                  <b>{Idrestaurant}</b>
+                </h1>
+              </div>
+              <div>
+                <p>Hyderabd</p>
+                <p>Amberpet 500013</p>
+                <p>9989649278</p>
               </div>
             </div>
+            <div className="bill-customer-details my-2">
+              <p>
+                <b>Name</b> : {selectedBill.customerName}
+              </p>
+              <p>
+                <b>Phone Number</b> : {selectedBill.customerPhoneNumber}
+              </p>
+              <p>
+                <b>Date</b> :{" "}
+                {selectedBill.createdAt.toString().substring(0, 10)}
+              </p>
+            </div>
+            <Table dataSource={selectedBill.cartItems} columns={cartcolumns} pagination={false}/>
+
+            <div className="dotted-border">
+                <p><b>SUB TOTAL</b> : {selectedBill.subTotal}</p>
+            </div>
+
+            <div>
+                <h2><b>ราคาทั้งหมด : {selectedBill.totalAmount}</b></h2>
+            </div>
+            <div className="dotted-border"></div>
+
+            <div className="text-center">
+                  <p>Thanks</p>
+                  <p>Visit Again :)</p>
+            </div>
+          </div>
+
+          <div className="d-flex justify-content-end">
+                  <Button type='primary' onClick={handlePrint}>Print Bill</Button>
           </div>
         </Modal>
       )}

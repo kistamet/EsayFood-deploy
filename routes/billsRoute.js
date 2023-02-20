@@ -43,13 +43,11 @@ router.post("/bill-order", async (req, res) => {
   try {
     const neworder = new orderModel({
       customerName: req.body.customerName,
-      customerPhoneNumber: req.body.customerPhoneNumber,
-      totalAmount: req.body.totalAmount,
       status: req.body.status,
+      price: req.body.price,
+      quantity: req.body.quantity,
       table: req.body.table,
-      subTotal: req.body.subTotal,
-      paymentMode: req.body.paymentMode,
-      cartItems: req.body.cartItems,
+      order: req.body.order,
       IDrestaurant:req.body.Idrestaurant,
     });
     await neworder.save();
@@ -59,5 +57,12 @@ router.post("/bill-order", async (req, res) => {
   }
 });
 
-
+router.post("/bill-order-update", async (req, res) => {
+  try {
+      await orderModel.findOneAndUpdate({_id : req.body.orderId} , req.body)
+      res.send('Order delete successfull')
+  } catch (error) {
+      res.status(400).json(error);
+  }
+});
 module.exports = router;

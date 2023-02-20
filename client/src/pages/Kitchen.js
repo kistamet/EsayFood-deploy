@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import DefaultLayout from '../components/DefaultLayout'
-import { Button, Divider, Table } from 'antd';
+import { Button, Divider, Table , message } from 'antd';
 import axios from 'axios'
 import { useDispatch } from "react-redux";
 import { useCallback } from 'react';
 function Kitchen() {
   const [orderData, setOrderData] = useState([]);
   const dispatch = useDispatch();
-  const [orderData2, setOrderData2] = useState([]);
-
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
 
@@ -26,112 +24,123 @@ function Kitchen() {
       });
   }, [dispatch]);
 
-  //console.log(orderData)
-  orderData.forEach((item) => {
-    //console.log(item.cartItems)
-    orderData2.push(item.cartItems);
-  })
-
-  console.log(orderData2)
-
-  const ArraykeepButton = orderData.find((i) => i.cartItems)
-  const timeTableArraykeepButton = ArraykeepButton?.cartItems.find(item => {
-    return item.name ; // replace with your desired search value
-  });
-  //console.log(timeTableArraykeepButton)
-
-
   useEffect(() => {
     getAllorder();
   }, [getAllorder]);
 
+  const cookingdOrder = (record) => {
+    dispatch({ type: "showLoading" });
+    axios
+      .post("/api/bills/bill-order-update", { orderId: record._id , status : "กำลังทำ"})
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        message.success(`${record.order} order is being made.`)
+        getAllorder()
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        message.error('Something went wrong')
+        console.log(error);
+      });
+  };
+
+  const cancelOrder = (record) => {
+    dispatch({ type: "showLoading" });
+    axios
+      .post("/api/bills/bill-order-update", { orderId: record._id , status : "ยกเลิก" })
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        message.success(`${record.order} has been canceled`)
+        getAllorder()
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        message.error('Something went wrong')
+        console.log(error);
+      });
+  };
+
+  const alreadyOrder = (record) => {
+    dispatch({ type: "showLoading" });
+    axios
+      .post("/api/bills/bill-order-update", { orderId: record._id , status : "เสร็จแล้ว"})
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        message.success(`${record.order} finished.`)
+        getAllorder()
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        message.error('Something went wrong')
+        console.log(error);
+      });
+  };
   const columns = [
     {
       title: 'รายการ',
-      dataIndex:  'name',
-      render: (text) => <a>{text}</a>,
-      width: '50%',
+      dataIndex:  'order',
+      width: '30%',
+    },
+    {
+      title: 'เพิ่มเติม',
+      dataIndex:  'detail',
+      width: '30%',
     },
     {
       title: 'โต๊ะ',
       dataIndex: 'table',
+      width: '15%',
     },
     {
       title: 'จำนวน',
-      dataIndex: 'address',
+      dataIndex: 'quantity',
       width: '15%',
     },
     {
       title: 'สถานะ',
-      dataIndex: 'address',
-      width: '20%',
-    },
-  ];
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
+      dataIndex: 'status',
+      width: '25%',
     },
     {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-    },
-    
-  ];
+      title: "Actions",
+      dataIndex: "_id",
+      width: "425px",
 
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      render: (id, record) => <div className="d-flex justify-content-end">
+        <Button className="d-flex justify-content-end"
+          type="primary"
+          onClick={() => cookingdOrder(record)}
+          style={{ marginLeft: "10px", fontSize: "15px", backgroundColor: "blue" 
+          }}  >กำลังทำ</Button>
+
+
+        <Button className="d-flex justify-content-between" 
+          type="primary"
+          onClick={() => alreadyOrder(record)}
+          style={{fontSize: "15px",backgroundColor: "green",marginLeft: "10px",
+          }}  >เสร็จแล้ว</Button>
+
+        <Button className="d-flex justify-content-end"
+          type="primary"
+          onClick={() => cancelOrder(record)}
+          style={{ marginLeft: "10px", fontSize: "15px", backgroundColor: "red" 
+          }}  >ยกเลิก</Button>
+      </div>
+
     },
-    getCheckboxProps: (record) => ({
-      disabled: record.name === 'Disabled User',
-      // Column configuration not to be checked
-      name: record.name,
-    }),
-  };
-  const [selectionType, setSelectionType] = useState('checkbox');
+  ];
   return (
     <DefaultLayout>
     <div className="d-flex justify-content-between" >
     <h3>ครัว</h3>
-    <div class="d-flex justify-content-center">
-    <Button className="d-flex justify-content-center"
-          type="primary"
-          style={{ marginLeft: "20px",  width: '200px' , height:'50px',  fontSize: "25px", backgroundColor: "blue" 
-          }}  >กำลังทำ</Button>
-    <Button className="d-flex justify-content-center"
-          type="primary"
-          style={{ marginLeft: "20px", width: '150px' , height:'50px', fontSize: "25px", backgroundColor: "green" 
-          }}  >เสร็จแล้ว</Button>
-    <Button className="d-flex justify-content-center"
-          type="primary"
-          style={{ marginLeft: "20px" ,  width: '150px' , height:'50px', fontSize: "25px" , backgroundColor: "red" 
-          }}  >หมด</Button>
     </div>
-    </div>
-
-
     <div>
 
       <Divider />
 
       <Table
-        rowSelection={{
-          type: selectionType,
-          ...rowSelection,
-        }}
         columns={columns}
-        dataSource={orderData.cartItems} bordered />
+        dataSource={orderData.filter((i) => i.IDrestaurant === getIdrestaurant && i.status === "กำลังทำ" || i.status === "ส่งครัว"  )} bordered />
     </div>
     </DefaultLayout>
   )
