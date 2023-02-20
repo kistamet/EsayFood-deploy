@@ -9,6 +9,7 @@ const orderSchema = mongoose.Schema({
     subTotal: { type: Number, required: false },
     paymentMode: { type: String, required: false },
     cartItems: { type: Array, required: false },
+    status: { type: String, required: false },
     IDrestaurant:{ type: String, required: false },
   }, {timestamps : true});
 
