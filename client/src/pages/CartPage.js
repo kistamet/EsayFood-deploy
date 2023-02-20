@@ -69,6 +69,12 @@ function CartPage() {
     }).catch(() => {
       message.error("Something went wrong");
     })
+    axios.post('/api/bills/bill-order', reqObject )
+    .then(() => {
+      message.success("Bill charged Successfully");
+    }).catch(() => {
+      message.error("Something went wrong");
+    })
     console.log(reqObject)
 
   };

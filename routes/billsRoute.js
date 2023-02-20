@@ -31,14 +31,22 @@ router.get("/get-all-bills", async (req, res) => {
         res.status(400).json(error);
     }
 });
-
+router.get("/get-all-order", async (req, res) => {
+  try {
+      const orders = await orderModel.find();
+      res.send(orders);
+  } catch (error) {
+      res.status(400).json(error);
+  }
+});
 router.post("/bill-order", async (req, res) => {
   try {
     const neworder = new orderModel({
       customerName: req.body.customerName,
       customerPhoneNumber: req.body.customerPhoneNumber,
       totalAmount: req.body.totalAmount,
-      tax: req.body.tax,
+      status: req.body.status,
+      table: req.body.table,
       subTotal: req.body.subTotal,
       paymentMode: req.body.paymentMode,
       cartItems: req.body.cartItems,
@@ -50,4 +58,6 @@ router.post("/bill-order", async (req, res) => {
     res.status(400).json(error);
   }
 });
+
+
 module.exports = router;
