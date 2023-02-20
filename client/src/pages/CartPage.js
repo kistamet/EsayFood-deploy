@@ -42,6 +42,14 @@ function CartPage() {
     setSubTotal(temp)
   }, [cartItems]);
 
+  useEffect(() => {
+    let temp = 0;
+    cartItems.forEach((item) => {
+      console.log(item.name)
+    })
+    setSubTotal(temp)
+  }, [cartItems]);
+
   const onFinish = (values) => {
     const reqObject = {
       ...values,
@@ -87,7 +95,7 @@ function CartPage() {
         <div style={{ fontSize: "20px" }}>
           <PlusCircleOutlined
             className="mx-3"
-          
+
             onClick={() => increaseQuantity(record)}
           />
           <b>{record.quantity}</b>
