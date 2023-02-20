@@ -7,6 +7,7 @@ import { useCallback } from 'react';
 function Kitchen() {
   const [orderData, setOrderData] = useState([]);
   const dispatch = useDispatch();
+  const [orderData2, setOrderData2] = useState([]);
 
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
@@ -18,7 +19,6 @@ function Kitchen() {
       .then((response) => {
         dispatch({ type: "hideLoading" });
         setOrderData(response.data)
-        console.log(response.data)
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -26,11 +26,19 @@ function Kitchen() {
       });
   }, [dispatch]);
 
+  //console.log(orderData)
+  orderData.forEach((item) => {
+    //console.log(item.cartItems)
+    orderData2.push(item.cartItems);
+  })
+
+  console.log(orderData2)
+
   const ArraykeepButton = orderData.find((i) => i.cartItems)
   const timeTableArraykeepButton = ArraykeepButton?.cartItems.find(item => {
     return item.name ; // replace with your desired search value
   });
-  console.log(timeTableArraykeepButton)
+  //console.log(timeTableArraykeepButton)
 
 
   useEffect(() => {
@@ -40,7 +48,7 @@ function Kitchen() {
   const columns = [
     {
       title: 'รายการ',
-      dataIndex:  'name', 
+      dataIndex:  'name',
       render: (text) => <a>{text}</a>,
       width: '50%',
     },
@@ -123,7 +131,7 @@ function Kitchen() {
           ...rowSelection,
         }}
         columns={columns}
-        dataSource={orderData.filter((i) => i.IDrestaurant === getIdrestaurant)} bordered />
+        dataSource={orderData.cartItems} bordered />
     </div>
     </DefaultLayout>
   )

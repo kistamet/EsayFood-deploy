@@ -13,6 +13,9 @@ import { useNavigate } from "react-router-dom";
 function CartPage() {
   const { cartItems } = useSelector((state) => state.rootReducer);
   const [billChargeModal, setBillChargeModal] = useState(false)
+
+  const [getorder, setGetorder] = useState([])
+
   const [subTotal, setSubTotal] = useState(0)
   const dispatch = useDispatch();
   const navigate = useNavigate()
@@ -36,11 +39,16 @@ function CartPage() {
   };
   useEffect(() => {
     let temp = 0;
+    let temp2 = [];
     cartItems.forEach((item) => {
       temp = temp + (item.price * item.quantity)
+      temp2.push({ name: item.name, price: item.price });
+      console.log(temp2)
     })
     setSubTotal(temp)
+    setGetorder(temp2)
   }, [cartItems]);
+console.log(getorder)
 
   const onFinish = (values) => {
     const reqObject = {
