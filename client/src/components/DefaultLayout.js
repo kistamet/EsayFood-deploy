@@ -82,7 +82,7 @@ const DefaultLayout = (props) => {
           <Menu.Item key="/Items" icon={<ContainerOutlined style={{ fontSize: '20px' }} />}>
             <Link to="/Items">สินค้าคงคลัง</Link>
           </Menu.Item>
-          <Menu.Item key="/Customers" icon={<HistoryOutlined style={{ fontSize: '20px' }} />}>
+          <Menu.Item key="/HistoryRestaurant" icon={<HistoryOutlined style={{ fontSize: '20px' }} />}>
             <Link to="/HistoryRestaurant">ประวัติการขาย</Link>
           </Menu.Item>
           <Menu.Item key="/ProfileRestaurant" icon={<UserOutlined style={{ fontSize: '20px' }} />}>

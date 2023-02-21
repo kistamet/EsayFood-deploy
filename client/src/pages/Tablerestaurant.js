@@ -14,21 +14,47 @@ import { useCallback } from 'react';
 
 function Tablerestaurant() {
   const dispatch = useDispatch()
+
+  // table active
   const [activeTable, setActiveTable] = useState(null);
+
+  //ตาราง table
   const [keepButton, setKeepButton] = useState([]);
+
+  // color Button
   const [buttonColor, setButtonColor] = useState('primary');
 
+  //ข้อมูล order
   const [orderData, setOrderData] = useState([]);
+
+  //price
   const [subTotal, setSubTotal] = useState(0)
 
   const [billtable, setBilltable] = useState(false);
 
+  //time
   const now = new Date(); // get the current time
   const timenow = now.toLocaleTimeString();
 
+  //Idrestaurant
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
 
+  //get table avtive
+  const getStatusTable = JSON.parse(localStorage.getItem('pop-table'));
+  const [statusTable, setStatusTable] = useState(getStatusTable);
+  
+
+  const A1Color = statusTable.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
+  const A2Color = statusTable.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
+  const A3Color = statusTable.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
+  const B1Color = statusTable.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
+  const B2Color = statusTable.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
+  const B3Color = statusTable.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
+  const B4Color = statusTable.some(item => item.table === "B4" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
+
+  console.log(statusTable)
+  //
   const handleButtonClick = (buttonName) => {
     if (activeTable === buttonName) {
       setActiveTable(null);
@@ -41,7 +67,6 @@ function Tablerestaurant() {
     }
   };
 
-
   const getAllorder = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios
@@ -49,6 +74,7 @@ function Tablerestaurant() {
       .then((response) => {
         dispatch({ type: "hideLoading" });
         setOrderData(response.data)
+        
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -63,6 +89,9 @@ function Tablerestaurant() {
       .then((response) => {
         dispatch({ type: "hideLoading" });
         setKeepButton(response.data);
+        //get from app
+        localStorage.setItem('pop-table', JSON.stringify(response.data))
+        setStatusTable(response.data)
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -86,7 +115,6 @@ function Tablerestaurant() {
       });
 
   };
-
   const onFinish = (values) => {
 
     dispatch({ type: "showLoading" });
@@ -127,7 +155,7 @@ function Tablerestaurant() {
   useEffect(() => {
     getAllTabel();
     getAllorder();
-  }, [getAllTabel]);
+  }, [getAllTabel, getAllorder]);
 
   
   //import time from "table"
@@ -142,7 +170,6 @@ function Tablerestaurant() {
       total = Number(total) + Number((item.price * item.quantity))
       quantity = Number(quantity) + 1
     }})
-
 
     
   const columns = [
@@ -176,22 +203,22 @@ function Tablerestaurant() {
             
             <Col span={22}  ><Divider />
               <div >
-                <Button className={`${activeTable === 'A1' ? buttonColor : ''} button`} onClick={() => handleButtonClick('A1')} >
+                <Button className={`${activeTable === 'A1' ? buttonColor : ''} button`} style={{ backgroundColor: A1Color }} onClick={() => handleButtonClick('A1')} >
                   A1
                 </Button>
-                <Button className={`${activeTable === 'A2' ? buttonColor : ''} button`} onClick={() => handleButtonClick('A2')}  >
+                <Button className={`${activeTable === 'A2' ? buttonColor : ''} button`} style={{ backgroundColor: A2Color }} onClick={() => handleButtonClick('A2')}  >
                   A2
                 </Button>
-                <Button className={`${activeTable === 'A3' ? buttonColor : ''} button`} onClick={() => handleButtonClick('A3')}>
+                <Button className={`${activeTable === 'A3' ? buttonColor : ''} button`} style={{ backgroundColor: A3Color }} onClick={() => handleButtonClick('A3')}>
                   A3
                 </Button>
-                <Button className={`${activeTable === 'B1' ? buttonColor : ''} button`} onClick={() => handleButtonClick('B1')}>
+                <Button className={`${activeTable === 'B1' ? buttonColor : ''} button`} style={{ backgroundColor: B1Color }} onClick={() => handleButtonClick('B1')}>
                   B1
                 </Button>
-                <Button className={`${activeTable === 'B2' ? buttonColor : ''} button`} onClick={() => handleButtonClick('B2')}>
+                <Button className={`${activeTable === 'B2' ? buttonColor : ''} button`} style={{ backgroundColor: B2Color }} onClick={() => handleButtonClick('B2')}>
                   B2
                 </Button>
-                <Button className={`${activeTable === 'B3' ? buttonColor : ''} button`} onClick={() => handleButtonClick('B3')}>
+                <Button className={`${activeTable === 'B3' ? buttonColor : ''} button`} style={{ backgroundColor: B3Color }} onClick={() => handleButtonClick('B3')}>
                   B3
                 </Button>
               </div>
