@@ -78,11 +78,11 @@ function Items() {
       title: "Actions",
       dataIndex: "_id",
       render: (id, record) => <div className="d-flex">
-        <EditOutlined className="ms-2" onClick={() => {
+        <EditOutlined className="ms-2" style={{ fontSize: "20px" }} onClick={() => {
           setEditingItem(record)
           setAddEditModalVisibilty(true)
         }} />
-        <DeleteOutlined className="mx-2" onClick={()=> deleteItem(record)} />
+        <DeleteOutlined className="mx-2" style={{ fontSize: "20px" }} onClick={()=> deleteItem(record)} />
 
       </div>
     },

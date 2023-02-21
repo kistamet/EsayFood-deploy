@@ -34,7 +34,7 @@ function Bills() {
 
   const columns = [
     {
-      title: "Customer",
+      title: "ชื่อลูกค้า",
       dataIndex: "customerName",
     },
     {

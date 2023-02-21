@@ -69,10 +69,11 @@ function CartPage() {
       axios.post('/api/bills/bill-order', { ...values, order:item.name , status:"ส่งครัว" , Idrestaurant : Idrestaurant , price:Number(item.price) , quantity:Number(item.quantity)} )
       .then(() => {
       }).catch(() => {
-        message.error("Something went wrong");
+        //message.error("Something went wrong");
       })
     })
-
+    message.success("Bill charged Successfully");
+    navigate('/bills')
   };
   const columns = [
     {

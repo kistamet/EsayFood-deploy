@@ -18,6 +18,7 @@ function Tablerestaurant() {
   const [keepButton, setKeepButton] = useState([]);
   const [buttonColor, setButtonColor] = useState('primary');
 
+  const [orderData, setOrderData] = useState([]);
   const [subTotal, setSubTotal] = useState(0)
 
   const [billtable, setBilltable] = useState(false);
@@ -37,9 +38,23 @@ function Tablerestaurant() {
       setActiveTable(buttonName);
       setButtonColor('danger');
       getAllTabel()
-
     }
   };
+
+
+  const getAllorder = useCallback(() => {
+    dispatch({ type: "showLoading" });
+    axios
+      .get("/api/bills/get-all-order")
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        setOrderData(response.data)
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        console.log(error);
+      });
+  }, [dispatch]);
 
   const getAllTabel = useCallback(() => {
     dispatch({ type: "showLoading" });
@@ -84,7 +99,7 @@ function Tablerestaurant() {
       })
       .catch((error) => {
         if (error.response.data.message === "Table already exists") {
-          message.error(`Table ${activeTable} already  `)
+          message.error(`Table ${activeTable} is already  `)
         } else {
           message.error("Something went wrong");
         }
@@ -108,51 +123,49 @@ function Tablerestaurant() {
     }).catch(() => {
       message.error("Something went wrong");
     })
-    console.log(reqObject)
   }
   useEffect(() => {
     getAllTabel();
+    getAllorder();
   }, [getAllTabel]);
 
-  const ArraykeepButton = keepButton.find((i) => i.table === activeTable)
+  
+  //import time from "table"
+  const ArraykeepButton = keepButton.find((i) => i.table === activeTable && i.IDrestaurant === getIdrestaurant)
   const timeTableArraykeepButton = ArraykeepButton?.time
 
-  const data = [];
-  for (let i = 0; i < 10; i++) {
-    data.push({
-      key: i,
-      name: `กระเกรา ${i}`,
-      age: 32,
-      address: `1. ${i}`,
-    });
-  }
+  //price total and quantity each table 
+  let total = "";
+  let quantity = "";
+  orderData.forEach((item) => {
+    if (item.table === activeTable && item.IDrestaurant === getIdrestaurant){
+      total = Number(total) + Number((item.price * item.quantity))
+      quantity = Number(quantity) + 1
+    }})
 
+
+    
   const columns = [
     {
       title: 'รายการ',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'order',
       width: '30%',
     },
     {
       title: 'ราคา',
-      dataIndex: 'age',
-      key: 'age',
+      dataIndex: 'price',
     },
     {
       title: 'จำนวน',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'quantity',
     },
     {
       title: 'รวม',
       dataIndex: 'address',
-      key: 'address',
     },
     {
       title: 'สถานะ',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'status',
     },
   ];
   return (
@@ -181,7 +194,6 @@ function Tablerestaurant() {
                 <Button className={`${activeTable === 'B3' ? buttonColor : ''} button`} onClick={() => handleButtonClick('B3')}>
                   B3
                 </Button>
-
               </div>
             </Col>
 
@@ -197,8 +209,8 @@ function Tablerestaurant() {
                 <Col span={26} >
                   <Descriptions labelStyle={{ fontSize: '20px' }}>
                     <Descriptions.Item label="โต๊ะ" style={{ fontSize: '20px' }}>{activeTable}</Descriptions.Item>
-                    <Descriptions.Item label="รายการ">2</Descriptions.Item>
-                    <Descriptions.Item label="ราคา">300</Descriptions.Item>
+                    <Descriptions.Item label="รายการ">{quantity}</Descriptions.Item>
+                    <Descriptions.Item label="ราคา">{total}</Descriptions.Item>
                     <Descriptions.Item label="เวลามา" style={{ fontSize: '20px' }}>{timeTableArraykeepButton}</Descriptions.Item>
                   </Descriptions>
                 </Col>
@@ -235,17 +247,18 @@ function Tablerestaurant() {
             </Row>
             <Table
               columns={columns}
-              dataSource={data}
+              dataSource={orderData.filter((i) => i.IDrestaurant === getIdrestaurant && i.table === activeTable )}
               pagination={false}
               scroll={{
                 y: 200,
               }}
               bordered={true}
+              footer={false}
             />
           </Col>
           <div className="d-flex justify-content-end" style={{ backgroundColor: '#13AAFF', border: '2px solid black' }}>
-            <div class="p-2" style={{ fontSize: '25px' }}>ราคารวม :</div>
-            <div class="p-2" style={{ fontSize: '25px' }}>200</div>
+            <div class="p-2" style={{ fontSize: '25px' }}>ราคาอาหารรวม :</div>
+            <div class="p-2" style={{ fontSize: '25px' }}>{total}</div>
           </div>
         </Col>
       </Row>
@@ -256,6 +269,7 @@ function Tablerestaurant() {
           visible={billtable}
           title={"Charge Bill"}
           footer={false}
+          width={800}
         >
           <Form 
             layout="vertical" onFinish={onFinishbilltable}  >
@@ -264,14 +278,13 @@ function Tablerestaurant() {
                 <h5>รายการทั้งหมด<b></b></h5>
                 <Table
               columns={columns}
-              dataSource={data}
+              dataSource={orderData.filter((i) => i.IDrestaurant === getIdrestaurant && i.table === activeTable )}
               pagination={false}
               scroll={{
                 y: 200,
               }}
-              bordered={true}
-            />
-                <h2>ยอดรวม : <b>323</b></h2>
+            /><h5>รายการ : <b>{quantity}</b></h5>
+                <h2>ยอดรวม : <b>{total}</b></h2>
               </div>
               <div className="d-flex justify-content-start">
               <h4 >จ่ายด้วย </h4>
