@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DefaultLayout from '../components/DefaultLayout'
-import { Col, Row, Button, Card, Form, Modal, Descriptions, Table, message, Select ,Divider } from 'antd';
+import { Col, Row, Button, Card, Form, Modal, Descriptions, Table, message, Select, Divider } from 'antd';
 import "../resourses/Table.css";
 import {
   PlusCircleOutlined,
@@ -19,7 +19,7 @@ function Tablerestaurant() {
   const [activeTable, setActiveTable] = useState(null);
 
   //ตาราง table
-  const [keepButton, setKeepButton] = useState([]);
+  const [table, setTable] = useState([]);
 
   // color Button
   const [buttonColor, setButtonColor] = useState('primary');
@@ -42,28 +42,46 @@ function Tablerestaurant() {
 
   //get table avtive
   const getStatusTable = JSON.parse(localStorage.getItem('pop-table'));
-  const [statusTable, setStatusTable] = useState(getStatusTable);
-  
+  const [statusTable, setStatusTable] = useState([]);
 
-  const A1Color = statusTable.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
-  const A2Color = statusTable.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
-  const A3Color = statusTable.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
-  const B1Color = statusTable.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
-  const B2Color = statusTable.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
-  const B3Color = statusTable.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
-  const B4Color = statusTable.some(item => item.table === "B4" && item.IDrestaurant === Idrestaurant) ? '#3672f4' : '';
+  const getStatusOrder = JSON.parse(localStorage.getItem('pop-table-Order'));
+  const [statusTableOrder, setStatusTableOrder] = useState([])
 
-  console.log(statusTable)
-  //
+
+  const A1Color = (statusTable.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant))
+    ? '#3672f4'
+    : '';
+    const A2Color = (statusTable.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant))
+    ? '#3672f4'
+    : '';
+    const A3Color = (statusTable.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant))
+    ? '#3672f4'
+    : '';
+    const B1Color = (statusTable.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant))
+    ? '#3672f4'
+    : '';
+    const B2Color = (statusTable.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant))
+    ? '#3672f4'
+    : '';
+    const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant))
+    ? '#3672f4'
+    : '';
+
+  //active Button
   const handleButtonClick = (buttonName) => {
     if (activeTable === buttonName) {
       setActiveTable(null);
       setButtonColor('primary');
-      console.log("if")
     } else {
       setActiveTable(buttonName);
       setButtonColor('danger');
-      getAllTabel()
+      getAllTable()
     }
   };
 
@@ -74,7 +92,9 @@ function Tablerestaurant() {
       .then((response) => {
         dispatch({ type: "hideLoading" });
         setOrderData(response.data)
-        
+        //get from app
+        localStorage.setItem('pop-table-Order', JSON.stringify(response.data))
+        setStatusTableOrder(response.data)
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -82,13 +102,13 @@ function Tablerestaurant() {
       });
   }, [dispatch]);
 
-  const getAllTabel = useCallback(() => {
+  const getAllTable = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios
       .get("/api/tables/get-all-table")
       .then((response) => {
         dispatch({ type: "hideLoading" });
-        setKeepButton(response.data);
+        setTable(response.data);
         //get from app
         localStorage.setItem('pop-table', JSON.stringify(response.data))
         setStatusTable(response.data)
@@ -101,12 +121,13 @@ function Tablerestaurant() {
 
   const cancelTable = () => {
     dispatch({ type: "showLoading" });
+    for (let i = 0; i < orderData.length; i++) {
     axios
       .post("/api/tables/cancel-table", { tablenumber: activeTable })
       .then((response) => {
         dispatch({ type: "hideLoading" });
-        message.success('Table cancel successfully')
-        getAllTabel()
+        getAllTable()
+        getAllorder()
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -114,7 +135,9 @@ function Tablerestaurant() {
         console.log(error);
       });
 
-  };
+  }
+  message.success('Table cancel successfully')
+  }
   const onFinish = (values) => {
 
     dispatch({ type: "showLoading" });
@@ -123,7 +146,7 @@ function Tablerestaurant() {
       .then((response) => {
         dispatch({ type: "hideLoading" });
         message.success('Table add successfully')
-        getAllTabel()
+        getAllTable()
       })
       .catch((error) => {
         if (error.response.data.message === "Table already exists") {
@@ -143,35 +166,41 @@ function Tablerestaurant() {
       tax: ((subTotal / 100) * 10),
       totalAmount: subTotal,
       userID: JSON.parse(localStorage.getItem('pos-user'))._id,
-      Idrestaurant : Idrestaurant
+      Idrestaurant: Idrestaurant
     };
-    axios.post('/api/bills/bill-order', reqObject )
-    .then(() => {
-      message.success("Bill charged Successfully");
-    }).catch(() => {
-      message.error("Something went wrong");
-    })
+    axios.post('/api/bills/bill-order', reqObject)
+      .then(() => {
+        message.success("Bill charged Successfully");
+      }).catch(() => {
+        message.error("Something went wrong");
+      })
   }
   useEffect(() => {
-    getAllTabel();
+    getAllTable();
     getAllorder();
-  }, [getAllTabel, getAllorder]);
+  }, [getAllTable, getAllorder]);
 
-  
+
   //import time from "table"
-  const ArraykeepButton = keepButton.find((i) => i.table === activeTable && i.IDrestaurant === getIdrestaurant)
-  const timeTableArraykeepButton = ArraykeepButton?.time
+  const timeTable = table.find((i) => i.table === activeTable && i.IDrestaurant === getIdrestaurant)
+  const timeTableButton = timeTable?.time
 
   //price total and quantity each table 
   let total = "";
   let quantity = "";
+  let dataTimetable = [];
+  let getTimetable = "";
   orderData.forEach((item) => {
-    if (item.table === activeTable && item.IDrestaurant === getIdrestaurant){
+    if (item.table === activeTable && item.IDrestaurant === getIdrestaurant) {
       total = Number(total) + Number((item.price * item.quantity))
       quantity = Number(quantity) + 1
-    }})
+      dataTimetable.push(item.time)
+      dataTimetable.sort()
+      getTimetable = dataTimetable[0]
+    }
+  })
 
-    
+
   const columns = [
     {
       title: 'รายการ',
@@ -200,7 +229,7 @@ function Tablerestaurant() {
       <Row>
         <Col span={12}><h3>โต๊ะอาหาร</h3>
           <Row gutter={16}>
-            
+
             <Col span={22}  ><Divider />
               <div >
                 <Button className={`${activeTable === 'A1' ? buttonColor : ''} button`} style={{ backgroundColor: A1Color }} onClick={() => handleButtonClick('A1')} >
@@ -238,7 +267,7 @@ function Tablerestaurant() {
                     <Descriptions.Item label="โต๊ะ" style={{ fontSize: '20px' }}>{activeTable}</Descriptions.Item>
                     <Descriptions.Item label="รายการ">{quantity}</Descriptions.Item>
                     <Descriptions.Item label="ราคา">{total}</Descriptions.Item>
-                    <Descriptions.Item label="เวลามา" style={{ fontSize: '20px' }}>{timeTableArraykeepButton}</Descriptions.Item>
+                    <Descriptions.Item label="เวลามา" style={{ fontSize: '20px' }}>{getTimetable}</Descriptions.Item>
                   </Descriptions>
                 </Col>
 
@@ -256,7 +285,7 @@ function Tablerestaurant() {
               <Col span={6} >
                 <Button className="custom-button">
                   <QrcodeOutlined style={{ fontSize: '40px' }} />
-                  <span>เพิ่ม</span>
+                  <span>Qr Code</span>
                 </Button>
               </Col>
               <Col span={6} >
@@ -274,7 +303,7 @@ function Tablerestaurant() {
             </Row>
             <Table
               columns={columns}
-              dataSource={orderData.filter((i) => i.IDrestaurant === getIdrestaurant && i.table === activeTable )}
+              dataSource={orderData.filter((i) => i.IDrestaurant === getIdrestaurant && i.table === activeTable)}
               pagination={false}
               scroll={{
                 y: 200,
@@ -290,7 +319,7 @@ function Tablerestaurant() {
         </Col>
       </Row>
       {billtable && (
-        <Modal  onCancel={() => {
+        <Modal onCancel={() => {
           setBilltable(false)
         }}
           visible={billtable}
@@ -298,34 +327,34 @@ function Tablerestaurant() {
           footer={false}
           width={800}
         >
-          <Form 
+          <Form
             layout="vertical" onFinish={onFinishbilltable}  >
             <div>
               <div className="Charge-bill-amount">
                 <h5>รายการทั้งหมด<b></b></h5>
                 <Table
-              columns={columns}
-              dataSource={orderData.filter((i) => i.IDrestaurant === getIdrestaurant && i.table === activeTable )}
-              pagination={false}
-              scroll={{
-                y: 200,
-              }}
-            /><h5>รายการ : <b>{quantity}</b></h5>
+                  columns={columns}
+                  dataSource={orderData.filter((i) => i.IDrestaurant === getIdrestaurant && i.table === activeTable)}
+                  pagination={false}
+                  scroll={{
+                    y: 200,
+                  }}
+                /><h5>รายการ : <b>{quantity}</b></h5>
                 <h2>ยอดรวม : <b>{total}</b></h2>
               </div>
               <div className="d-flex justify-content-start">
-              <h4 >จ่ายด้วย </h4>
-              <Form.Item  name='paymentMode'style={{ width: '200px', marginLeft: '10px' }}>
-                <Select>
-                  <Select.Option value='cash' >เงินสด</Select.Option>
-                  <Select.Option value='card'>บัตร</Select.Option>
-                </Select>
-              </Form.Item>
-              
+                <h4 >จ่ายด้วย </h4>
+                <Form.Item name='paymentMode' style={{ width: '200px', marginLeft: '10px' }}>
+                  <Select>
+                    <Select.Option value='cash' >เงินสด</Select.Option>
+                    <Select.Option value='card'>บัตร</Select.Option>
+                  </Select>
+                </Form.Item>
+
               </div>
               <div class="d-flex justify-content-end">
-              <Button htmlType="submit" type="primary"  >ยืนยัน</Button>
-            </div>
+                <Button htmlType="submit" type="primary"  >ยืนยัน</Button>
+              </div>
             </div>
           </Form>
         </Modal>

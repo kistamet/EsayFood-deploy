@@ -14,6 +14,8 @@ function CartPage() {
   const { cartItems } = useSelector((state) => state.rootReducer);
   const [billChargeModal, setBillChargeModal] = useState(false)
 
+  const now = new Date(); // get the current time
+  const timenow = now.toLocaleTimeString();
 
   const [subTotal, setSubTotal] = useState(0)
   const dispatch = useDispatch();
@@ -66,7 +68,7 @@ function CartPage() {
     //   message.error("Something went wrong");
     // })
     cartItems.forEach((item) => {
-      axios.post('/api/bills/bill-order', { ...values, order:item.name , status:"ส่งครัว" , Idrestaurant : Idrestaurant , price:Number(item.price) , quantity:Number(item.quantity)} )
+      axios.post('/api/bills/bill-order', { ...values,time: timenow  , order:item.name , status:"ส่งครัว" , Idrestaurant : Idrestaurant , price:Number(item.price) , quantity:Number(item.quantity)} )
       .then(() => {
       }).catch(() => {
         //message.error("Something went wrong");

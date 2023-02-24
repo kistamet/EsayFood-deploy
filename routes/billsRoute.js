@@ -48,6 +48,7 @@ router.post("/bill-order", async (req, res) => {
       quantity: req.body.quantity,
       table: req.body.table,
       order: req.body.order,
+      time: req.body.time,
       IDrestaurant:req.body.Idrestaurant,
     });
     await neworder.save();

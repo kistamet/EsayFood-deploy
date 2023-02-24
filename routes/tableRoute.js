@@ -1,5 +1,6 @@
 const express = require("express");
 const tableModel = require("../models/tableModel");
+const orderModel = require("../models/orderModel");
 const router = express.Router();
 
 router.get("/get-all-table", async (req, res) => {
@@ -43,6 +44,7 @@ router.post("/add-table", async (req, res) => {
 router.post("/cancel-table", async (req, res) => {
     try {
         await tableModel.findOneAndDelete({ table: req.body.tablenumber })
+        await orderModel.findOneAndDelete({ table: req.body.tablenumber })
         res.send('Table cancel successfull')
     } catch (error) {
         res.status(400).json(error);
