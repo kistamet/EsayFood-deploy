@@ -11,7 +11,6 @@ router.post("/charge-bill", async (req, res) => {
         customerPhoneNumber: req.body.customerPhoneNumber,
         totalAmount: req.body.totalAmount,
         table: req.body.table,
-        tax: req.body.tax,
         subTotal: req.body.subTotal,
         paymentMode: req.body.paymentMode,
         cartItems: req.body.cartItems,

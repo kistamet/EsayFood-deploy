@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState  } from "react";
 import DefaultLayout from '../components/DefaultLayout'
 import { Col, Row, Button, Card, Form, Modal, Descriptions, Table, message, Select, Divider } from 'antd';
 import "../resourses/Table.css";
@@ -9,12 +9,11 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useCallback } from 'react';
 
 function Tablerestaurant() {
   const dispatch = useDispatch()
-
   // table active
   const [activeTable, setActiveTable] = useState(null);
 
@@ -156,24 +155,40 @@ function Tablerestaurant() {
         }
         dispatch({ type: "hideLoading" });
       });
+      for (let i = 0; i < orderData.length; i++) {
+        axios
+          .post("/api/tables/cancel-table", { tablenumber: activeTable })
+          .then((response) => {
+            dispatch({ type: "hideLoading" });
+            getAllTable()
+            getAllorder()
+          })
+          .catch((error) => {
+            dispatch({ type: "hideLoading" });
+            message.error('Something went wrong')
+            console.log(error);
+          });
+    
+      }
   }
   const onFinishbilltable = (values) => {
     setBilltable(false);
     console.log(values)
     const reqObject = {
       ...values,
-      subTotal,
-      tax: ((subTotal / 100) * 10),
-      totalAmount: subTotal,
-      userID: JSON.parse(localStorage.getItem('pos-user'))._id,
-      Idrestaurant: Idrestaurant
+      cartItems:dataOrdertable, //order table page to bill page
+      subTotal : total,
+      totalAmount:quantity,
+      table : activeTable,
+      Idrestaurant : Idrestaurant
     };
-    axios.post('/api/bills/bill-order', reqObject)
+    axios.post('/api/bills/charge-bill', reqObject)
       .then(() => {
-        message.success("Bill charged Successfully");
+        message.success(`Bill ${activeTable} charged Successfully`);
       }).catch(() => {
         message.error("Something went wrong");
       })
+      
   }
   useEffect(() => {
     getAllTable();
@@ -189,7 +204,9 @@ function Tablerestaurant() {
   let total = "";
   let quantity = "";
   let dataTimetable = [];
+  let dataOrdertable = [];
   let getTimetable = "";
+  let temp = 0;
   orderData.forEach((item) => {
     if (item.table === activeTable && item.IDrestaurant === getIdrestaurant) {
       total = Number(total) + Number((item.price * item.quantity))
@@ -197,9 +214,11 @@ function Tablerestaurant() {
       dataTimetable.push(item.time)
       dataTimetable.sort()
       getTimetable = dataTimetable[0]
+      temp = temp + (item.price * item.quantity)
+      dataOrdertable.push(item)
     }
   })
-
+console.log(dataOrdertable)
 
   const columns = [
     {
