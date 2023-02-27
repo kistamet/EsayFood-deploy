@@ -49,6 +49,7 @@ router.post("/bill-order", async (req, res) => {
       order: req.body.order,
       time: req.body.time,
       IDrestaurant:req.body.Idrestaurant,
+      ObjectIdItem:req.body.ObjectIdItem,
     });
     await neworder.save();
     res.send('Bill charged successfully' );

@@ -55,4 +55,13 @@ router.post("/delete-item", async (req, res) => {
         res.status(400).json(error);
     }
 });
+
+router.post("/update-stock", async (req, res) => {
+    try {
+        await menuItemModel.findOneAndUpdate({_id : req.body.itemId ,stock : req.body.stock})
+        res.send('Update stock successfull')
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
 module.exports = router;

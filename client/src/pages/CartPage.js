@@ -48,7 +48,7 @@ function CartPage() {
   }, [cartItems]);
 
 
-  const onFinish = (values) => {
+  const onFinish = (values , record) => {
     const reqObject = {
       ...values,
       subTotal,
@@ -68,7 +68,8 @@ function CartPage() {
     //   message.error("Something went wrong");
     // })
     cartItems.forEach((item) => {
-      axios.post('/api/bills/bill-order', { ...values,time: timenow  , order:item.name , status:"ส่งครัว" , Idrestaurant : Idrestaurant , price:Number(item.price) , quantity:Number(item.quantity)} )
+      console.log(item)
+      axios.post('/api/bills/bill-order', { ...values , ObjectIdItem:item._id , time: timenow  , order:item.name , status:"ส่งครัว" , Idrestaurant : Idrestaurant , price:Number(item.price) , quantity:Number(item.quantity)} )
       .then(() => {
       }).catch(() => {
         //message.error("Something went wrong");
@@ -150,7 +151,7 @@ function CartPage() {
         <Form.Item name='paymentMode' label='จ่ายด้วย'>
           <Select>
             <Select.Option value='cash'>เงินสด</Select.Option>
-            <Select.Option value='card'>บัตร</Select.Option>
+            <Select.Option value='card'>บัตร</Select.Option>z
           </Select>
         </Form.Item>
         <div className="Charge-bill-amount">

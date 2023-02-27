@@ -11,6 +11,7 @@ const orderSchema = mongoose.Schema({
     status: { type: String, required: false },
     time: { type: String, required: false },
     IDrestaurant:{ type: String, required: false },
+    ObjectIdItem:{ type: String, required: false },
   }, {timestamps : true});
 
 const ordersModel = mongoose.model("orders", orderSchema);
