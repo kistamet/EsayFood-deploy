@@ -11,15 +11,6 @@ function ProfileRestaurant() {
 
   const updateRestaurant = async () => {
     setLoading(true);
-    try {
-      const response = await axios.put(`/api/restaurant/${Idrestaurant}`, {
-        Idrestaurant
-      });
-      message.success('Successfully updated restaurant details');
-    } catch (error) {
-      message.error('Failed to update restaurant details');
-    }
-    setLoading(false);
   };
   return (
     <DefaultLayout>

@@ -9,7 +9,7 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useCallback } from 'react';
 
 function Tablerestaurant() {
@@ -155,21 +155,6 @@ function Tablerestaurant() {
         }
         dispatch({ type: "hideLoading" });
       });
-      for (let i = 0; i < orderData.length; i++) {
-        axios
-          .post("/api/tables/cancel-table", { tablenumber: activeTable })
-          .then((response) => {
-            dispatch({ type: "hideLoading" });
-            getAllTable()
-            getAllorder()
-          })
-          .catch((error) => {
-            dispatch({ type: "hideLoading" });
-            message.error('Something went wrong')
-            console.log(error);
-          });
-    
-      }
   }
   const onFinishbilltable = (values) => {
     setBilltable(false);
@@ -188,7 +173,21 @@ function Tablerestaurant() {
       }).catch(() => {
         message.error("Something went wrong");
       })
-      
+      for (let i = 0; i < orderData.length; i++) {
+        axios
+          .post("/api/tables/cancel-table", { tablenumber: activeTable })
+          .then((response) => {
+            dispatch({ type: "hideLoading" });
+            getAllTable()
+            getAllorder()
+          })
+          .catch((error) => {
+            dispatch({ type: "hideLoading" });
+            message.error('Something went wrong')
+            console.log(error);
+          });
+    
+      }
   }
   useEffect(() => {
     getAllTable();
