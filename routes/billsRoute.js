@@ -9,12 +9,14 @@ router.post("/charge-bill", async (req, res) => {
       const newbill = new BillModel({
         customerName: req.body.customerName,
         customerPhoneNumber: req.body.customerPhoneNumber,
-        totalAmount: req.body.totalAmount,
+        quantity: req.body.quantity,
         table: req.body.table,
         subTotal: req.body.subTotal,
         paymentMode: req.body.paymentMode,
         cartItems: req.body.cartItems,
         IDrestaurant:req.body.Idrestaurant,
+        timecheckbills: req.body.timecheckbills,
+        kind:req.body.kind,
       });
       await newbill.save();
       res.send('Bill charged successfully' );
@@ -50,6 +52,7 @@ router.post("/bill-order", async (req, res) => {
       time: req.body.time,
       IDrestaurant:req.body.Idrestaurant,
       ObjectIdItem:req.body.ObjectIdItem,
+      kind:req.body.kind,
     });
     await neworder.save();
     res.send('Bill charged successfully' );

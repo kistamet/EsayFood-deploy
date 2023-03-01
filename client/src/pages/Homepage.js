@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DefaultLayout from '../components/DefaultLayout'
 import axios from 'axios'
-import { Col, Row } from "antd";
+import { Col, Row , } from "antd";
 import Item from '../components/Item';
 import '../resourses/items.css'
 import { useDispatch } from 'react-redux';

@@ -17,6 +17,7 @@ function Bills() {
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
   const dispatch = useDispatch();
+
   const getAllBills = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios
@@ -31,29 +32,37 @@ function Bills() {
       });
   }, [dispatch]);
 
-
   const columns = [
     {
-      title: "ชื่อลูกค้า",
-      dataIndex: "customerName",
-    },
+      title: "ชื่อลูกค้า / โต๊ะ",
+      dataIndex: "table",
+      render: (text, record) => {
+        return (
+          <div>
+            <span>{record.customerName}</span>
+            <span>{text}</span>
+          </div>
+        );
+      },
+    },   
     {
-      title: "SubTotal",
+      title: "ราคาทั้งหมด",
       dataIndex: "subTotal",
     },
-     {
-      title: "Total",
-      dataIndex: "totalAmount",
+    {
+      title: "ประเภท",
+      dataIndex: "kind",
+      width: '15%',
     },
     {
       title: "Bill Details",
       dataIndex: "_id",
-      render: (id, record) =>(
+      render: (id, record) => (
         <div className="d-flex">
-          <EyeOutlined className="mx-2" onClick={() =>{
+          <EyeOutlined className="mx-2" onClick={() => {
             setSelectedBill(record)
             setPrintBillModalVisibilty(true)
-          }}/>
+          }} />
         </div>
       ),
     },
@@ -61,7 +70,7 @@ function Bills() {
   const cartcolumns = [
     {
       title: "รายการ",
-      dataIndex: "name",
+      dataIndex: "order",
     },
     {
       title: "ราคา",
@@ -94,10 +103,12 @@ function Bills() {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
+
   return (
     <DefaultLayout>
       <div className="d-flex justify-content-between">
-        <h3>คลังสินค้า</h3>
+        <h3>Bills</h3>
       </div>
       <Divider />
       <Table columns={columns} dataSource={billsData.filter((i) => i.IDrestaurant === getIdrestaurant)} bordered />
@@ -124,37 +135,43 @@ function Bills() {
                 <p>9989649278</p>
               </div>
             </div>
-            <div className="bill-customer-details my-2">
+            <div className="bill-customer-details my-2 dotted-border">
               <p>
-                <b>Name</b> : {selectedBill.customerName}
+                <b>Name</b> : {selectedBill.customerName || selectedBill.table}
               </p>
+
               <p>
                 <b>Phone Number</b> : {selectedBill.customerPhoneNumber}
               </p>
-              <p>
+              <p >
                 <b>Date</b> :{" "}
-                {selectedBill.createdAt.toString().substring(0, 10)}
+                {selectedBill.createdAt.toString().substring(0, 10)} {" "}
+                {(selectedBill.timecheckbills.toString().substring(0, 5))}
+              </p>
+              <p >
+                <b>Cashier</b> :{" "}
               </p>
             </div>
-            <Table dataSource={selectedBill.cartItems} columns={cartcolumns} pagination={false}/>
+            <Table dataSource={selectedBill.cartItems} columns={cartcolumns} pagination={false} />
 
             <div className="dotted-border">
-                <p><b>SUB TOTAL</b> : {selectedBill.subTotal}</p>
+              <p><b>Total</b> : {selectedBill.subTotal}</p>
+              <p><b>PayMode</b> : {selectedBill.paymentMode}</p>
             </div>
 
             <div>
-                <h2><b>ราคาทั้งหมด : {selectedBill.totalAmount}</b></h2>
+              <h2><b>ราคาทั้งหมด : {selectedBill.subTotal}</b></h2>
             </div>
             <div className="dotted-border"></div>
 
             <div className="text-center">
-                  <p>Thanks</p>
-                  <p>Visit Again :)</p>
+              <p>Thanks</p>
+              <p>Visit Again :)</p>
             </div>
           </div>
 
           <div className="d-flex justify-content-end">
-                  <Button type='primary' onClick={handlePrint}>Print Bill</Button>
+            <Button type='primary' onClick={handlePrint}>Print Bill</Button>
           </div>
         </Modal>
       )}

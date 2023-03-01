@@ -44,7 +44,7 @@ router.post("/add-table", async (req, res) => {
 router.post("/cancel-table", async (req, res) => {
     try {
         await tableModel.findOneAndDelete({ table: req.body.tablenumber })
-        await orderModel.findOneAndDelete({ table: req.body.tablenumber })
+        await orderModel.findOneAndDelete({ $or: [{ table: req.body.tablenumber }, { customerName: req.body.customerName }]})
         res.send('Table cancel successfull')
     } catch (error) {
         res.status(400).json(error);

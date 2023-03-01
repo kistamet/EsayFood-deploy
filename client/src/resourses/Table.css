@@ -22,6 +22,20 @@
   background-color: #4caf50;
 }
 
+.buttontakeaway{
+  background-color: #3672f4;
+  margin-top: 30px;
+  margin-right:10px;
+  color: rgb(247, 236, 236) !important;
+  text-align: left;
+  font-size: 20px;
+  width: 120px;
+  height: 120px;
+}
+.buttontakeaway:hover {
+  background-color: #3672f4;
+  cursor: pointer;
+}
 .custom-card .ant-card-head {
   background: #13AAFF;
   color: black;

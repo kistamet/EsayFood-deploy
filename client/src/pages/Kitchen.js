@@ -89,15 +89,12 @@ function Kitchen() {
           }
         })
     })
-    // if(record.order === stockData){
-
-    // }
   };
 
   const cancelOrder = (record) => {
     dispatch({ type: "showLoading" });
     axios
-      .post("/api/bills/bill-order-update", { orderId: record._id, status: "ยกเลิก" })
+      .post("/api/bills/bill-order-update", { orderId: record._id, status: "ยกเลิก" , price : "0" })
       .then((response) => {
         dispatch({ type: "hideLoading" });
         message.success(`${record.order} has been canceled`)
@@ -134,22 +131,30 @@ function Kitchen() {
     {
       title: 'เพิ่มเติม',
       dataIndex: 'detail',
-      width: '30%',
+      width: '25%',
     },
     {
-      title: 'โต๊ะ',
-      dataIndex: 'table',
+      title: "ชื่อ/โต๊ะ",
+      dataIndex: "table",
       width: '15%',
-    },
+      render: (text, record) => {
+        return (
+          <div>
+            <span>{record.customerName}</span>
+            <span>{text}</span>
+          </div>
+        );
+      },
+    },  
     {
       title: 'จำนวน',
       dataIndex: 'quantity',
-      width: '15%',
+      width: '10%',
     },
     {
       title: 'สถานะ',
       dataIndex: 'status',
-      width: '25%',
+      width: '15%',
     },
     {
       title: "Actions",
@@ -193,7 +198,7 @@ function Kitchen() {
 
         <Table
           columns={columns}
-          dataSource={orderData.filter((i) => i.IDrestaurant === getIdrestaurant && i.status === "กำลังทำ" || i.status === "ส่งครัว")} bordered />
+          dataSource={orderData.filter((i) => i.IDrestaurant === getIdrestaurant && (i.status === "กำลังทำ" || i.status === "ส่งครัว"))} bordered />
       </div>
     </DefaultLayout>
   )

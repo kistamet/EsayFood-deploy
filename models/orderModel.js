@@ -12,6 +12,7 @@ const orderSchema = mongoose.Schema({
     time: { type: String, required: false },
     IDrestaurant:{ type: String, required: false },
     ObjectIdItem:{ type: String, required: false },
+    kind:{ type: String, required: false },
   }, {timestamps : true});
 
 const ordersModel = mongoose.model("orders", orderSchema);
