@@ -12,7 +12,7 @@ function Kitchen() {
   const [itemsData, setItemsData] = useState([]);
 
   //const [stockData, setStockData] = useState([]);
-
+  console.log("11111111")
   const getAllorder = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios

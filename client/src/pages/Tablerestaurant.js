@@ -63,44 +63,44 @@ function Tablerestaurant() {
 
   const getStatusOrder = JSON.parse(localStorage.getItem('pop-table-Order'));
   const [statusTableOrder, setStatusTableOrder] = useState([])
-  
-//console.log(statusTable)
-const A1Color = (statusTable.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ||
+
+  //console.log(statusTable)
+  const A1Color = (statusTable.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-        ? 'green'
-        : '';
-const A2Color = (statusTable.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ||
+      ? 'green'
+      : '';
+  const A2Color = (statusTable.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-        ? 'green'
-        : '';
-const A3Color = (statusTable.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ||
+      ? 'green'
+      : '';
+  const A3Color = (statusTable.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-        ? 'green'
-        : '';
-const B1Color = (statusTable.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ||
+      ? 'green'
+      : '';
+  const B1Color = (statusTable.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-        ? 'green'
-        : '';
-const B2Color = (statusTable.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ||
+      ? 'green'
+      : '';
+  const B2Color = (statusTable.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-        ? 'green'
-        : '';
-const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ||
+      ? 'green'
+      : '';
+  const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-        ? 'green'
-        : '';
+      ? 'green'
+      : '';
 
   //active Button
   const handleButtonClick = (buttonName) => {
@@ -113,7 +113,7 @@ const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaura
       getAllTable()
     }
   };
-  const handleButtonClick2 = (label) => {
+  const handleButtonClickTakeAway = (label) => {
     if (activeTable === label) {
       setActiveTable(null);
       setButtonColor('primary');
@@ -139,7 +139,7 @@ const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaura
         dispatch({ type: "hideLoading" });
         console.log(error);
       });
-      dispatch({ type: "hideLoading" });
+    dispatch({ type: "hideLoading" });
   }, [dispatch]);
 
   const getAllTable = useCallback(() => {
@@ -157,7 +157,7 @@ const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaura
         dispatch({ type: "hideLoading" });
         console.log(error);
       });
-      dispatch({ type: "hideLoading" });
+    dispatch({ type: "hideLoading" });
   }, [dispatch]);
 
   const cancelTable = () => {
@@ -170,6 +170,8 @@ const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaura
           getAllTable()
           getAllorder()
 
+          // Remove the cancelled table from the buttonLabels array
+          setButtonLabels((prevLabels) => prevLabels.filter((label) => label !== activeTable));
         })
         .catch((error) => {
           dispatch({ type: "hideLoading" });
@@ -178,7 +180,7 @@ const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaura
         });
 
     }
-    message.success(`Table ${activeTable}  cancel successfully  `)
+    message.success(`Table ${activeTable} cancel successfully`)
   }
   const onFinish = (values) => {
 
@@ -235,13 +237,13 @@ const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaura
 
     }
   }
-
+  console.log("aaa")
   useEffect(() => {
     const labels = [...new Set(orderData.filter((order) => order.customerName).map((order) => order.customerName))];
     setButtonLabels(labels);
     queryDataTakeAway();
     getAllorder()
-  }, [orderData ]);
+  }, []);
 
 
   //import time from "table"
@@ -264,6 +266,7 @@ const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaura
       getTimetable = dataTimetable[0]
       temp = temp + (item.price * item.quantity)
       dataOrdertable.push(item)
+      console.log(item.details)
     }
   })
   //console.log(dataOrdertable)
@@ -322,9 +325,26 @@ const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaura
                 </TabPane>
                 <TabPane tab={<span style={{ fontSize: '20px' }}>Take away</span>} key="2">
                   <div>
-                    {buttonLabels.map((label, index) => (
-                      <Button onClick={() => handleButtonClick2(label)} className={`${activeTable === label ? buttonColor : ''} buttontakeaway`} key={index}   >{label}</Button>
-                    ))}
+                    {buttonLabels.map((label, index) => {
+                      const completedColor = orderData.some((item) => item.customerName === label && (item.status === "กำลังทำ" || item.status === "ส่งครัว"))
+                        ? "blue-color-class"
+                        : orderData.some((item) => item.customerName === label && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก"))
+                          ? "green-color-class"
+                          : "";
+                      return (
+                        <Button
+                          onClick={() => handleButtonClickTakeAway(label)}
+                          className={`${activeTable === label ? buttonColor : ''} buttontakeaway ${completedColor}`}
+                          key={index}
+                          style={{ fontSize: '30px'}}
+                        >
+                          {label}
+                          <div style={{ fontSize: '15px' }}>
+                            {orderData.find((item) => item.customerName === label)?.details}
+                          </div>
+                        </Button>
+                      );
+                    })}
                   </div>
                 </TabPane>
               </Tabs>

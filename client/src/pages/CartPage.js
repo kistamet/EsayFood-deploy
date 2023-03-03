@@ -168,6 +168,10 @@ function CartPage() {
           <Input />
         </Form.Item>
 
+        <Form.Item name='details' label='เพิ่มเติม'>
+          <Input />
+        </Form.Item>
+
         <div className="Charge-bill-amount">
           <h5>ยอดรวม : <b> {subTotal}</b></h5>
           <h2>ยอดรวมทั้งหมด : <b>{subTotal}</b></h2>
