@@ -61,7 +61,7 @@ function CartPage() {
     })
     dispatch({ type: "hideLoading" });
     message.success("Bill charged Successfully");
-    navigate('/bills')
+    navigate('/Tablerestaurant')
   };
 
   const onFinishtakeaway = (values, record) => {

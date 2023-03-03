@@ -63,32 +63,44 @@ function Tablerestaurant() {
 
   const getStatusOrder = JSON.parse(localStorage.getItem('pop-table-Order'));
   const [statusTableOrder, setStatusTableOrder] = useState([])
-
-
-  const A1Color = (statusTable.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant))
+  
+//console.log(statusTable)
+const A1Color = (statusTable.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
-    : '';
-  const A2Color = (statusTable.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant))
+    : (statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+        ? 'green'
+        : '';
+const A2Color = (statusTable.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
-    : '';
-  const A3Color = (statusTable.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant))
+    : (statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+        ? 'green'
+        : '';
+const A3Color = (statusTable.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
-    : '';
-  const B1Color = (statusTable.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant))
+    : (statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+        ? 'green'
+        : '';
+const B1Color = (statusTable.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
-    : '';
-  const B2Color = (statusTable.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant))
+    : (statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+        ? 'green'
+        : '';
+const B2Color = (statusTable.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
-    : '';
-  const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant))
+    : (statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+        ? 'green'
+        : '';
+const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
-    : '';
+    : (statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+        ? 'green'
+        : '';
 
   //active Button
   const handleButtonClick = (buttonName) => {
@@ -228,6 +240,7 @@ function Tablerestaurant() {
     const labels = [...new Set(orderData.filter((order) => order.customerName).map((order) => order.customerName))];
     setButtonLabels(labels);
     queryDataTakeAway();
+    getAllorder()
   }, [orderData ]);
 
 
@@ -275,7 +288,7 @@ function Tablerestaurant() {
     },
   ];
 
-  console.log(buttonLabels)
+  //console.log(buttonLabels)
   return (
     <DefaultLayout>
       <Row>
@@ -376,8 +389,8 @@ function Tablerestaurant() {
             />
           </Col>
           <div className="d-flex justify-content-end" style={{ backgroundColor: '#13AAFF', border: '2px solid black' }}>
-            <div class="p-2" style={{ fontSize: '25px' }}>ราคาอาหารรวม :</div>
-            <div class="p-2" style={{ fontSize: '25px' }}>{total}</div>
+            <div className="p-2" style={{ fontSize: '25px' }}>ราคาอาหารรวม :</div>
+            <div className="p-2" style={{ fontSize: '25px' }}>{total}</div>
           </div>
         </Col>
       </Row>

@@ -71,6 +71,14 @@ function Bills() {
     {
       title: "รายการ",
       dataIndex: "order",
+      render: (text, record) => {
+        return (
+          <div>
+            <span>{record.name}</span>
+            <span>{text}</span>
+          </div>
+        );
+      },
     },
     {
       title: "ราคา",
