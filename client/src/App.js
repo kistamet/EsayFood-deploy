@@ -14,6 +14,7 @@ import Queuecustomers from './pages/Queuecustomers';
 import HistoryRestaurant from './pages/HistoryRestaurant';
 import Kitchen from './pages/Kitchen';
 import Bills from './pages/Bills';
+import History from './pages/History';
 
 
 import { Navigate } from "react-router-dom";
@@ -38,6 +39,7 @@ function App() {
           <Route path='/Kitchen' element={<Kitchen />} />
           <Route path='/bills' element={<Bills />} />
           <Route path='/HistoryRestaurant' element={<HistoryRestaurant />} />
+          <Route path='/History' element={<History />} />
 
           <Route path='/' element={<Login />} />
         </Routes>

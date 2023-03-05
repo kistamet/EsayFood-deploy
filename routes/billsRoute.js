@@ -16,6 +16,7 @@ router.post("/charge-bill", async (req, res) => {
         cartItems: req.body.cartItems,
         IDrestaurant:req.body.Idrestaurant,
         timecheckbills: req.body.timecheckbills,
+        daycheckbills: req.body.daycheckbills,
         kind:req.body.kind,
       });
       await newbill.save();

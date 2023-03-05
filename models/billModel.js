@@ -10,6 +10,7 @@ const billSchema = mongoose.Schema({
   cartItems: { type: Array, required: false },
   IDrestaurant:{ type: String, required: true },
   timecheckbills:{ type: String, required: false },
+  daycheckbills:{ type: String, required: false },
   kind:{ type: String, required: false },
 }, {timestamps : true});
 

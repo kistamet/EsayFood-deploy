@@ -17,8 +17,12 @@ function CartPage() {
   //ข้อมูล order
   const [orderData, setOrderData] = useState([]);
 
-  const now = new Date(); // get the current time
+  //time
+  const now = new Date();
   const timenow = now.toLocaleTimeString();
+  const options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+  const dateTimeString = now.toLocaleString('th-TH', options);
+  console.log(dateTimeString);
 
   const [subTotal, setSubTotal] = useState(0)
   const dispatch = useDispatch();

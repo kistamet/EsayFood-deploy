@@ -50,9 +50,15 @@ function Tablerestaurant() {
   const [billtable, setBilltable] = useState(false);
 
   //time
-  const now = new Date(); // get the current time
+  const now = new Date();
   const timenow = now.toLocaleTimeString();
-
+  const options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+  const dateTimeString = now.toLocaleString('th-TH', options);
+  console.log(dateTimeString);
+  
+  const year = now.getFullYear() + 543; 
+  //console.log(dayOfWeekString)
+  console.log(year)
   //Idrestaurant
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
@@ -213,6 +219,7 @@ function Tablerestaurant() {
       table: activeTable,
       timecheckbills: timenow,
       Idrestaurant: Idrestaurant,
+      daycheckbills:dateTimeString,
       kind: "table",
     };
     axios.post('/api/bills/charge-bill', reqObject)
@@ -228,6 +235,7 @@ function Tablerestaurant() {
           dispatch({ type: "hideLoading" });
           getAllTable()
           getAllorder()
+          setButtonLabels((prevLabels) => prevLabels.filter((label) => label !== activeTable));
         })
         .catch((error) => {
           dispatch({ type: "hideLoading" });
@@ -237,7 +245,7 @@ function Tablerestaurant() {
 
     }
   }
-  console.log("aaa")
+
   useEffect(() => {
     const labels = [...new Set(orderData.filter((order) => order.customerName).map((order) => order.customerName))];
     setButtonLabels(labels);
@@ -266,7 +274,6 @@ function Tablerestaurant() {
       getTimetable = dataTimetable[0]
       temp = temp + (item.price * item.quantity)
       dataOrdertable.push(item)
-      console.log(item.details)
     }
   })
   //console.log(dataOrdertable)

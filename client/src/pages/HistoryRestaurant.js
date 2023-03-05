@@ -15,9 +15,13 @@ function HistoryRestaurant() {
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
 
+  const chartInstance = useRef(null);
+
   const chartRef = useRef(null);
-  const [chartType, setChartType] = useState('bar');
+  const [chartType, setChartType] = useState('line');
   const [billsData, setBillsData] = useState([]);
+  const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
+  const [chartLabels, setChartLabels] = useState();
 
   const getAllBills = useCallback(() => {
     const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
@@ -43,69 +47,72 @@ function HistoryRestaurant() {
   let dataOrdertable = [];
   let getTimetable = "";
   let temp = 0;
+  let dayLabels = []
+  
   billsData.forEach((item) => {
     if (item.IDrestaurant === getIdrestaurant) {
-      total.push(item.subTotal)
-      totalAmount += 1
-      //console.log(totalAmount)
-      //quantity = Number(quantity) + 1
-      //dataTimetable.push(item.time.substring(0, 5))
-      //dataTimetable.sort()
-      //getTimetable = dataTimetable[0]
-      //temp = temp + (item.price * item.quantity)
-      //dataOrdertable.push(item)
-      //console.log(totalAmount)
-
+      if (today === item.createdAt.toString().substring(0, 10)) {
+        let timecheckbills = parseFloat(item.timecheckbills).toFixed(2);
+        let index = dayLabels.indexOf(timecheckbills);
+        totalAmount += 1;
+        if (index === -1) {
+          dayLabels.push(timecheckbills);
+          total.push(item.subTotal);
+        } else {
+          total[index] += item.subTotal;
+        }
+      }
     }
-  })
+    console.log(item.timecheckbills.toString().substring(9, 14))
+  });
   const sum = total.reduce((total, num) => {
     return total + num;
   }, 0);
- // console.log(sum)
- // console.log(totalAmount)
+  console.log(total)
+  console.log(dayLabels)
   useEffect(() => {
-    getAllBills()
-    if (chartRef && chartRef.current) {
-      const myChartRef = chartRef.current.getContext('2d');
-      console.log(chartRef.current)
-      console.log(chartRef)
-      const chartData = {
-        labels: chartLabels,
-        datasets: [
-          {
-            label: 'Sales',
-            data: total,
-            backgroundColor: '#4CEAC4',
-            borderColor: '#1BA483',
-            borderWidth: 1,
-          },
-        ],
-      };
+    getAllBills();
+  }, [getAllBills]);
 
-      const chartOptions = {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          title: {
-            display: true,
-            text: chartType === 'bar' ? ' Bar Chart' : ' Doughnut Chart',
-          },
-        },
-      };
-
-      const chart = new Chart(myChartRef, {
-        type: chartType,
-        data: chartData,
-        options: chartOptions,
-      });
-
-      return () => {
-        chart.destroy();
-      };
+  useEffect(() => {
+    if (dayLabels.length === 0) {
+      return;
     }
-  }, [chartType]);
+
+    const chartConfig = {
+      type: chartType,
+      data: {
+        labels: chartLabels || dayLabels,
+        datasets: [{
+          label: 'Graph',
+          data: total,
+          backgroundColor: '#4CEAC4',
+          borderColor: '#1BA483',
+          borderWidth: 1
+        }]
+      }
+    };
+
+    const chartOptions = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top'
+        }
+      }
+    };
+
+    if (chartInstance.current !== null) {
+      chartInstance.current.destroy();
+    }
+
+    chartInstance.current = new Chart(chartRef.current, chartConfig);
+    return () => {
+      if (chartInstance.current !== null) {
+        chartInstance.current.destroy();
+      }
+    }
+  }, [chartType, dayLabels, total]);
   const [alignment, setAlignment] = useState('Day');
   const [chartData, setChartData] = useState([65, 59, 80, 81, 56, 55, 40]);
   const updateChartLabels = (labels) => {
@@ -116,8 +123,46 @@ function HistoryRestaurant() {
   };
   const handleAlignmentChange = (event, newAlignment) => {
     setAlignment(newAlignment);
-    };
-  const [chartLabels, setChartLabels] = useState([
+
+    switch (newAlignment) {
+      case 'Day':
+        setChartLabels(dayLabels);
+        break;
+      case 'Week':
+        setChartLabels(WeekLabels);
+        console.log("Week")
+        break;
+      case 'Month':
+        setChartData([1])
+        setChartLabels(YearLabels);
+        console.log(chartLabels)
+        break;
+      case 'Year':
+        setChartLabels(YearLabels);
+        break;
+      default:
+        break;
+    }
+  }
+  const [WeekLabels, setWeekLabels] = useState([
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ]);
+  const [DayLabels, setDayLabels] = useState([
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ]);
+  const [YearLabels, setYearLabels] = useState([
     'January',
     'February',
     'March',
@@ -125,15 +170,19 @@ function HistoryRestaurant() {
     'May',
     'June',
     'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ]);
-
   return (
     <DefaultLayout>
-      <ButtonGroup color="primary" aria-label="outlined primary button group">
+      {/* <ButtonGroup color="primary" aria-label="outlined primary button group">
         <Button onClick={() => setChartType('bar')} variant={chartType === 'bar' ? 'contained' : 'outlined'}>Bar Chart</Button>
         <Button onClick={() => setChartType('doughnut')} variant={chartType === 'doughnut' ? 'contained' : 'outlined'}>Doughnut Chart</Button>
-      </ButtonGroup>
-      
+      </ButtonGroup> */}
+
       <Box
         sx={{
           display: 'flex',
@@ -150,7 +199,7 @@ function HistoryRestaurant() {
             ยอดรวม
           </div>
           <div style={{ fontSize: '35px', marginLeft: '10px', textAlign: 'left' }} >
-          ฿ {sum}
+            ฿ {sum}
           </div>
         </Paper>
         <Paper sx={{ bgcolor: '#D9D9D9', textAlign: 'left', color: '#1DA01A', fontSize: '20px' }} >
@@ -158,7 +207,7 @@ function HistoryRestaurant() {
             จำนวนบิล
           </div>
           <div style={{ fontSize: '35px', marginLeft: '10px', textAlign: 'left' }} >
-          ฿ {totalAmount}
+            ฿ {totalAmount}
           </div>
         </Paper>
         <Paper sx={{ bgcolor: '#D9D9D9', textAlign: 'left', color: '#1DA01A', fontSize: '20px' }} >
@@ -166,7 +215,7 @@ function HistoryRestaurant() {
             เฉลี่ยต่อบิล
           </div>
           <div style={{ fontSize: '35px', marginLeft: '10px', textAlign: 'left' }}>
-          ฿ {isNaN(Number(sum) / Number(totalAmount)) ? "0" : Number(sum) / Number(totalAmount)}
+            ฿ {isNaN(Number(sum) / Number(totalAmount)) ? "0" : (Number(sum) / Number(totalAmount)).toFixed(2)}
           </div>
         </Paper>
       </Box>
@@ -174,52 +223,63 @@ function HistoryRestaurant() {
         <canvas ref={chartRef} />
       </div>
       <ButtonGroup
-      color="primary"
-      aria-label="text alignment"
-      variant="contained"
-      size="large"
-    >
-      <Button
-        value="Day"
-        onClick={(event) => handleAlignmentChange(event, 'Day')}
-        style={{
-          backgroundColor: alignment === 'Day' ? '#EEA414' : '#D9D9D9',
-          color: alignment === 'Day' ? '#000000' : '#000000',
-        }}
+        color="primary"
+        aria-label="text alignment"
+        variant="contained"
+        size="large"
       >
-        วันนี้
-      </Button>
-      <Button
-        value="Week"
-        onClick={(event) => handleAlignmentChange(event, 'Week')}
-        style={{
-          backgroundColor: alignment === 'Week' ? '#EEA414' : '#D9D9D9',
-          color: alignment === 'Week' ? '#000000' : '#000000',
-        }}
-      >
-        สัปดาห์นี้
-      </Button>
-      <Button
-        value="Month"
-        onClick={(event) => handleAlignmentChange(event, 'Month')}
-        style={{
-          backgroundColor: alignment === 'Month' ? '#EEA414' : '#D9D9D9',
-          color: alignment === 'Month' ? '#000000' : '#000000',
-        }}
-      >
-        เดือนนี้
-      </Button>
-      <Button
-        value="Year"
-        onClick={(event) => handleAlignmentChange(event, 'Year')}
-        style={{
-          backgroundColor: alignment === 'Year' ? '#EEA414' : '#D9D9D9',
-          color: alignment === 'Year' ? '#000000' : '#000000',
-        }}
-      >
-        ปีนี้
-      </Button>
-    </ButtonGroup>
+        <Button
+          value="Day"
+          onClick={(event) => {
+            handleAlignmentChange(event, 'Day');
+            setChartType('line');
+          }}
+          style={{
+            backgroundColor: alignment === 'Day' ? '#EEA414' : '#D9D9D9',
+            color: alignment === 'Day' ? '#000000' : '#000000',
+          }}
+        >
+          วันนี้
+        </Button>
+
+        <Button
+          value="Week"
+          onClick={(event) => {
+            handleAlignmentChange(event, 'Week');
+            setChartType('bar');
+          }}
+          style={{
+            backgroundColor: alignment === 'Week' ? '#EEA414' : '#D9D9D9',
+            color: alignment === 'Week' ? '#000000' : '#000000',
+          }}
+        >
+          สัปดาห์นี้
+        </Button>
+        <Button
+          value="Month"
+          onClick={(event) => {
+            handleAlignmentChange(event, 'Month');
+            setChartType('bar');
+          }}
+          style={{
+            backgroundColor: alignment === 'Month' ? '#EEA414' : '#D9D9D9',
+            color: alignment === 'Month' ? '#000000' : '#000000',
+          }}
+        >
+          เดือนนี้
+        </Button>
+        <Button
+          value="Year"
+          onClick={(event) => handleAlignmentChange(event, 'Year')}
+          style={{
+            backgroundColor: alignment === 'Year' ? '#EEA414' : '#D9D9D9',
+            color: alignment === 'Year' ? '#000000' : '#000000',
+          }}
+        >
+          ปีนี้
+        </Button>
+
+      </ButtonGroup>
     </DefaultLayout>
   );
 }
