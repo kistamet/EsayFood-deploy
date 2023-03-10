@@ -9,7 +9,8 @@ router.get("/get-all-items", async (req, res) => {
         const items = await menuItemModel.find();
         res.send(items);
     } catch (error) {
-        res.status(400).json(error);
+        console.error(error);
+        res.status(500).send({ message: 'Error fetching items.' });
     }
 });
 

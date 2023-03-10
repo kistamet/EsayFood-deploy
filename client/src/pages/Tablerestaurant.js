@@ -52,13 +52,17 @@ function Tablerestaurant() {
   //time
   const now = new Date();
   const timenow = now.toLocaleTimeString();
-  const options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-  const dateTimeString = now.toLocaleString('th-TH', options);
+  const dateTimeString = now.toISOString();
   console.log(dateTimeString);
-  
+  const moment = require('moment-timezone');
+
+  const thTime = moment().tz('Asia/Bangkok').format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+  console.log(thTime);
+
   const year = now.getFullYear() + 543; 
   //console.log(dayOfWeekString)
-  console.log(year)
+  //console.log(year)
+
   //Idrestaurant
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
@@ -219,7 +223,7 @@ function Tablerestaurant() {
       table: activeTable,
       timecheckbills: timenow,
       Idrestaurant: Idrestaurant,
-      daycheckbills:dateTimeString,
+      daycheckbills:thTime,
       kind: "table",
     };
     axios.post('/api/bills/charge-bill', reqObject)

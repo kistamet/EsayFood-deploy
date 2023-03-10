@@ -14,9 +14,8 @@ import Queuecustomers from './pages/Queuecustomers';
 import HistoryRestaurant from './pages/HistoryRestaurant';
 import Kitchen from './pages/Kitchen';
 import Bills from './pages/Bills';
-import History from './pages/History';
-
-
+import Table from './pages/Table';
+import { useParams } from 'react-router-dom';
 import { Navigate } from "react-router-dom";
 import RegisterRestaurant from './pages/RegisterRestaurant';
 function App() {
@@ -39,7 +38,7 @@ function App() {
           <Route path='/Kitchen' element={<Kitchen />} />
           <Route path='/bills' element={<Bills />} />
           <Route path='/HistoryRestaurant' element={<HistoryRestaurant />} />
-          <Route path='/History' element={<History />} />
+          <Route path='/table' element={<Table />} />
 
           <Route path='/' element={<Login />} />
         </Routes>

@@ -12,7 +12,8 @@ const billSchema = mongoose.Schema({
   timecheckbills:{ type: String, required: false },
   daycheckbills:{ type: String, required: false },
   kind:{ type: String, required: false },
-}, {timestamps : true});
+}, {
+  timestamps : true});
 
 const billModel = mongoose.model("bills", billSchema);
 
