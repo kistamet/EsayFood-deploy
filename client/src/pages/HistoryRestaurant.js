@@ -29,6 +29,8 @@ function HistoryRestaurant() {
   let totalAmount = 0;
   let dayLabels = []
 
+  const [TotalCash, setTotalCash] = useState(0);
+  const [TotalCard, setTotalCard] = useState(0);
   //แสดง Day
   const [showDaylabel, setShowDashowDaylabel] = useState(false);
 
@@ -63,13 +65,14 @@ function HistoryRestaurant() {
   const [chartLabels, setChartLabels] = useState(dayLabels);
 
 
-  //console.log(billsData)
 
+
+  let totalCash = 0;
+  let totalCard = 0;
 
   billsData.forEach((item) => {
     if (item.IDrestaurant === getIdrestaurant) {
       if (dateString === item.daycheckbills.toString().substring(0, 10)) {
-        //console.log(item.daycheckbills.toString().substring(5,7));
         let timecheckbills = parseFloat(item.timecheckbills).toFixed(2);
         let index = dayLabels.indexOf(timecheckbills);
         totalAmount += 1;
@@ -79,17 +82,21 @@ function HistoryRestaurant() {
         } else {
           total[index] += item.subTotal;
         }
+
+        if (item.paymentMode === "เงินสด") {
+          totalCash += item.subTotal;
+        } else if (item.paymentMode === "บัตร") {
+          totalCard += item.subTotal;
+        }
       }
     }
-    //setChartData(total)
-    //console.log(item.timecheckbills.toString().substring(9, 14))
   });
+
   const sum = total.reduce((total, num) => {
     return total + num;
   }, 0);
 
-  // console.log(total)
-  // console.log(chartData)
+
   const getAllBills = useCallback(() => {
 
     dispatch({ type: "showLoading" });
@@ -151,6 +158,8 @@ function HistoryRestaurant() {
 
     switch (newAlignment) {
       case 'Day':
+        setTotalCash(totalCash)
+        setTotalCard(totalCard)
         setChartLabels(dayLabels);
         setChartData(total);
         setDataToatal(sum);
@@ -161,6 +170,8 @@ function HistoryRestaurant() {
         setShowWeekButtons(false)
         break;
       case 'Week':
+        setTotalCash(totalCashWeek)
+        setTotalCard(totalCardWeek)
         setChartLabels(dayOfWeekLabels);
         setChartData(dayOfWeekTotals);
         setDataToatal(totalWeek);
@@ -171,6 +182,8 @@ function HistoryRestaurant() {
         setShowWeekButtons(true)
         break;
       case 'Month':
+        setTotalCash(totalCashMonth)
+        setTotalCard(totalCardMonth)
         setChartLabels(dayOfMonthLabels);
         setChartData(dayOfMonthTotals);
         setDataToatal(totalMonth);
@@ -181,6 +194,8 @@ function HistoryRestaurant() {
         setShowWeekButtons(false)
         break;
       case 'Year':
+        setTotalCash(totalCashYear)
+        setTotalCard(totalCardYear)
         setChartLabels(YearLabels);
         setDataBill(numberOfBillsYear);
         setChartData(yearData.map((month) => month.total));
@@ -215,11 +230,14 @@ function HistoryRestaurant() {
   //การหายอดของแต่ละวันใน 1 สัปดาห์
   const [weekStartDate, setWeekStartDate] = useState(new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay()));
   const weekEndDate = new Date(weekStartDate.getFullYear(), weekStartDate.getMonth(), weekStartDate.getDate() + 6);
-
+  
   if (today > weekEndDate) {
     weekStartDate.setDate(weekStartDate.getDate() + 7);
   }
-
+  
+  let totalCashWeek = 0;
+  let totalCardWeek = 0;
+  
   const groupedDataByDayOfWeek = billsData.reduce((acc, item) => {
     if (item.IDrestaurant === getIdrestaurant) {
       const itemDate = new Date(item.daycheckbills);
@@ -227,6 +245,13 @@ function HistoryRestaurant() {
         const dayOfWeek = itemDate.getDay();
         const timecheckbills = parseFloat(item.timecheckbills).toFixed(2);
         const total = item.subTotal;
+        
+        if(item.paymentMode === "เงินสด") {
+          totalCashWeek += total;
+        } else if(item.paymentMode === "บัตร") {
+          totalCardWeek += total;
+        }
+  
         if (!acc[dayOfWeek]) {
           acc[dayOfWeek] = { timecheckbills: [timecheckbills], total: [total] };
         } else {
@@ -242,17 +267,23 @@ function HistoryRestaurant() {
     }
     return acc;
   }, {});
-
+  
   const dayOfWeekTotals = Array(7).fill(0);
-
+  
   Object.keys(groupedDataByDayOfWeek).forEach((dayOfWeek) => {
     const index = parseInt(dayOfWeek);
     dayOfWeekTotals[index] = groupedDataByDayOfWeek[dayOfWeek].total.reduce((acc, t) => acc + t, 0);
   });
+  
 
   //จำนวนบิลของสัปดาห์
-  const numberOfBillsWeek = Object.keys(groupedDataByDayOfWeek).reduce((acc, dayOfWeek) => {
-    acc += groupedDataByDayOfWeek[dayOfWeek].total.length;
+  const numberOfBillsWeek = billsData.reduce((acc, item) => {
+    if (item.IDrestaurant === getIdrestaurant) {
+      const itemDate = new Date(item.daycheckbills);
+      if (itemDate >= weekStartDate && itemDate <= weekEndDate) {
+        acc++;
+      }
+    }
     return acc;
   }, 0);
 
@@ -262,12 +293,20 @@ function HistoryRestaurant() {
     return itemDate.getFullYear() === currentMonth.getFullYear() && itemDate.getMonth() === currentMonth.getMonth();
   });
 
+  let totalCashMonth = 0;
+  let totalCardMonth = 0;
 
   const groupedDataByDayOfMonth = filteredData.reduce((acc, item) => {
     if (item.IDrestaurant === getIdrestaurant && month === item.daycheckbills.toString().substring(5, 7)) {
       const dayOfMonth = new Date(item.daycheckbills).getDate();
       const timecheckbills = parseFloat(item.timecheckbills).toFixed(2);
       const total = item.subTotal;
+
+        if(item.paymentMode === "เงินสด") {
+          totalCashMonth += total;
+        } else if(item.paymentMode === "บัตร") {
+          totalCardMonth += total;
+        }
 
       if (!acc[dayOfMonth]) {
         acc[dayOfMonth] = { timecheckbills: [timecheckbills], total: [total] };
@@ -293,17 +332,20 @@ function HistoryRestaurant() {
   });
 
   //จำนวนบิลของเดือน
-  const numberOfBillsMonth = Object.keys(groupedDataByDayOfMonth).reduce((acc, dayOfMonth) => {
-    acc += groupedDataByDayOfMonth[dayOfMonth].total.length;
-    return acc;
-  }, 0);
-
-  console.log("Month" +numberOfBillsMonth)
+  const numberOfBillsMonth = filteredData.length;
+  
   //console.log(numberOfBillsMonth)
 
   //การหายอดของแต่ละเดือนใน 1 ปี
   const yearData = YearLabels.map((month) => ({ label: month, total: 0 }));
 
+  const filteredDataYear = billsData.filter(item => {
+    const itemDate = new Date(item.daycheckbills);
+    return itemDate.getFullYear() === currentYear;
+  });
+
+  let totalCashYear = 0;
+  let totalCardYear = 0;
 
   const groupedDataByMonth = billsData.reduce((acc, item) => {
     if (item.IDrestaurant === getIdrestaurant && String(year) === item.daycheckbills.toString().substring(0, 4)) {
@@ -311,6 +353,12 @@ function HistoryRestaurant() {
       const monthIndex = new Date(item.daycheckbills).getMonth();
       const timecheckbills = parseFloat(item.timecheckbills).toFixed(2);
       const total = item.subTotal;
+
+      if(item.paymentMode === "เงินสด") {
+        totalCashYear += total;
+      } else if(item.paymentMode === "บัตร") {
+        totalCardYear += total;
+      }
 
       if (!acc[monthIndex]) {
         acc[monthIndex] = { timecheckbills: [timecheckbills], total: [total] };
@@ -333,12 +381,8 @@ function HistoryRestaurant() {
     yearData[index].total = groupedDataByMonth[monthIndex].total.reduce((acc, t) => acc + t, 0);
   });
 
-  const numberOfBillsYear= Object.keys(groupedDataByMonth).reduce((acc, monthIndex) => {
-    acc += groupedDataByMonth[monthIndex].total.length;
-    return acc;
-  }, 0);
-  console.log("Year" +numberOfBillsYear)
-  
+  const numberOfBillsYear = filteredDataYear.length;
+
   const totalWeek = Object.values(dayOfWeekTotals).reduce((acc, val) => acc + val, 0);
   const totalMonth = Object.values(dayOfMonthTotals).reduce((acc, val) => acc + val, 0);
   const totalYear = yearData.reduce((acc, month) => acc + month.total, 0);
@@ -481,7 +525,7 @@ function HistoryRestaurant() {
         yearData[monthIndex].total += total;
       }
     });
-    const numberOfBillsYear= Object.keys(groupedDataByMonth).reduce((acc, monthIndex) => {
+    const numberOfBillsYear = Object.keys(groupedDataByMonth).reduce((acc, monthIndex) => {
       acc += groupedDataByMonth[monthIndex].total.length;
       return acc;
     }, 0);
@@ -500,7 +544,7 @@ function HistoryRestaurant() {
         yearData[monthIndex].total += total;
       }
     });
-    const numberOfBillsYear= Object.keys(groupedDataByMonth).reduce((acc, monthIndex) => {
+    const numberOfBillsYear = Object.keys(groupedDataByMonth).reduce((acc, monthIndex) => {
       acc += groupedDataByMonth[monthIndex].total.length;
       return acc;
     }, 0);
@@ -512,7 +556,7 @@ function HistoryRestaurant() {
   const monthFormatter = new Intl.DateTimeFormat('th-TH', {
     month: 'long',
   });
-  
+
   const yearFormatter = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
   });
@@ -620,7 +664,7 @@ function HistoryRestaurant() {
             เงินสด
           </div>
           <div style={{ fontSize: '35px', marginLeft: '10px', textAlign: 'left' }} >
-            ฿ {sum}
+            ฿ {TotalCash}
           </div>
         </Paper>
         <Paper sx={{ bgcolor: '#D9D9D9', textAlign: 'left', color: '#1DA01A', fontSize: '20px' }} >
@@ -628,20 +672,20 @@ function HistoryRestaurant() {
             โอน
           </div>
           <div style={{ fontSize: '35px', marginLeft: '10px', textAlign: 'left' }} >
-            ฿ {sum}
+            ฿ {TotalCard}
           </div>
         </Paper>
       </Box>
       <div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-        {showDaylabel && (
+          {showDaylabel && (
             <>
               {/* <Button onClick={handlePrevWeek}>
                 <ArrowBackIosIcon />
               </Button> */}
-<Typography variant="h6">
-{today.getDate()} {monthFormatter.format(today)} {yearFormatter.format(today)}
-</Typography>
+              <Typography variant="h6">
+                {today.getDate()} {monthFormatter.format(today)} {yearFormatter.format(today)}
+              </Typography>
               {/* <Button onClick={handleNextWeek}>
                 <ArrowForwardIosIcon />
               </Button> */}
