@@ -82,7 +82,7 @@ function CustomerHomepage() {
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "center",
-            minHeight: "300px", // add a minimum height
+            minHeight: "800px", // add a minimum height
             overflow: "auto", // enable scrolling if content overflows
           }}
         >

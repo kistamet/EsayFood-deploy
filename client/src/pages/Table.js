@@ -31,7 +31,7 @@ function Table() {
 
   const generateLink = () => {
     const newExpirationTime = new Date(Date.now() + 1000 * 60 * 1000); // 30 minutes from now
-    const newLink = `http://localhost:3000/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${Idrestaurant}&expires=${newExpirationTime.toISOString()}`;
+    const newLink = `http://localhost:3000/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${Idrestaurant}`;
     setExpirationTime(newExpirationTime);
     setLink(newLink);
   };
@@ -50,10 +50,10 @@ function Table() {
   return (
     <DefaultLayout>
       <div>
-        <h3>Table {uniqueTableID}</h3>
+        {/* <h3>Table {uniqueTableID}</h3> */}
         {isLinkValid() ? (
           <>
-            <p>This link will expire at: {expirationTime.toLocaleTimeString()}</p>
+            {/* <p>This link will expire at: {expirationTime.toLocaleTimeString()}</p> */}
             <QrCode value={link} />
             <button onClick={cancelLink}>Cancel Link</button>
           </>

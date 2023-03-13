@@ -73,6 +73,7 @@ function HistoryRestaurant() {
   billsData.forEach((item) => {
     if (item.IDrestaurant === getIdrestaurant) {
       if (dateString === item.daycheckbills.toString().substring(0, 10)) {
+        console.log(item.daycheckbills.toString().substring(0, 10))
         let timecheckbills = parseFloat(item.timecheckbills).toFixed(2);
         let index = dayLabels.indexOf(timecheckbills);
         totalAmount += 1;
@@ -95,7 +96,6 @@ function HistoryRestaurant() {
   const sum = total.reduce((total, num) => {
     return total + num;
   }, 0);
-
 
   const getAllBills = useCallback(() => {
 
@@ -209,23 +209,13 @@ function HistoryRestaurant() {
         break;
     }
   };
-  const dayOfWeekLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const dayOfWeekLabels = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธ', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์'];
   const dayOfMonthLabels = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
 
-  const [YearLabels, setYearLabels] = useState([
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ]);
+  const [YearLabels, setYearLabels] = useState([  'มกราคม',  'กุมภาพันธ์',  'มีนาคม',  'เมษายน',  'พฤษภาคม',  'มิถุนายน',  'กรกฎาคม',  'สิงหาคม',  'กันยายน',  'ตุลาคม',  'พฤศจิกายน',  'ธันวาคม',]);
+
+
+
 
   //การหายอดของแต่ละวันใน 1 สัปดาห์
   const [weekStartDate, setWeekStartDate] = useState(new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay()));
@@ -414,12 +404,20 @@ function HistoryRestaurant() {
       const itemYear = new Date(item.daycheckbills).getFullYear();
       return itemMonth === newDate.getMonth() && itemYear === newDate.getFullYear();
     });
+    let totalCashMonth = 0;
+    let totalCardMonth = 0;
     const groupedDataByDayOfMonth = filteredData.reduce((acc, item) => {
       console.log(item)
       if (item.IDrestaurant === getIdrestaurant) {
         const dayOfMonth = new Date(item.daycheckbills).getDate();
         const timecheckbills = parseFloat(item.timecheckbills).toFixed(2);
         const total = item.subTotal;
+
+        if(item.paymentMode === "เงินสด") {
+          totalCashMonth += total;
+        } else if(item.paymentMode === "บัตร") {
+          totalCardMonth += total;
+        }
 
         if (!acc[dayOfMonth]) {
           acc[dayOfMonth] = { timecheckbills: [timecheckbills], total: [total] };
@@ -448,6 +446,8 @@ function HistoryRestaurant() {
       return acc;
     }, 0);
     const totalMonth = Object.values(dayOfMonthTotals).reduce((acc, val) => acc + val, 0);
+    setTotalCash(totalCashMonth)
+    setTotalCard(totalCardMonth)
     setDataToatal(totalMonth);
     setDataBill(numberOfBillsMonth);
     setCurrentMonth(newDate);
@@ -463,11 +463,19 @@ function HistoryRestaurant() {
       const itemYear = new Date(item.daycheckbills).getFullYear();
       return itemMonth === newDate.getMonth() && itemYear === newDate.getFullYear();
     });
+    let totalCashMonth = 0;
+    let totalCardMonth = 0;
     const groupedDataByDayOfMonth = filteredData.reduce((acc, item) => {
       if (item.IDrestaurant === getIdrestaurant) {
         const dayOfMonth = new Date(item.daycheckbills).getDate();
         const timecheckbills = parseFloat(item.timecheckbills).toFixed(2);
         const total = item.subTotal;
+
+        if(item.paymentMode === "เงินสด") {
+          totalCashMonth += total;
+        } else if(item.paymentMode === "บัตร") {
+          totalCardMonth += total;
+        }
 
         if (!acc[dayOfMonth]) {
           acc[dayOfMonth] = { timecheckbills: [timecheckbills], total: [total] };
@@ -496,6 +504,8 @@ function HistoryRestaurant() {
       return acc;
     }, 0);
     const totalMonth = Object.values(dayOfMonthTotals).reduce((acc, val) => acc + val, 0);
+    setTotalCash(totalCashMonth)
+    setTotalCard(totalCardMonth)
     setDataToatal(totalMonth);
     setDataBill(numberOfBillsMonth);
     setCurrentMonth(newDate);
@@ -516,39 +526,58 @@ function HistoryRestaurant() {
   const handlePrevYear = () => {
     setCurrentYear(currentYear - 1);
 
+    const filteredDataYear = billsData.filter(item => {
+      const itemDate = new Date(item.daycheckbills);
+      return itemDate.getFullYear() === (currentYear - 1);
+    });
     const yearData = YearLabels.map((month) => ({ label: month, total: 0 }));
-
+    let totalCashYear = 0;
+    let totalCardYear = 0;
     billsData.forEach((item) => {
       if (item.IDrestaurant === getIdrestaurant && String(currentYear - 1) === item.daycheckbills.toString().substring(0, 4)) {
         const monthIndex = new Date(item.daycheckbills).getMonth();
         const total = item.subTotal;
         yearData[monthIndex].total += total;
+        if(item.paymentMode === "เงินสด") {
+          totalCashYear += total;
+        } else if(item.paymentMode === "บัตร") {
+          totalCardYear += total;
+        }
       }
     });
-    const numberOfBillsYear = Object.keys(groupedDataByMonth).reduce((acc, monthIndex) => {
-      acc += groupedDataByMonth[monthIndex].total.length;
-      return acc;
-    }, 0);
+    const numberOfBillsYear = filteredDataYear.length;
     const totalYear = yearData.reduce((acc, month) => acc + month.total, 0);
+    setTotalCash(totalCashYear)
+    setTotalCard(totalCardYear)
     setDataBill(numberOfBillsYear);
     setDataToatal(totalYear);
     setChartData(yearData.map((month) => month.total));
   };
   const handleNextYear = () => {
     setCurrentYear(currentYear + 1);
+    const filteredDataYear = billsData.filter(item => {
+      const itemDate = new Date(item.daycheckbills);
+      return itemDate.getFullYear() === (currentYear + 1);
+    });
     const yearData = YearLabels.map((month) => ({ label: month, total: 0 }));
+    let totalCashYear = 0;
+    let totalCardYear = 0;
     billsData.forEach((item) => {
       if (item.IDrestaurant === getIdrestaurant && String(currentYear + 1) === item.daycheckbills.toString().substring(0, 4)) {
         const monthIndex = new Date(item.daycheckbills).getMonth();
         const total = item.subTotal;
         yearData[monthIndex].total += total;
+              if(item.paymentMode === "เงินสด") {
+        totalCashYear += total;
+      } else if(item.paymentMode === "บัตร") {
+        totalCardYear += total;
+      }
       }
     });
-    const numberOfBillsYear = Object.keys(groupedDataByMonth).reduce((acc, monthIndex) => {
-      acc += groupedDataByMonth[monthIndex].total.length;
-      return acc;
-    }, 0);
+    const numberOfBillsYear = filteredDataYear.length;
     const totalYear = yearData.reduce((acc, month) => acc + month.total, 0);
+    setTotalCash(totalCashYear)
+    setTotalCard(totalCardYear)
     setDataBill(numberOfBillsYear);
     setDataToatal(totalYear);
     setChartData(yearData.map((month) => month.total));
@@ -648,15 +677,7 @@ function HistoryRestaurant() {
             จำนวนบิล
           </div>
           <div style={{ fontSize: '35px', marginLeft: '10px', textAlign: 'left' }} >
-            ฿ {dataBill}
-          </div>
-        </Paper>
-        <Paper sx={{ bgcolor: '#D9D9D9', textAlign: 'left', color: '#1DA01A', fontSize: '20px' }} >
-          <div style={{ fontSize: '20px', marginLeft: '10px', fontWeight: 'bold' }} >
-            เฉลี่ยต่อบิล
-          </div>
-          <div style={{ fontSize: '35px', marginLeft: '10px', textAlign: 'left' }}>
-            ฿ {isNaN(Number(dataTotal) / Number(dataBill)) ? "0" : (Number(dataTotal) / Number(dataBill)).toFixed(2)}
+             {dataBill}
           </div>
         </Paper>
         <Paper sx={{ bgcolor: '#D9D9D9', textAlign: 'left', color: '#1DA01A', fontSize: '20px' }} >
@@ -669,10 +690,18 @@ function HistoryRestaurant() {
         </Paper>
         <Paper sx={{ bgcolor: '#D9D9D9', textAlign: 'left', color: '#1DA01A', fontSize: '20px' }} >
           <div style={{ fontSize: '20px', marginLeft: '10px', fontWeight: 'bold' }} >
-            โอน
+            เงินโอน
           </div>
           <div style={{ fontSize: '35px', marginLeft: '10px', textAlign: 'left' }} >
             ฿ {TotalCard}
+          </div>
+        </Paper>
+        <Paper sx={{ bgcolor: '#D9D9D9', textAlign: 'left', color: '#1DA01A', fontSize: '20px' }} >
+          <div style={{ fontSize: '20px', marginLeft: '10px', fontWeight: 'bold' }} >
+            เฉลี่ยต่อบิล
+          </div>
+          <div style={{ fontSize: '35px', marginLeft: '10px', textAlign: 'left' }}>
+            ฿ {isNaN(Number(dataTotal) / Number(dataBill)) ? "0" : (Number(dataTotal) / Number(dataBill)).toFixed(2)}
           </div>
         </Paper>
       </Box>

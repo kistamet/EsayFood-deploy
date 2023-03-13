@@ -138,9 +138,9 @@ function Bills() {
                 </h1>
               </div>
               <div>
-                <p>Hyderabd</p>
-                <p>Amberpet 500013</p>
-                <p>9989649278</p>
+                <p>327 ถ. มหาไชย</p>
+                <p>แขวงสำราญราษฎร์ เขตพระนคร</p>
+                <p>กรุงเทพมหานคร 10200</p>
               </div>
             </div>
             <div className="bill-customer-details my-2 dotted-border">

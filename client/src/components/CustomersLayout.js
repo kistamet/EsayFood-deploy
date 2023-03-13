@@ -67,7 +67,7 @@ const CustomersLayout = (props) => {
           </Grid>
           <Grid item sx={{ position: "relative" }}>
             <IconButton onClick={handleOpenModal}>
-              <Badge badgeContent={4} color="error" variant="dot">
+              <Badge>
                 <Notifications sx={{ fontSize: 30 }} />
               </Badge>
             </IconButton>
@@ -77,40 +77,29 @@ const CustomersLayout = (props) => {
               aria-labelledby="modal-title"
               aria-describedby="modal-description"
             >
-              <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", backgroundColor: "#fff", padding: "20px", outline: "none" }}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: "#fff",
+                  padding: "20px",
+                  outline: "none",
+                  boxShadow: "0px 3px 20px rgba(0, 0, 0, 0.2)",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  minWidth: "250px"
+                }}
+              >
                 <Typography variant="h5" gutterBottom>
-                  Notifications
+                  เลือกรายการที่ต้องการ
                 </Typography>
-                <Typography variant="body1">
-                  Notification 1
-                </Typography>
-                <Typography variant="body1">
-                  Notification 2
-                </Typography>
-                <Typography variant="body1">
-                  Notification 3
-                </Typography>
+                <Button variant="contained" sx={{ backgroundColor: "#2196f3", color: "#fff", margin: "10px" }}>เรียกพนักงาน</Button>
+                <Button variant="contained" sx={{ backgroundColor: "#f44336", color: "#fff", margin: "10px" }}>เช็คบิล</Button>
               </Box>
             </Modal>
-            <Typography
-              variant="caption"
-              sx={{
-                position: "absolute",
-                top: 2,
-                right: -8,
-                color: "white",
-                fontWeight: "bold",
-                backgroundColor: "#f50057",
-                borderRadius: "50%",
-                width: 20,
-                height: 20,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              4
-            </Typography>
+
           </Grid>
         </Grid>
       </Grid>
