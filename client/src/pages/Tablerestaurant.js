@@ -11,17 +11,39 @@ import {
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useCallback } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import QrCode from "react-qr-code";
 
-function Tablerestaurant() {
+function Tablerestaurant(props) {
   const dispatch = useDispatch()
   const [buttonLabels, setButtonLabels] = useState([]);
   const { TabPane } = Tabs;
   const [activeTab, setActiveTab] = useState('1');
+  const [isModalVisibleQrCode, setIsModalVisibleQrCode] = useState(false);
+
+  const [isButtonDisabledQrCode, setIsButtonDisabledQrCode] = useState(true);
+  const [isButtonDisabledAdd, setIsButtonDisabledAdd] = useState(true);
+  const [isButtonDisabledCancel, setIsButtonDisabledCancel] = useState(true);
+  const [isButtonDisabledBills, setIsButtonDisabledBills] = useState(true);
+
+  const [isLinkExpired, setIsLinkExpired] = useState(false);
+
+
+  const [link, setLink] = useState(null);
+
   const handleTabChange = (key) => {
     dispatch({ type: "showLoading" });
     setActiveTab(key);
     queryDataTakeAway();
     getAllorder()
+    setIsButtonDisabledQrCode(true)
+    if (key === "1") {
+      setIsButtonDisabledAdd(false)
+    } else
+      setIsButtonDisabledAdd(true)
+    setIsButtonDisabledBills(true)
+    setIsButtonDisabledCancel(true)
+    setIsButtonDisabledBills(true)
   };
   const queryDataTakeAway = () => {
     orderData.forEach((item) => {
@@ -31,7 +53,10 @@ function Tablerestaurant() {
       }
     });
   };
-
+  const handleExpireButtonClick = () => {
+    setIsLinkExpired(true);
+    console.log(isLinkExpired)
+  };
   // table active
   const [activeTable, setActiveTable] = useState(null);
 
@@ -53,13 +78,13 @@ function Tablerestaurant() {
   const now = new Date();
   const timenow = now.toLocaleTimeString();
   const dateTimeString = now.toISOString();
-  console.log(dateTimeString);
+  //console.log(dateTimeString);
+
   const moment = require('moment-timezone');
-
   const thTime = moment().tz('Asia/Bangkok').format('YYYY-MM-DDTHH:mm:ss.SSSZ');
-  console.log(thTime);
+  //console.log(thTime);
 
-  const year = now.getFullYear() + 543; 
+  const year = now.getFullYear() + 543;
   //console.log(dayOfWeekString)
   //console.log(year)
 
@@ -73,39 +98,38 @@ function Tablerestaurant() {
 
   const getStatusOrder = JSON.parse(localStorage.getItem('pop-table-Order'));
   const [statusTableOrder, setStatusTableOrder] = useState([])
-
   //console.log(statusTable)
-  const A1Color = (statusTable.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ||
+  const A1Color = (table.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
       ? 'green'
       : '';
-  const A2Color = (statusTable.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ||
+  const A2Color = (table.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
       ? 'green'
       : '';
-  const A3Color = (statusTable.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ||
+  const A3Color = (table.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
       ? 'green'
       : '';
-  const B1Color = (statusTable.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ||
+  const B1Color = (table.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
       ? 'green'
       : '';
-  const B2Color = (statusTable.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ||
+  const B2Color = (table.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
       ? 'green'
       : '';
-  const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ||
+  const B3Color = (table.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ||
     statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
     ? '#3672f4'
     : (statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
@@ -114,23 +138,56 @@ function Tablerestaurant() {
 
   //active Button
   const handleButtonClick = (buttonName) => {
+    const tableColor = table.some(item => item.table === buttonName && item.IDrestaurant === Idrestaurant) ||
+      statusTableOrder.some(item => item.table === buttonName && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ"))
+      ? '#3672f4'
+      : (statusTableOrder.some(item => item.table === buttonName && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+        ? 'green'
+        : '';
+
     if (activeTable === buttonName) {
       setActiveTable(null);
       setButtonColor('primary');
+      setIsButtonDisabledQrCode(true);
+      setIsButtonDisabledBills(true);
+      setIsButtonDisabledCancel(true);
+      setIsButtonDisabledAdd(true);
+      console.log("1")
     } else {
       setActiveTable(buttonName);
       setButtonColor('danger');
-      getAllTable()
+      getAllTable();
+      setIsButtonDisabledQrCode(false);
+      setIsButtonDisabledBills(false);
+      setIsButtonDisabledCancel(false);
+      setIsButtonDisabledAdd(false);
+      console.log("2")
+
+      if (tableColor === '#3672f4') {
+        setIsButtonDisabledQrCode(false);
+        setIsButtonDisabledBills(false);
+        setIsButtonDisabledCancel(false);
+        console.log("3")
+      } else {
+        setIsButtonDisabledQrCode(true);
+        setIsButtonDisabledBills(true);
+        setIsButtonDisabledCancel(true);
+        console.log("4")
+      }
     }
   };
   const handleButtonClickTakeAway = (label) => {
     if (activeTable === label) {
       setActiveTable(null);
       setButtonColor('primary');
+      setIsButtonDisabledBills(true)
+      setIsButtonDisabledCancel(true)
     } else {
       setActiveTable(label);
       setButtonColor('danger');
       getAllTable()
+      setIsButtonDisabledBills(false)
+      setIsButtonDisabledCancel(false)
     }
   };
   const getAllorder = useCallback(() => {
@@ -172,31 +229,51 @@ function Tablerestaurant() {
 
   const cancelTable = () => {
     dispatch({ type: "showLoading" });
-    for (let i = 0; i < orderData.length; i++) {
+    if (orderData.length > 0) {
+      for (let i = 0; i < orderData.length; i++) {
+        axios
+          .post("/api/tables/cancel-table", { tablenumber: activeTable, customerName: activeTable })
+          .then((response) => {
+            dispatch({ type: "hideLoading" });
+            getAllTable()
+            getAllorder()
+
+            // Remove the cancelled table from the buttonLabels array
+            setButtonLabels((prevLabels) => prevLabels.filter((label) => label !== activeTable));
+          })
+          .catch((error) => {
+            dispatch({ type: "hideLoading" });
+            message.error('Something went wrong')
+            console.log(error);
+          });
+
+      }
+    } else if (table.length >= 0) {
       axios
-        .post("/api/tables/cancel-table", { tablenumber: activeTable, customerName: activeTable })
+        .post("/api/tables/cancel-table", { tablenumber: activeTable })
         .then((response) => {
           dispatch({ type: "hideLoading" });
           getAllTable()
           getAllorder()
-
-          // Remove the cancelled table from the buttonLabels array
-          setButtonLabels((prevLabels) => prevLabels.filter((label) => label !== activeTable));
         })
         .catch((error) => {
           dispatch({ type: "hideLoading" });
           message.error('Something went wrong')
           console.log(error);
         });
-
     }
-    message.success(`Table ${activeTable} cancel successfully`)
-  }
-  const onFinish = (values) => {
 
+    message.success(`Table ${activeTable} cancel successfully`);
+  };
+  const onFinish = (values) => {
+    const uniqueTableID = uuidv4(); // generate new unique ID
+    const newLink = `http://localhost:3000/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${activeTable}&restaurantId=${Idrestaurant}`;
+    setIsButtonDisabledQrCode(false);
+    setIsButtonDisabledBills(false);
+    setIsButtonDisabledCancel(false);
     dispatch({ type: "showLoading" });
     axios
-      .post("/api/tables/add-table", { ...values, Idrestaurant: Idrestaurant, table: activeTable, status: "active", time: timenow })
+      .post("/api/tables/add-table", { ...values, Idrestaurant: Idrestaurant, table: activeTable, status: "active", time: timenow, Link: newLink, uniqueTableID: uniqueTableID })
       .then((response) => {
         dispatch({ type: "hideLoading" });
         message.success('Table add successfully')
@@ -214,7 +291,6 @@ function Tablerestaurant() {
   const onFinishbilltable = (values) => {
     dispatch({ type: "showLoading" });
     setBilltable(false);
-    console.log(values)
     const reqObject = {
       ...values,
       cartItems: dataOrdertable, //order table page to bill page
@@ -223,38 +299,57 @@ function Tablerestaurant() {
       table: activeTable,
       timecheckbills: timenow,
       Idrestaurant: Idrestaurant,
-      daycheckbills:thTime,
-      kind: "table",
+      daycheckbills: thTime,
+      kind: "", // initialize kind as an empty string
     };
-    axios.post('/api/bills/charge-bill', reqObject)
+
+    // Check if orderData contains customerName or tablenumber
+    const hasCustomerName = orderData.some((item) => item.customerName);
+    const hasTableNumber = orderData.some((item) => item.table);
+
+    if (hasCustomerName) {
+      reqObject.kind = "takeaway";
+    } else if (hasTableNumber) {
+      reqObject.kind = "table";
+    }
+
+    axios
+      .post("/api/bills/charge-bill", reqObject)
       .then(() => {
         message.success(`Bill ${activeTable} charged Successfully`);
-      }).catch(() => {
-        message.error("Something went wrong");
       })
+      .catch(() => {
+        message.error("Something went wrong");
+      });
+
     for (let i = 0; i < orderData.length; i++) {
       axios
-        .post("/api/tables/cancel-table", { tablenumber: activeTable, customerName: activeTable })
+        .post("/api/tables/cancel-table", {
+          tablenumber: activeTable,
+          customerName: activeTable,
+        })
         .then((response) => {
           dispatch({ type: "hideLoading" });
-          getAllTable()
-          getAllorder()
-          setButtonLabels((prevLabels) => prevLabels.filter((label) => label !== activeTable));
+          getAllTable();
+          getAllorder();
+          setButtonLabels((prevLabels) =>
+            prevLabels.filter((label) => label !== activeTable)
+          );
         })
         .catch((error) => {
           dispatch({ type: "hideLoading" });
-          message.error('Something went wrong')
+          message.error("Something went wrong");
           console.log(error);
         });
-
     }
-  }
+  };
 
   useEffect(() => {
     const labels = [...new Set(orderData.filter((order) => order.customerName).map((order) => order.customerName))];
     setButtonLabels(labels);
     queryDataTakeAway();
     getAllorder()
+    getAllTable()
   }, []);
 
 
@@ -302,7 +397,24 @@ function Tablerestaurant() {
     },
   ];
 
-  //console.log(buttonLabels)
+  const handleQrCodeButtonClick = () => {
+    setIsModalVisibleQrCode(true);
+    table.forEach((item) => {
+      if (item.IDrestaurant === Idrestaurant && item.table === activeTable) {
+        setLink(item.Link);
+      }
+    });
+    // setLink(newLink);
+  };
+
+  const handleModalOk = () => {
+    setIsModalVisibleQrCode(false); // hide the modal
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisibleQrCode(false); // hide the modal
+    setLink("");
+  };
   return (
     <DefaultLayout>
       <Row>
@@ -347,7 +459,7 @@ function Tablerestaurant() {
                           onClick={() => handleButtonClickTakeAway(label)}
                           className={`${activeTable === label ? buttonColor : ''} buttontakeaway ${completedColor}`}
                           key={index}
-                          style={{ fontSize: '30px'}}
+                          style={{ fontSize: '30px' }}
                         >
                           {label}
                           <div style={{ fontSize: '15px' }}>
@@ -384,25 +496,31 @@ function Tablerestaurant() {
           <Col span={24}>
             <Row gutter={[8, 8]}>
               <Col span={6} >
-                <Button className="custom-button" onClick={() => onFinish()}>
+                <Button className="custom-button" disabled={isButtonDisabledAdd} onClick={() => onFinish()}>
                   <PlusCircleOutlined style={{ fontSize: '40px' }} />
                   <span>เพิ่ม</span>
                 </Button>
               </Col>
               <Col span={6} >
-                <Button className="custom-button">
+                <Button className="custom-button" disabled={isButtonDisabledQrCode} onClick={handleQrCodeButtonClick}>
                   <QrcodeOutlined style={{ fontSize: '40px' }} />
                   <span>Qr Code</span>
                 </Button>
+                <Modal title={`QR Code for Table ${activeTable}`} visible={isModalVisibleQrCode} onOk={handleModalOk} onCancel={handleModalCancel}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <QrCode value={link} style={{ width: '50%', height: 'auto' }} />
+                    {link && <p>{link}</p>}
+                  </div>
+                </Modal>
               </Col>
               <Col span={6} >
-                <Button className="custom-button" onClick={() => cancelTable()}>
+                <Button className="custom-button" disabled={isButtonDisabledCancel} onClick={() => cancelTable()}>
                   <DeleteOutlined style={{ fontSize: '40px' }} />
                   <span>ยกเลิก</span>
                 </Button>
               </Col>
               <Col span={6} >
-                <Button className="custom-button" onClick={() => setBilltable(true)}>
+                <Button className="custom-button" disabled={isButtonDisabledBills} onClick={() => setBilltable(true)}>
                   <CheckSquareOutlined style={{ fontSize: '40px' }} />
                   <span>เช็คบิล</span>
                 </Button>

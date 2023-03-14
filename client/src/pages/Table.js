@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import QrCode from "react-qr-code";
 import DefaultLayout from "../components/DefaultLayout";
 import { v4 as uuidv4 } from 'uuid';
-
+import AES from 'crypto-js/aes';
+import Utf8 from 'crypto-js/enc-utf8';
 function Table() {
   //const { tableID } = useParams(1);
   const [tableID, setTableID] = useState("1");
@@ -15,6 +16,7 @@ function Table() {
   const [menu, setMenu] = useState([]);
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
+  
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
@@ -30,8 +32,8 @@ function Table() {
   }, [expirationTime]);
 
   const generateLink = () => {
-    const newExpirationTime = new Date(Date.now() + 1000 * 60 * 1000); // 30 minutes from now
-    const newLink = `http://localhost:3000/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${Idrestaurant}`;
+    const newExpirationTime = new Date(Date.now() + 10 * 60 * 1000); // 30 minutes from now
+    const newLink = `http://localhost:3000/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${Idrestaurant}&expires=${newExpirationTime.toISOString()}`;
     setExpirationTime(newExpirationTime);
     setLink(newLink);
   };
@@ -50,10 +52,10 @@ function Table() {
   return (
     <DefaultLayout>
       <div>
-        {/* <h3>Table {uniqueTableID}</h3> */}
+        <h3>Table {uniqueTableID}</h3>
         {isLinkValid() ? (
           <>
-            {/* <p>This link will expire at: {expirationTime.toLocaleTimeString()}</p> */}
+            <p>This link will expire at: {expirationTime.toLocaleTimeString()}</p>
             <QrCode value={link} />
             <button onClick={cancelLink}>Cancel Link</button>
           </>

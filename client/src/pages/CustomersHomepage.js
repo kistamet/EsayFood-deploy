@@ -18,7 +18,7 @@ function CustomerHomepage() {
   const { search } = useLocation();
   const { value } = useParams();
   const [restaurantId, setRestaurantId] = useState(null);
-
+  const [table, setTable] = useState([]);
   const location = useLocation();
 
   const queryParams = new URLSearchParams(search);
@@ -39,26 +39,56 @@ function CustomerHomepage() {
       });
   }, [dispatch]);
 
+  const getAllTable = useCallback(() => {
+    dispatch({ type: "showLoading" });
+    axios
+      .get("/api/tables/get-all-table")
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        setTable(response.data);
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        console.log(error);
+      });
+    dispatch({ type: "hideLoading" });
+  }, [dispatch]);
+
   useEffect(() => {
     getAllItems();
+    getAllTable();
     const queryParams = new URLSearchParams(search);
     const expires = queryParams.get("expires");
     if (expires && new Date(expires) < new Date()) {
       setIsLinkExpired(true);
     }
-  }, [getAllItems, search]);
-
+  }, [getAllItems, getAllTable, search]);
+  
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const id = params.get("restaurantId");
     setRestaurantId(id);
   }, [location.search]);
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    console.log("111111111111")
-  };
-
+  
+  useEffect(() => {
+    const tableIds = [];
+    table.forEach((item) => {
+      if (item.IDrestaurant === restaurantId) {
+        tableIds.push(item.uniqueTableID);
+      }
+    });
+  
+    const queryParams = new URLSearchParams(location.search);
+    const uniqueTableID = queryParams.get("uniqueTableID");
+    const expires = queryParams.get("expires");
+    
+    if (tableIds.includes(uniqueTableID)) {
+      setIsLinkExpired(false);
+    } else {
+      setIsLinkExpired(true);
+    }
+  }, [table, restaurantId, location.search]);
+  console.log(isLinkExpired)
   if (isLinkExpired) {
     return (
       <CustomersLayout>
@@ -66,7 +96,6 @@ function CustomerHomepage() {
       </CustomersLayout>
     );
   }
-
   return (
     <CustomersLayout>
       <div>
@@ -74,7 +103,7 @@ function CustomerHomepage() {
           placeholder="Search for items"
           enterButton="Search"
           size="large"
-          onChange={handleSearch}
+          // onChange={handleSearch}
         />
         <Row
           gutter={20}
@@ -82,7 +111,7 @@ function CustomerHomepage() {
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "center",
-            minHeight: "800px", // add a minimum height
+            minHeight: "300px", // add a minimum height
             overflow: "auto", // enable scrolling if content overflows
           }}
         >

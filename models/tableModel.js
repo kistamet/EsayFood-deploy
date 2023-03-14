@@ -9,6 +9,8 @@ const tableSchema = new mongoose.Schema({
     time: { type: String, required: false },
     status: { type: String, required: false },
     IDrestaurant:{ type: String, required: false },
+    uniqueTableID:{ type: String, required: false },
+    Link:{ type: String, required: false },
   }, {timestamps : true});
 
 const tableModel = mongoose.model("tables", tableSchema);

@@ -27,6 +27,8 @@ router.post("/add-table", async (req, res) => {
                 time: req.body.time,
                 status: req.body.status,
                 IDrestaurant: req.body.Idrestaurant,
+                uniqueTableID: req.body.uniqueTableID,
+                Link: req.body.Link,
             })
             if (tablerestaurants) {
                 res.send({ message: 'Login successfull', tablerestaurants });
