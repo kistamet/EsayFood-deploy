@@ -68,7 +68,11 @@ input:focus{
     margin-top: 0;
     margin-bottom:0 !important ;
 }
-
+.bill-model {
+    width: 80mm;
+    padding: 2mm;
+    background-color: white;
+  }
 .dotted-border{
     border-bottom: 2px dashed rgb(77, 76, 76);
 }

@@ -46,7 +46,7 @@ const DefaultLayout = (props) => {
         </div>
       )}
       <Sider  trigger={null} collapsible collapsed={collapsed} >
-        <div className="logo">
+        <div className="logo" onClick={() => navigate("/home")}>
           <h3>Easy POS</h3>
         </div >
         <Menu

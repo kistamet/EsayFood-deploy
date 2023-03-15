@@ -44,7 +44,7 @@ function Bills() {
           </div>
         );
       },
-    },   
+    },
     {
       title: "ราคาทั้งหมด",
       dataIndex: "subTotal",
@@ -128,14 +128,14 @@ function Bills() {
           visible={printBillModalVisibility}
           title="Bill Details"
           footer={false}
-          width={800}
+          width={350}
         >
           <div className="bill-model p-3" ref={componentRef}>
             <div className="d-flex justify-content-between bill-header pb-2">
               <div>
-                <h1>
+                <h5>
                   <b>{Idrestaurant}</b>
-                </h1>
+                </h5>
               </div>
               <div>
                 <p>327 ถ. มหาไชย</p>
@@ -164,11 +164,18 @@ function Bills() {
 
             <div className="dotted-border">
               <p><b>Total</b> : {selectedBill.subTotal}</p>
-              <p><b>PayMode</b> : {selectedBill.paymentMode}</p>
+              {selectedBill.paymentMode === 'เงินสด' ? (
+                <>
+                  <p><b>รับเงิน</b> : {selectedBill.cash}</p>
+                  <p><b>เงินทอน</b> : {selectedBill.change}</p>
+                </>
+              ) : (
+                <p><b>PayMode</b> : {selectedBill.paymentMode}</p>
+              )}
             </div>
 
             <div>
-              <h2><b>ราคาทั้งหมด : {selectedBill.subTotal}</b></h2>
+              <h4><b>ราคาทั้งหมด : {selectedBill.subTotal}</b></h4>
             </div>
             <div className="dotted-border"></div>
 
@@ -181,6 +188,7 @@ function Bills() {
           <div className="d-flex justify-content-end">
             <Button type='primary' onClick={handlePrint}>Print Bill</Button>
           </div>
+
         </Modal>
       )}
     </DefaultLayout>

@@ -15,14 +15,17 @@ function CartPage() {
   const [billChargeModal, setBillChargeModal] = useState(false)
   const [billChargeTakeaway, setBillChargeTakeaway] = useState(false)
   //ข้อมูล order
-  const [orderData, setOrderData] = useState([]);
+  // const [orderData, setOrderData] = useState([]);
 
   //time
   const now = new Date();
   const timenow = now.toLocaleTimeString();
-  const options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-  const dateTimeString = now.toLocaleString('th-TH', options);
-  console.log(dateTimeString);
+  // const options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+  // const dateTimeString = now.toLocaleString('th-TH', options);
+  // console.log(dateTimeString);
+
+  const [isButtonDisabledTable, setIsButtonDisabledTable] = useState(true);
+  const [isButtonDisabledTakeAway, setIsButtonDisabledTakeAway] = useState(true);
 
   const [subTotal, setSubTotal] = useState(0)
   const dispatch = useDispatch();
@@ -53,6 +56,15 @@ function CartPage() {
     setSubTotal(temp)
   }, [cartItems]);
 
+  const onCustomerNameChangeTakeAway = (event) => {
+    const { value } = event.target;
+    setIsButtonDisabledTakeAway(value.length === 0);
+  };
+  
+  const onTableChange = (value) => {
+    setIsButtonDisabledTable(value === undefined);
+  };
+
   const onFinish = (values, record) => {
     dispatch({ type: "showLoading" });
     cartItems.forEach((item) => {
@@ -72,7 +84,7 @@ function CartPage() {
     dispatch({ type: "showLoading" });
     cartItems.forEach((item) => {
       console.log(item)
-      axios.post('/api/bills/bill-order', { ...values, ObjectIdItem: item._id, time: timenow, order: item.name, status: "ส่งครัว", Idrestaurant: Idrestaurant, price: Number(item.price), quantity: Number(item.quantity) , })
+      axios.post('/api/bills/bill-order', { ...values, ObjectIdItem: item._id, time: timenow, order: item.name, status: "ส่งครัว", Idrestaurant: Idrestaurant, price: Number(item.price), quantity: Number(item.quantity), })
         .then(() => {
         }).catch(() => {
           //message.error("Something went wrong");
@@ -120,6 +132,7 @@ function CartPage() {
     },
   ];
 
+
   return (
     <DefaultLayout>
       <h3>ตะกร้าสินค้า</h3><Divider />
@@ -130,43 +143,40 @@ function CartPage() {
         </div>
         <div>
           <Button type="primary" style={{ backgroundColor: 'green', margin: '10px' }} onClick={() => setBillChargeTakeaway(true)}>Take away</Button>
-          <Button type="primary" onClick={() => setBillChargeModal(true)}> Order to table</Button>
+          <Button type="primary" onClick={() => setBillChargeModal(true)}>บันทึกไปยังโต๊ะ</Button>
         </div>
       </div>
 
-      <Modal title='Order to table' visible={billChargeModal} footer={false} onCancel={() => setBillChargeModal(false)}><Form
-        layout="vertical" onFinish={onFinish}>
+      <Modal title='บันทึกไปยังโต๊ะ' visible={billChargeModal} footer={false} onCancel={() => setBillChargeModal(false)}>
+    <Form layout="vertical" onFinish={onFinish}>
+      <Form.Item name='table' label='โต๊ะ'>
+        <Select onChange={onTableChange}>
+          <Select.Option value='A1'>A1</Select.Option>
+          <Select.Option value='A2'>A2</Select.Option>
+          <Select.Option value='A3'>A3</Select.Option>
+          <Select.Option value='B1'>B1</Select.Option>
+          <Select.Option value='B2'>B2</Select.Option>
+          <Select.Option value='B3'>B3</Select.Option>
+        </Select>
+      </Form.Item>
+      <div className="d-flex justify-content-end">
+        <Button htmlType="submit" type="primary" disabled={isButtonDisabledTable}>
+          บันทึก
+        </Button>
+      </div>
+    </Form>
+  </Modal>
 
-        <Form.Item name='table' label='โต๊ะ'>
-          <Select>
-            <Select.Option value='A1'>A1</Select.Option>
-            <Select.Option value='A2'>A2</Select.Option>
-            <Select.Option value='A3'>A3</Select.Option>
-            <Select.Option value='B1'>B1</Select.Option>
-            <Select.Option value='B2'>B2</Select.Option>
-            <Select.Option value='B3'>B3</Select.Option>
-          </Select>
-        </Form.Item>
-
-        <div className="Charge-bill-amount">
-          <h5>ยอดรวม : <b> {subTotal}</b></h5>
-          <h2>ยอดรวมทั้งหมด : <b>{subTotal}</b></h2>
-        </div>
-        <div className="d-flex justify-content-end">
-          <Button htmlType="submit" type="primary">
-            บันทึกไปยังโต๊ะ
-          </Button>
-        </div>
-      </Form>{""}
-      </Modal>
-
-      <Modal title='Take away' visible={billChargeTakeaway} footer={false} onCancel={() => setBillChargeTakeaway(false)}><Form
-        layout="vertical" onFinish={onFinishtakeaway}>
-
-
-        <Form.Item name='customerName' label='ขื่อลูกค้า'>
-          <Input />
-        </Form.Item>
+      <Modal title='Take away' visible={billChargeTakeaway} footer={false} onCancel={() => setBillChargeTakeaway(false)}>
+    <Form layout="vertical" onFinish={onFinishtakeaway}>
+      <Form.Item name='customerName' label='ชื่อลูกค้า' rules={[
+        {
+          required: true,
+          message: 'โปรดกรอกชื่อลูกค้า',
+        },
+      ]}>
+        <Input onChange={onCustomerNameChangeTakeAway} />
+      </Form.Item>
 
         <Form.Item name='customerPhoneNumber' label='เบอร์โทรศัพท์'>
           <Input />
@@ -175,13 +185,8 @@ function CartPage() {
         <Form.Item name='details' label='เพิ่มเติม'>
           <Input />
         </Form.Item>
-
-        <div className="Charge-bill-amount">
-          <h5>ยอดรวม : <b> {subTotal}</b></h5>
-          <h2>ยอดรวมทั้งหมด : <b>{subTotal}</b></h2>
-        </div>
         <div className="d-flex justify-content-end">
-          <Button htmlType="submit" type="primary">
+          <Button htmlType="submit" type="primary" disabled={isButtonDisabledTakeAway}>
             บันทึก
           </Button>
         </div>

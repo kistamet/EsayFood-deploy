@@ -18,6 +18,8 @@ router.post("/charge-bill", async (req, res) => {
         timecheckbills: req.body.timecheckbills,
         daycheckbills: req.body.daycheckbills,
         kind:req.body.kind,
+        cash:req.body.cash,
+        change:req.body.change,
       });
       await newbill.save();
       res.send('Bill charged successfully' );

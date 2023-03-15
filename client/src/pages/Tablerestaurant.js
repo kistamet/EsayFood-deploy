@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DefaultLayout from '../components/DefaultLayout'
-import { Col, Row, Button, Card, Form, Modal, Descriptions, Table, message, Select, Divider, Tabs } from 'antd';
+import { Col, Row, Button, Card, Form, Modal, Descriptions, Table, message, Select, Input, Tabs } from 'antd';
 import "../resourses/Table.css";
 import {
   PlusCircleOutlined,
@@ -14,23 +14,36 @@ import { useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import QrCode from "react-qr-code";
 
-function Tablerestaurant(props) {
+function Tablerestaurant() {
   const dispatch = useDispatch()
   const [buttonLabels, setButtonLabels] = useState([]);
+  //Tab
   const { TabPane } = Tabs;
   const [activeTab, setActiveTab] = useState('1');
+  //Qrcode Modal
   const [isModalVisibleQrCode, setIsModalVisibleQrCode] = useState(false);
-
+  //state ที่เอาไว้ให้ปุ่ม enable หรือ disable
   const [isButtonDisabledQrCode, setIsButtonDisabledQrCode] = useState(true);
   const [isButtonDisabledAdd, setIsButtonDisabledAdd] = useState(true);
   const [isButtonDisabledCancel, setIsButtonDisabledCancel] = useState(true);
   const [isButtonDisabledBills, setIsButtonDisabledBills] = useState(true);
+  const [isButtonDisabledCheckBills, setIsButtonDisabledCheckBills] = useState(true);
 
-  const [isLinkExpired, setIsLinkExpired] = useState(false);
+  //โหมดของการจ่ายเงิน
+  const [paymentMode, setPaymentMode] = useState(null); // null to start, until user selects a payment mode  const [isCashSelected, setIsCashSelected] = useState(true); // track whether "Cash" is selected
+  //state ที่เอาไว้ให้ show ปุ่มกับ Input เมื่อเลือก "เงินสด"
+  const [showCashInput, setShowCashInput] = useState(false);
+  //เงินที่รับมาจากช่อง Input
+  const [cashAmount, setCashAmount] = useState(0);
+  //บวกค่าของ Input
+  const ClickPlusCash = (value) => {
+    setCashAmount(cashAmount + value);
+  };
 
-
+  //Link ของ QrCode
   const [link, setLink] = useState(null);
 
+  //เปลี่ยน Tab
   const handleTabChange = (key) => {
     dispatch({ type: "showLoading" });
     setActiveTab(key);
@@ -39,12 +52,15 @@ function Tablerestaurant(props) {
     setIsButtonDisabledQrCode(true)
     if (key === "1") {
       setIsButtonDisabledAdd(false)
+      setActiveTable(null)
     } else
-      setIsButtonDisabledAdd(true)
+      setActiveTable(null)
+    setIsButtonDisabledAdd(true)
     setIsButtonDisabledBills(true)
     setIsButtonDisabledCancel(true)
     setIsButtonDisabledBills(true)
   };
+  //ข้อมูลของ Take Away มห้นำมาแสดง
   const queryDataTakeAway = () => {
     orderData.forEach((item) => {
       if (item.IDrestaurant === Idrestaurant) {
@@ -53,10 +69,7 @@ function Tablerestaurant(props) {
       }
     });
   };
-  const handleExpireButtonClick = () => {
-    setIsLinkExpired(true);
-    console.log(isLinkExpired)
-  };
+
   // table active
   const [activeTable, setActiveTable] = useState(null);
 
@@ -77,7 +90,7 @@ function Tablerestaurant(props) {
   //time
   const now = new Date();
   const timenow = now.toLocaleTimeString();
-  const dateTimeString = now.toISOString();
+  // const dateTimeString = now.toISOString();
   //console.log(dateTimeString);
 
   const moment = require('moment-timezone');
@@ -93,48 +106,33 @@ function Tablerestaurant(props) {
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
 
   //get table avtive
-  const getStatusTable = JSON.parse(localStorage.getItem('pop-table'));
-  const [statusTable, setStatusTable] = useState([]);
+  // const getStatusTable = JSON.parse(localStorage.getItem('pop-table'));
+    //const [statusTable, setStatusTable] = useState([]);
 
-  const getStatusOrder = JSON.parse(localStorage.getItem('pop-table-Order'));
+  // const getStatusOrder = JSON.parse(localStorage.getItem('pop-table-Order'));
   const [statusTableOrder, setStatusTableOrder] = useState([])
   //console.log(statusTable)
-  const A1Color = (table.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
-  const A2Color = (table.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
-  const A3Color = (table.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
-  const B1Color = (table.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
-  const B2Color = (table.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
-  const B3Color = (table.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
+
+  //function สำหรับเปลี่ยนสีปุ่มเมื่อกด add หรือ มีออเดอร์ และเปลี่ยนเป็นสีเขียวเมื่อเสร็จแล้ว
+  function getTableColor(tableNumber, Idrestaurant, table, statusTableOrder) {
+    const isTableOccupied = table.some(item => item.table === tableNumber && item.IDrestaurant === Idrestaurant);
+    const isTableBeingPrepared = statusTableOrder.some(item => item.table === tableNumber && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ"));
+    const isTableCompletedOrCancelled = statusTableOrder.some(item => item.table === tableNumber && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก"));
+
+    if (isTableOccupied || isTableBeingPrepared) {
+      return '#3672f4';
+    } else if (isTableCompletedOrCancelled) {
+      return 'green';
+    } else {
+      return '';
+    }
+  }
+  const A1Color = getTableColor('A1', Idrestaurant, table, statusTableOrder);
+  const A2Color = getTableColor('A2', Idrestaurant, table, statusTableOrder);
+  const A3Color = getTableColor('A3', Idrestaurant, table, statusTableOrder);
+  const B1Color = getTableColor('B1', Idrestaurant, table, statusTableOrder);
+  const B2Color = getTableColor('B2', Idrestaurant, table, statusTableOrder);
+  const B3Color = getTableColor('B3', Idrestaurant, table, statusTableOrder);
 
   //active Button
   const handleButtonClick = (buttonName) => {
@@ -145,6 +143,7 @@ function Tablerestaurant(props) {
         ? 'green'
         : '';
 
+    //Disabel ปุ่มเมื่อกดเข้ามาที่หน้า table
     if (activeTable === buttonName) {
       setActiveTable(null);
       setButtonColor('primary');
@@ -152,7 +151,6 @@ function Tablerestaurant(props) {
       setIsButtonDisabledBills(true);
       setIsButtonDisabledCancel(true);
       setIsButtonDisabledAdd(true);
-      console.log("1")
     } else {
       setActiveTable(buttonName);
       setButtonColor('danger');
@@ -161,21 +159,20 @@ function Tablerestaurant(props) {
       setIsButtonDisabledBills(false);
       setIsButtonDisabledCancel(false);
       setIsButtonDisabledAdd(false);
-      console.log("2")
 
-      if (tableColor === '#3672f4') {
+      if (tableColor === '#3672f4' || tableColor === 'green') {
         setIsButtonDisabledQrCode(false);
         setIsButtonDisabledBills(false);
         setIsButtonDisabledCancel(false);
-        console.log("3")
       } else {
         setIsButtonDisabledQrCode(true);
         setIsButtonDisabledBills(true);
         setIsButtonDisabledCancel(true);
-        console.log("4")
+
       }
     }
   };
+
   const handleButtonClickTakeAway = (label) => {
     if (activeTable === label) {
       setActiveTable(null);
@@ -218,7 +215,7 @@ function Tablerestaurant(props) {
         setTable(response.data);
         //get from app
         localStorage.setItem('pop-table', JSON.stringify(response.data))
-        setStatusTable(response.data)
+        // setStatusTable(response.data)
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -229,6 +226,8 @@ function Tablerestaurant(props) {
 
   const cancelTable = () => {
     dispatch({ type: "showLoading" });
+    setActiveTable(null)
+    setCashAmount(0)
     if (orderData.length > 0) {
       for (let i = 0; i < orderData.length; i++) {
         axios
@@ -271,6 +270,7 @@ function Tablerestaurant(props) {
     setIsButtonDisabledQrCode(false);
     setIsButtonDisabledBills(false);
     setIsButtonDisabledCancel(false);
+    setCashAmount(0)
     dispatch({ type: "showLoading" });
     axios
       .post("/api/tables/add-table", { ...values, Idrestaurant: Idrestaurant, table: activeTable, status: "active", time: timenow, Link: newLink, uniqueTableID: uniqueTableID })
@@ -291,6 +291,10 @@ function Tablerestaurant(props) {
   const onFinishbilltable = (values) => {
     dispatch({ type: "showLoading" });
     setBilltable(false);
+    setCashAmount(0)
+    setPaymentMode(null)
+    setShowCashInput(false)
+    setActiveTable(null)
     const reqObject = {
       ...values,
       cartItems: dataOrdertable, //order table page to bill page
@@ -301,11 +305,13 @@ function Tablerestaurant(props) {
       Idrestaurant: Idrestaurant,
       daycheckbills: thTime,
       kind: "", // initialize kind as an empty string
+      change: cashAmount - total,
+      cash: cashAmount
     };
 
     // Check if orderData contains customerName or tablenumber
-    const hasCustomerName = orderData.some((item) => item.customerName);
-    const hasTableNumber = orderData.some((item) => item.table);
+    const hasCustomerName = orderData.some((item) => item.customerName && item.customerName === activeTable);
+    const hasTableNumber = orderData.some((item) => item.table && item.table === activeTable);
 
     if (hasCustomerName) {
       reqObject.kind = "takeaway";
@@ -375,7 +381,7 @@ function Tablerestaurant(props) {
       dataOrdertable.push(item)
     }
   })
-  //console.log(dataOrdertable)
+
 
   const columns = [
     {
@@ -415,6 +421,7 @@ function Tablerestaurant(props) {
     setIsModalVisibleQrCode(false); // hide the modal
     setLink("");
   };
+
   return (
     <DefaultLayout>
       <Row>
@@ -544,46 +551,115 @@ function Tablerestaurant(props) {
         </Col>
       </Row>
       {billtable && (
-        <Modal onCancel={() => {
-          setBilltable(false)
-        }}
+        <Modal
+          onCancel={() => {
+            setBilltable(false);
+            setShowCashInput(false);
+            setPaymentMode(null)
+            setCashAmount(0)
+          }}
           visible={billtable}
           title={"Charge Bill"}
           footer={false}
           width={800}
         >
-          <Form
-            layout="vertical" onFinish={onFinishbilltable}  >
+          <Form layout="vertical" onFinish={onFinishbilltable}>
             <div>
               <div className="Charge-bill-amount">
-                <h5>รายการทั้งหมด<b></b></h5>
+                <h5>
+                  รายการทั้งหมด<b></b>
+                </h5>
                 <Table
                   columns={columns}
-                  dataSource={orderData.filter((i) => i.IDrestaurant === getIdrestaurant && (i.table || i.customerName) === activeTable)}
+                  dataSource={orderData.filter(
+                    (i) =>
+                      i.IDrestaurant === getIdrestaurant &&
+                      (i.table || i.customerName) === activeTable
+                  )}
                   pagination={false}
                   scroll={{
                     y: 200,
                   }}
-                /><h5>รายการ : <b>{quantity}</b></h5>
-                <h2>ยอดรวม : <b>{total}</b></h2>
+                />
+                <h5>
+                  รายการ : <b>{quantity}</b>
+                </h5>
+                <h2>
+                  ยอดรวม : <b>{total}</b>
+                </h2>
               </div>
+              <div className="bill-customer-details my-2 dotted-border" />
               <div className="d-flex justify-content-start">
-                <h4 >จ่ายด้วย </h4>
-                <Form.Item name='paymentMode' style={{ width: '200px', marginLeft: '10px' }}>
-                  <Select>
-                    <Select.Option value='เงินสด' >เงินสด</Select.Option>
-                    <Select.Option value='บัตร'>บัตร</Select.Option>
+                <Form.Item name="paymentMode" label="เลือกวิธีชำระเงิน" style={{ width: "200px", marginLeft: "10px" }}>
+                  <Select
+                    onChange={(value) => {
+                      setPaymentMode(value);
+                      setShowCashInput(value === "เงินสด");
+                    }}
+                  >
+                    <Select.Option value="เงินสด">เงินสด</Select.Option>
+                    <Select.Option value="เงินโอน">เงินโอน</Select.Option>
                   </Select>
                 </Form.Item>
-
+                <div className="d-flex justify-content-between" style={{ marginLeft: "120px" }}>
+                  {showCashInput && (
+                    <div >
+                      <Form.Item
+                        name="cashAmount"
+                        label="จำนวนเงิน"
+                        rules={[
+                          {
+                            validator: (_, value) => {
+                              if (value <= 0) {
+                                return Promise.reject("โปรดระบุจำนวนเงิน");
+                              }
+                              return Promise.resolve();
+                            },
+                          },
+                        ]}
+                      >
+                        <Input.Group compact>
+                          <Input
+                            type="number"
+                            style={{ width: "70%" }}
+                            value={cashAmount}
+                            onChange={(e) => setCashAmount(Number(e.target.value))}
+                          />
+                        </Input.Group>
+                        <Button onClick={() => ClickPlusCash(20)}>+20</Button>
+                        <Button onClick={() => ClickPlusCash(50)}>+50</Button>
+                        <Button onClick={() => ClickPlusCash(100)}>+100</Button>
+                        <Button onClick={() => ClickPlusCash(500)}>+500</Button>
+                        {cashAmount > 0 && <div>เงินทอน: {cashAmount - total}</div>}
+                      </Form.Item>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div class="d-flex justify-content-end">
-                <Button htmlType="submit" type="primary"  >ยืนยัน</Button>
+              <div className="d-flex justify-content-end">
+                {paymentMode === "เงินสด" && (
+                  <Button
+                    htmlType="submit"
+                    type="primary"
+                    disabled={!showCashInput || cashAmount <= total}
+                  >
+                    ยืนยัน
+                  </Button>
+                )}
+                {paymentMode === "เงินโอน" && (
+                  <Button
+                    htmlType="submit"
+                    type="primary"
+                  >
+                    ยืนยัน
+                  </Button>
+                )}
               </div>
             </div>
           </Form>
         </Modal>
       )}
+
     </DefaultLayout>
   )
 }
