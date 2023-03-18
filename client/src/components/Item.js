@@ -32,6 +32,10 @@ function Item({ item }) {
     function addToCart() {
         dispatch({ type: 'addToCart', payload: { ...item, quantity: 1 } });
     }
+    function addToCart2() {
+        dispatch({ type: 'incrementCount' });
+    }
+
 
     return (
         <ItemWrapper>
@@ -42,6 +46,9 @@ function Item({ item }) {
             </Typography>
             <Button onClick={addToCart} className="addToCartButton" variant="contained" color="primary">
                 Add To Cart
+            </Button>
+            <Button onClick={addToCart2} className="addToCartButton" variant="contained" color="primary">
+                Add To Cart2
             </Button>
         </ItemWrapper>
     );
