@@ -52,4 +52,16 @@ router.post("/cancel-table", async (req, res) => {
         res.status(400).json(error);
     }
 });
+
+router.post("/update-table", async (req, res) => {
+    try {
+        await tableModel.findOneAndUpdate(
+            { _id: req.body.tableId },
+            { $set: { status: req.body.status } }
+          );
+        res.send('table updated successfull')
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
 module.exports = router;

@@ -138,9 +138,10 @@ function Items() {
       <Divider />
       <Table columns={columns} dataSource={itemsData.filter((i) => i.IDrestaurant === getIdrestaurant)} bordered />
       {addEditModalVisibilty && (
-        <Modal onCancel={() => {
+        <Modal  onCancel={() => {
           setEditingItem(null)
           setAddEditModalVisibilty(false)
+          
         }} 
         visible={addEditModalVisibilty} 
         title={`${editingItem !==null ? 'แก้ไขสินค้า' : 'เพิ่มสินค้า'}`}

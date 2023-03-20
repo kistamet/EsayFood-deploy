@@ -49,11 +49,10 @@ export const rootReducer = (state = initailState, action) => {
         loading: false,
       };
 
-    case "incrementCount":
-      return {
-        ...state,
-        count: state.count + 1,
-      };
+      case 'INCREMENT_COUNT':
+        return { ...state, count: state.count + 1 };
+      case 'DECREMENT_COUNT':
+        return { ...state, count: state.count - 1 };
 
     default:
       return state;

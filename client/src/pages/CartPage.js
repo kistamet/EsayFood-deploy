@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../components/DefaultLayout";
-import { Button, Table, Modal, Form, Input, Select, message, Divider } from "antd";
+import { Button, Table, Modal, Form, Input, Select, message, Divider , Typography } from "antd";
 import {
   DeleteOutlined,
   PlusCircleOutlined,
@@ -147,7 +147,8 @@ function CartPage() {
         </div>
       </div>
 
-      <Modal title='บันทึกไปยังโต๊ะ' visible={billChargeModal} footer={false} onCancel={() => setBillChargeModal(false)}>
+      <Modal title={<Typography style={{ color: '#2e186a' }}>บันทึกไปยังโต๊ะ</Typography>} visible={billChargeModal} footer={false} onCancel={() => setBillChargeModal(false)}>
+        
     <Form layout="vertical" onFinish={onFinish}>
       <Form.Item name='table' label='โต๊ะ'>
         <Select onChange={onTableChange}>
@@ -167,7 +168,7 @@ function CartPage() {
     </Form>
   </Modal>
 
-      <Modal title='Take away' visible={billChargeTakeaway} footer={false} onCancel={() => setBillChargeTakeaway(false)}>
+      <Modal title={<Typography style={{ color: '#2e186a' }}>Take away</Typography>} visible={billChargeTakeaway} footer={false} onCancel={() => setBillChargeTakeaway(false)}>
     <Form layout="vertical" onFinish={onFinishtakeaway}>
       <Form.Item name='customerName' label='ชื่อลูกค้า' rules={[
         {

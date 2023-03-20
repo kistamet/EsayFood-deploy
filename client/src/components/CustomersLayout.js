@@ -7,6 +7,9 @@ import { useLocation } from "react-router-dom";
 import { IconButton } from '@mui/material';
 import "../resourses/CustomersLayout.css";
 import { Modal } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { useCallback } from 'react';
+import axios from "axios";
 
 const CustomersLayout = (props) => {
   const navigate = useNavigate();
@@ -14,12 +17,17 @@ const CustomersLayout = (props) => {
   const { cartItems } = useSelector((state) => state.rootReducer);
   const queryParams = new URLSearchParams(search);
   const tableID = queryParams.get("tableID");
-
+  const dispatch = useDispatch()
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
   const [openModal, setOpenModal] = useState(false);
+  const [callstaffCount, setCallstaffCount] = useState(0);
+  const [checkbillsCount, setCheckbillsCount] = useState(0);
+
+  const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
+  const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -28,6 +36,61 @@ const CustomersLayout = (props) => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+
+  const { count } = useSelector((state) => state.rootReducer);
+
+  const [table, setTable] = useState([]);
+
+  const getAllTable = useCallback(() => {
+    dispatch({ type: "showLoading" });
+    axios
+      .get("/api/tables/get-all-table")
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        setTable(response.data);
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        console.log(error);
+      });
+    dispatch({ type: "hideLoading" });
+  }, [dispatch]);
+
+  useEffect(() => {
+    getAllTable()
+  }, []);
+
+  const Notifunction = (type) => {
+    if (type === 'callstaff') {
+      const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getIdrestaurant );
+      if (callStaffTables.length > 0) {
+        dispatch({ type: 'INCREMENT_COUNT' });
+        localStorage.setItem('count', count + 1);
+        callStaffTables.forEach(item => {
+          axios
+            .post("/api/tables/update-table", { tableId: item._id, status: "callstaff" })
+            .then(() => { })
+            .catch(() => { });
+        });
+      }
+      getAllTable();
+    } else if (type === 'checkbills') {
+      const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getIdrestaurant);
+      if (callStaffTables.length > 0) {
+        dispatch({ type: 'INCREMENT_COUNT' });
+        localStorage.setItem('count', count + 1);
+        callStaffTables.forEach(item => {
+          axios
+            .post("/api/tables/update-table", { tableId: item._id, status: "checkbills" })
+            .then(() => { })
+            .catch(() => { });
+        });
+      }
+      getAllTable();
+    }
+  };
+
+
   return (
     <Grid container direction="column" minHeight="100vh">
       <Grid item>
@@ -95,8 +158,8 @@ const CustomersLayout = (props) => {
                 <Typography variant="h5" gutterBottom>
                   เลือกรายการที่ต้องการ
                 </Typography>
-                <Button variant="contained" sx={{ backgroundColor: "#2196f3", color: "#fff", margin: "10px" }}>เรียกพนักงาน</Button>
-                <Button variant="contained" sx={{ backgroundColor: "#f44336", color: "#fff", margin: "10px" }}>เช็คบิล</Button>
+                <Button onClick={() => Notifunction('callstaff')} variant="contained" sx={{ backgroundColor: "#2196f3", color: "#fff", margin: "10px" }}>เรียกพนักงาน</Button>
+                <Button onClick={() => Notifunction('checkbills')} variant="contained" sx={{ backgroundColor: "#f44336", color: "#fff", margin: "10px" }}>เช็คบิล</Button>
               </Box>
             </Modal>
 

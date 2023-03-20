@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Layout, Menu, Modal , Row ,Col  } from "antd";
+import { Button, Layout, Menu, Modal, Row, Col, Card, Badge, Typography, message } from "antd";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -14,25 +14,41 @@ import {
   HistoryOutlined,
   SolutionOutlined,
   LaptopOutlined,
-  BellOutlined
+  BellOutlined,
+  CloseOutlined,
+  CheckOutlined,
+  SyncOutlined
 } from "@ant-design/icons";
 import "../resourses/layout.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { useCallback } from 'react';
+import axios from "axios";
 
 const { Header, Sider, Content } = Layout;
 
 
 const DefaultLayout = (props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [collapsed, setCollapsed] = useState(false);
-  const { cartItems, loading ,count } = useSelector((state) => state.rootReducer);
+  const { cartItems, loading } = useSelector((state) => state.rootReducer);
+
+  const { count } = useSelector((state) => state.rootReducer);
+
+  const state = useSelector(state => state.rootReducer.count);
+  // console.log(state);
+
+  const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
+  const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
+
   const toggle = () => {
     setCollapsed(!collapsed);
   };
 
-console.log(count)
+  const [table, setTable] = useState([]);
+
   const namerestaurant = JSON.parse(localStorage.getItem("pop-name-restaurant"));
   const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -40,6 +56,7 @@ console.log(count)
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
 
+    localStorage.setItem("count", JSON.stringify(count));
 
   }, [cartItems]);
 
@@ -48,22 +65,64 @@ console.log(count)
   //const [count, setCount] = useState(0);
 
   const showModal = () => {
+    getAllTable();
     setIsModalVisible(true);
   };
 
 
   const handleCancel = () => {
+    getAllTable();
     setIsModalVisible(false);
   };
-  //onst count = useSelector((state) => state.buttonCount);
+
+  const getAllTable = useCallback(() => {
+    dispatch({ type: "showLoading" });
+    axios
+      .get("/api/tables/get-all-table")
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        setTable(response.data);
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        console.log(error);
+      });
+    dispatch({ type: "hideLoading" });
+  }, [dispatch]);
 
 
-  const dispatch = useDispatch();
+  //const [countNoti, setCountNoti] = useState(0);
 
 
-  const handleClick = () => {
-    
-  };
+  useEffect(() => {
+    getAllTable()
+  }, [table]);
+
+  let countNoti = 0
+  table.forEach((item) => {
+    if (item.IDrestaurant === Idrestaurant && (item.status === "callstaff" || item.status === "checkbills"  ) ) {
+      countNoti += 1
+    }
+  });
+
+  function handleCheck(table) {
+    dispatch({ type: 'DECREMENT_COUNT' });
+    localStorage.setItem('count', count - 1);
+    axios
+      .post("/api/tables/update-table", { tableId: table._id, status: "active" })
+      .then(() => {
+        message.success(`Table ${table.table} successfully`);
+      })
+      .catch(() => {
+        message.error("Something went wrong");
+      });
+    getAllTable()
+  }
+
+  function handleClose() {
+    // logic to handle the "Close" action
+  }
+
   return (
     <Layout>
       {loading && (
@@ -77,7 +136,7 @@ console.log(count)
       )}
       <Sider trigger={null} collapsible collapsed={collapsed} >
         <div className="logo">
-          <h3>Easy POS</h3>
+          <h3 >Easy POS</h3>
         </div >
         <Menu
           theme="dark"
@@ -87,21 +146,66 @@ console.log(count)
 
         >    <div>
             <div onClick={showModal}>
-              <BellOutlined style={{ fontSize: "30px", marginLeft: "20px" }} />
-              <span>{count}</span>
+              <Badge count={countNoti}>
+                <BellOutlined style={{ fontSize: "30px", marginLeft: "20px", color: "white" }} />
+              </Badge>
             </div>
-            <Button onClick={handleClick}>Increase Count</Button>
-            <Modal title="Basic Modal" visible={isModalVisible} onCancel={handleCancel}>
-              <Row>
-                <Col span={12}>col-12</Col>
-                <Col span={12}>col-12</Col>
+            <Modal
+              title={<Typography style={{ color: '#2e186a' }}>รายการแจ้งเตือน</Typography>}
+              visible={isModalVisible}
+              onCancel={handleCancel}
+              bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(60vh - 100px)' }}
+              autoFocus
+              footer={[
+                <Button key="refresh" onClick={() => getAllTable()} icon={<SyncOutlined />}>
+                  Refresh
+                </Button>
+              ]}
+            >
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Typography style={{ color: 'blue' }}>เรียกพนักงาน</Typography>
+                  {table.filter(item => item.status === "callstaff" && item.IDrestaurant === getIdrestaurant).length > 0 ? (
+                    table
+                      .filter(item => item.status === "callstaff" && item.IDrestaurant === getIdrestaurant)
+                      .map(item => (
+                        <Card
+                          key={item.id}
+                          actions={[
+                            <CheckOutlined onClick={() => handleCheck(item)} />,
+                            <div onClick={handleClose}><CloseOutlined /></div>
+                          ]}
+                        >
+                          {item.table} เรียกพนักงาน
+                        </Card>
+                      ))
+                  ) : (
+                    <Typography style={{ color: 'blue' }}>ไม่มีการเรียก</Typography>
+                  )}
+                </Col>
+                <Col span={12}>
+                  <Typography style={{ color: 'red' }}>เช็คบิล</Typography>
+                  {table.filter(item => item.status === "checkbills" && item.IDrestaurant === getIdrestaurant).length > 0 ? (
+                    table
+                      .filter(item => item.status === "checkbills" && item.IDrestaurant === getIdrestaurant)
+                      .map(item => (
+                        <Card
+                          key={item.id}
+                          actions={[
+                            <CheckOutlined onClick={() => handleCheck(item)} />,
+                            <CloseOutlined />
+                          ]}
+                        >
+                          {item.table} เช็คบิล
+                        </Card>
+                      ))
+                  ) : (
+                    <Typography style={{ color: 'blue' }}>ไม่มีการเรียก</Typography>
+                  )}
+                </Col>
               </Row>
             </Modal>
           </div>
-
-
-
-
           <Menu.Item key="/home" icon={<HomeOutlined style={{ fontSize: '20px' }} />}>
             <Link to="/home">Home</Link>
           </Menu.Item>

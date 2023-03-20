@@ -2,6 +2,7 @@ import { Button, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useSelector } from "react-redux";
 
 const ItemWrapper = styled('div')({
     display: 'flex',
@@ -28,13 +29,22 @@ const ItemWrapper = styled('div')({
 
 function Item({ item }) {
     const dispatch = useDispatch();
+    const { count } = useSelector((state) => state.rootReducer);
 
     function addToCart() {
         dispatch({ type: 'addToCart', payload: { ...item, quantity: 1 } });
     }
-    function addToCart2() {
-        dispatch({ type: 'incrementCount' });
-    }
+    function incrementCount() {
+        dispatch({ type: 'INCREMENT_COUNT' });
+        localStorage.setItem('count', count + 1);
+      }
+      
+      function decrementCount() {
+        if (count > 0) {
+          dispatch({ type: 'DECREMENT_COUNT' });
+          localStorage.setItem('count', count - 1);
+        }
+      }
 
 
     return (
@@ -47,8 +57,11 @@ function Item({ item }) {
             <Button onClick={addToCart} className="addToCartButton" variant="contained" color="primary">
                 Add To Cart
             </Button>
-            <Button onClick={addToCart2} className="addToCartButton" variant="contained" color="primary">
-                Add To Cart2
+            <Button onClick={incrementCount}  >
+            incrementCount
+            </Button>
+            <Button onClick={decrementCount}  >
+            decrementCount
             </Button>
         </ItemWrapper>
     );
