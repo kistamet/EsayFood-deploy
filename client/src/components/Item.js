@@ -34,17 +34,7 @@ function Item({ item }) {
     function addToCart() {
         dispatch({ type: 'addToCart', payload: { ...item, quantity: 1 } });
     }
-    function incrementCount() {
-        dispatch({ type: 'INCREMENT_COUNT' });
-        localStorage.setItem('count', count + 1);
-      }
-      
-      function decrementCount() {
-        if (count > 0) {
-          dispatch({ type: 'DECREMENT_COUNT' });
-          localStorage.setItem('count', count - 1);
-        }
-      }
+
 
 
     return (
@@ -57,12 +47,7 @@ function Item({ item }) {
             <Button onClick={addToCart} className="addToCartButton" variant="contained" color="primary">
                 Add To Cart
             </Button>
-            <Button onClick={incrementCount}  >
-            incrementCount
-            </Button>
-            <Button onClick={decrementCount}  >
-            decrementCount
-            </Button>
+
         </ItemWrapper>
     );
 }

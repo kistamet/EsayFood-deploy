@@ -1,7 +1,8 @@
 const initailState = {
   loading: false,
   cartItems: [],
-  count: 0
+  cartItemsCustomer :[],
+
 };
 
 export const rootReducer = (state = initailState, action) => {
@@ -49,11 +50,49 @@ export const rootReducer = (state = initailState, action) => {
         loading: false,
       };
 
-      case 'INCREMENT_COUNT':
-        return { ...state, count: state.count + 1 };
-      case 'DECREMENT_COUNT':
-        return { ...state, count: state.count - 1 };
-
+      case "addToCartCustomer":
+        const newItemCustomer = action.payload;
+        const existingItemIndexCustomer = state.cartItemsCustomer.findIndex(item => item.name === newItemCustomer.name);
+      
+        if (existingItemIndexCustomer !== -1) { // item already exists in cart
+          const updatedcartItemsCustomer = state.cartItemsCustomer.map((item, index) => {
+            if (index === existingItemIndexCustomer) {
+              return {...item, quantity: item.quantity + newItemCustomer.quantity}; // update quantity of existing item
+            }
+            return item;
+          });
+          const newState = {...state, cartItemsCustomer: updatedcartItemsCustomer};
+          localStorage.setItem("cartItemsCustomer", JSON.stringify(newState.cartItemsCustomer)); // update local storage
+          return newState;
+        } else { // item does not exist in cart
+          const newState = {...state, cartItemsCustomer: [...state.cartItemsCustomer, newItemCustomer]};
+          localStorage.setItem("cartItemsCustomer", JSON.stringify(newState.cartItemsCustomer)); // update local storage
+          return newState;
+        }
+        case "deleteFromCartCustomer":
+          const updatedCartItemsCustomer = state.cartItemsCustomer.map((item) => {
+            if (item._id === action.payload._id) {
+              return {
+                ...item,
+                quantity: item.quantity - 1 // decrease quantity of item by 1
+              };
+            }
+            return item;
+          }).filter((item) => item.quantity > 0); // remove item from cart if quantity is 0
+          
+          localStorage.setItem("cartItemsCustomer", JSON.stringify(updatedCartItemsCustomer)); // update localStorage
+          
+          return {
+            ...state,
+            cartItemsCustomer: updatedCartItemsCustomer
+          };
+          
+          case "resetCartItemsCustomer":
+            localStorage.setItem("cartItemsCustomer", "[]"); // reset localStorage
+            return {
+              ...state,
+              cartItemsCustomer: [] // reset cartItemsCustomer to an empty array
+            };
     default:
       return state;
   }

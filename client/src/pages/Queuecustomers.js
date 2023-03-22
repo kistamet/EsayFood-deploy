@@ -4,7 +4,6 @@ import { Button, Form, Input, message, Modal , Divider  } from "antd";
 import { useCallback } from 'react';
 import { Table } from "antd";
 import {
-  DeleteOutlined,
   CheckOutlined,
   EditOutlined,
   PlusOutlined,

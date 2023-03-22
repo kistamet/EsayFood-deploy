@@ -107,7 +107,7 @@ function Tablerestaurant() {
 
   //get table avtive
   // const getStatusTable = JSON.parse(localStorage.getItem('pop-table'));
-    //const [statusTable, setStatusTable] = useState([]);
+  //const [statusTable, setStatusTable] = useState([]);
 
   // const getStatusOrder = JSON.parse(localStorage.getItem('pop-table-Order'));
   const [statusTableOrder, setStatusTableOrder] = useState([])
@@ -151,6 +151,7 @@ function Tablerestaurant() {
       setIsButtonDisabledBills(true);
       setIsButtonDisabledCancel(true);
       setIsButtonDisabledAdd(true);
+      console.log("if 1")
     } else {
       setActiveTable(buttonName);
       setButtonColor('danger');
@@ -159,16 +160,18 @@ function Tablerestaurant() {
       setIsButtonDisabledBills(false);
       setIsButtonDisabledCancel(false);
       setIsButtonDisabledAdd(false);
-
+      console.log("else 1")
       if (tableColor === '#3672f4' || tableColor === 'green') {
         setIsButtonDisabledQrCode(false);
         setIsButtonDisabledBills(false);
         setIsButtonDisabledCancel(false);
+        setIsButtonDisabledAdd(true);
+        console.log("if 2")
       } else {
         setIsButtonDisabledQrCode(true);
         setIsButtonDisabledBills(true);
         setIsButtonDisabledCancel(true);
-
+        console.log("else 2")
       }
     }
   };
@@ -270,6 +273,7 @@ function Tablerestaurant() {
     setIsButtonDisabledQrCode(false);
     setIsButtonDisabledBills(false);
     setIsButtonDisabledCancel(false);
+    setIsButtonDisabledAdd(true);
     setCashAmount(0)
     dispatch({ type: "showLoading" });
     axios
@@ -492,7 +496,7 @@ function Tablerestaurant() {
                   <Descriptions labelStyle={{ fontSize: '20px' }}>
                     <Descriptions.Item label="โต๊ะ" style={{ fontSize: '20px' }}>{activeTable}</Descriptions.Item>
                     <Descriptions.Item label="รายการ">{quantity}</Descriptions.Item>
-                    <Descriptions.Item label="ราคา">{total}</Descriptions.Item>
+                    <Descriptions.Item label="ราคา">{total.toLocaleString('en-US')}</Descriptions.Item>
                     <Descriptions.Item label="เวลามา" style={{ fontSize: '20px' }}>{getTimetable}</Descriptions.Item>
                   </Descriptions>
                 </Col>
@@ -585,7 +589,7 @@ function Tablerestaurant() {
                   รายการ : <b>{quantity}</b>
                 </h5>
                 <h2>
-                  ยอดรวม : <b>{total}</b>
+                  ยอดรวม : <b>{total.toLocaleString('en-US')}</b>
                 </h2>
               </div>
               <div className="bill-customer-details my-2 dotted-border" />

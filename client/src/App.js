@@ -7,6 +7,8 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import CustomerHomepage from './pages/CustomersHomepage';
 import CustomerCartpage from './pages/CustomerCartpage';
+import CustomerOrder from './pages/CustomerOrder';
+import CustomerBills from './pages/CustomerBills';
 import LoginRestaurant from './pages/LoginRestaurant';
 import ProfileRestaurant from './pages/ProfileRestaurant';
 import Tablerestaurant from './pages/Tablerestaurant';
@@ -30,6 +32,8 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/CustomersHomepage' element={<CustomerHomepage />} />
           <Route path='/CustomerCartpage' element={<CustomerCartpage />} />
+          <Route path='/CustomerOrder' element={<CustomerOrder />} />
+          <Route path='/CustomerBills' element={<CustomerBills />} />
           <Route path='/RegisterRestaurant' element={<RegisterRestaurant />} />
           <Route path='/LoginRestaurant' element={<LoginRestaurant />} />
           <Route path='/ProfileRestaurant' element={<ProfileRestaurant />} />

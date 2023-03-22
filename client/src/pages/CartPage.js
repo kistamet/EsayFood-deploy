@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../components/DefaultLayout";
-import { Button, Table, Modal, Form, Input, Select, message, Divider , Typography } from "antd";
+import { Button, Table, Modal, Form, Input, Select, message, Divider, Typography } from "antd";
 import {
   DeleteOutlined,
   PlusCircleOutlined,
@@ -60,7 +60,7 @@ function CartPage() {
     const { value } = event.target;
     setIsButtonDisabledTakeAway(value.length === 0);
   };
-  
+
   const onTableChange = (value) => {
     setIsButtonDisabledTable(value === undefined);
   };
@@ -148,50 +148,50 @@ function CartPage() {
       </div>
 
       <Modal title={<Typography style={{ color: '#2e186a' }}>บันทึกไปยังโต๊ะ</Typography>} visible={billChargeModal} footer={false} onCancel={() => setBillChargeModal(false)}>
-        
-    <Form layout="vertical" onFinish={onFinish}>
-      <Form.Item name='table' label='โต๊ะ'>
-        <Select onChange={onTableChange}>
-          <Select.Option value='A1'>A1</Select.Option>
-          <Select.Option value='A2'>A2</Select.Option>
-          <Select.Option value='A3'>A3</Select.Option>
-          <Select.Option value='B1'>B1</Select.Option>
-          <Select.Option value='B2'>B2</Select.Option>
-          <Select.Option value='B3'>B3</Select.Option>
-        </Select>
-      </Form.Item>
-      <div className="d-flex justify-content-end">
-        <Button htmlType="submit" type="primary" disabled={isButtonDisabledTable}>
-          บันทึก
-        </Button>
-      </div>
-    </Form>
-  </Modal>
+
+        <Form layout="vertical" onFinish={onFinish}>
+          <Form.Item name='table' label='โต๊ะ'>
+            <Select onChange={onTableChange}>
+              <Select.Option value='A1'>A1</Select.Option>
+              <Select.Option value='A2'>A2</Select.Option>
+              <Select.Option value='A3'>A3</Select.Option>
+              <Select.Option value='B1'>B1</Select.Option>
+              <Select.Option value='B2'>B2</Select.Option>
+              <Select.Option value='B3'>B3</Select.Option>
+            </Select>
+          </Form.Item>
+          <div className="d-flex justify-content-end">
+            <Button htmlType="submit" type="primary" disabled={isButtonDisabledTable}>
+              บันทึก
+            </Button>
+          </div>
+        </Form>
+      </Modal>
 
       <Modal title={<Typography style={{ color: '#2e186a' }}>Take away</Typography>} visible={billChargeTakeaway} footer={false} onCancel={() => setBillChargeTakeaway(false)}>
-    <Form layout="vertical" onFinish={onFinishtakeaway}>
-      <Form.Item name='customerName' label='ชื่อลูกค้า' rules={[
-        {
-          required: true,
-          message: 'โปรดกรอกชื่อลูกค้า',
-        },
-      ]}>
-        <Input onChange={onCustomerNameChangeTakeAway} />
-      </Form.Item>
+        <Form layout="vertical" onFinish={onFinishtakeaway}>
+          <Form.Item name='customerName' label='ชื่อลูกค้า' rules={[
+            {
+              required: true,
+              message: 'โปรดกรอกชื่อลูกค้า',
+            },
+          ]}>
+            <Input onChange={onCustomerNameChangeTakeAway} />
+          </Form.Item>
 
-        <Form.Item name='customerPhoneNumber' label='เบอร์โทรศัพท์'>
-          <Input />
-        </Form.Item>
+          <Form.Item name='customerPhoneNumber' label='เบอร์โทรศัพท์'>
+            <Input />
+          </Form.Item>
 
-        <Form.Item name='details' label='เพิ่มเติม'>
-          <Input />
-        </Form.Item>
-        <div className="d-flex justify-content-end">
-          <Button htmlType="submit" type="primary" disabled={isButtonDisabledTakeAway}>
-            บันทึก
-          </Button>
-        </div>
-      </Form>{""}
+          <Form.Item name='details' label='เพิ่มเติม'>
+            <Input />
+          </Form.Item>
+          <div className="d-flex justify-content-end">
+            <Button htmlType="submit" type="primary" disabled={isButtonDisabledTakeAway}>
+              บันทึก
+            </Button>
+          </div>
+        </Form>{""}
       </Modal>
 
     </DefaultLayout>

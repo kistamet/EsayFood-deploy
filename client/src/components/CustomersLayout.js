@@ -10,7 +10,9 @@ import { Modal } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useCallback } from 'react';
 import axios from "axios";
-
+import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
+import Avatar from '@mui/material/Avatar';
+import { green, pink } from '@mui/material/colors';
 const CustomersLayout = (props) => {
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -23,8 +25,7 @@ const CustomersLayout = (props) => {
   }, [cartItems]);
 
   const [openModal, setOpenModal] = useState(false);
-  const [callstaffCount, setCallstaffCount] = useState(0);
-  const [checkbillsCount, setCheckbillsCount] = useState(0);
+
 
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
@@ -62,7 +63,7 @@ const CustomersLayout = (props) => {
 
   const Notifunction = (type) => {
     if (type === 'callstaff') {
-      const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getIdrestaurant );
+      const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getIdrestaurant);
       if (callStaffTables.length > 0) {
         dispatch({ type: 'INCREMENT_COUNT' });
         localStorage.setItem('count', count + 1);
@@ -90,8 +91,12 @@ const CustomersLayout = (props) => {
     }
   };
 
-
+  const handleBackClick = () => {
+    dispatch({ type: "showLoading" });
+    window.history.back();
+  }
   return (
+
     <Grid container direction="column" minHeight="100vh">
       <Grid item>
         <Grid
@@ -106,22 +111,22 @@ const CustomersLayout = (props) => {
         >
           <Grid item>
             <Button
-              sx={{ backgroundColor: "#EEA414 !important" }}
+              className="back-btn"
               variant="contained"
               startIcon={<ArrowBack sx={{ fontSize: 20 }} />}
-              onClick={() => navigate("/CustomersHomepage")}
+              onClick={handleBackClick}
             >
               Back
             </Button>
           </Grid>
-          <Grid item sx={{ display: "flex", alignItems: "center", marginLeft: "150px" }}>
-            <Grid container direction="row" alignItems="center">
-              <TableChartOutlined />
+          <Grid item sx={{ display: "flex", alignItems: "center", marginLeft: "120px" }}>
+            <Grid container direction="row " alignItems="center">
+              <TableRestaurantIcon />
               <Typography
                 variant="h6"
                 sx={{
-                  fontWeight: "bold",
-                  marginLeft: "10px",
+                  fontWeight: "bold !important",
+                  marginLeft: "10px !important ",
                 }}
               >
                 {tableID}
@@ -129,11 +134,13 @@ const CustomersLayout = (props) => {
             </Grid>
           </Grid>
           <Grid item sx={{ position: "relative" }}>
-            <IconButton onClick={handleOpenModal}>
-              <Badge>
-                <Notifications sx={{ fontSize: 30 }} />
-              </Badge>
-            </IconButton>
+            <Avatar sx={{ bgcolor: pink[500] }}>
+              <IconButton onClick={handleOpenModal}>
+                <Badge >
+                  <Notifications sx={{ fontSize: "30px !important", color: "white !important" }} />
+                </Badge>
+              </IconButton>
+            </Avatar>
             <Modal
               open={openModal}
               onClose={handleCloseModal}
@@ -155,11 +162,11 @@ const CustomersLayout = (props) => {
                   minWidth: "250px"
                 }}
               >
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h6" gutterBottom>
                   เลือกรายการที่ต้องการ
-                </Typography>
-                <Button onClick={() => Notifunction('callstaff')} variant="contained" sx={{ backgroundColor: "#2196f3", color: "#fff", margin: "10px" }}>เรียกพนักงาน</Button>
-                <Button onClick={() => Notifunction('checkbills')} variant="contained" sx={{ backgroundColor: "#f44336", color: "#fff", margin: "10px" }}>เช็คบิล</Button>
+                </Typography >
+                <Button onClick={() => Notifunction('callstaff')} className="callstaff-btn">เรียกพนักงาน</Button>
+                <Button onClick={() => Notifunction('checkbills')} className="checkbills-btn">ชำระเงิน</Button>
               </Box>
             </Modal>
 
@@ -168,17 +175,13 @@ const CustomersLayout = (props) => {
       </Grid>
       <Grid item flexGrow={1}>
         <Grid
-          container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
+
           sx={{ padding: "20px", backgroundColor: "#fff", minHeight: "80vh" }}
         >
           {props.children}
         </Grid>
       </Grid>
     </Grid>
-
   );
 
 };

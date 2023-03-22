@@ -1,0 +1,45 @@
+.back-btn {
+    text-decoration: none !important;
+    color: inherit !important;
+    font-family: "Roboto","Helvetica","Arial",sans-serif !important;
+    font-size: 0.875rem !important;
+    letter-spacing: 0.02857em !important;
+    text-transform: uppercase !important;
+    min-width: 64px !important;
+    padding: 6px 16px !important;
+    border-radius: 4px !important;
+    background-color: #EEA414 !important;
+  }
+.callstaff-btn {
+    background-color: #2196f3 !important;
+    color: #fff !important;
+    margin: 10px !important;
+    width: 120px !important;
+    font-size: 16px !important;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.75 !important;
+    letter-spacing: 0.02857em !important;
+    text-transform: uppercase !important;
+    min-width: 64px !important;
+    padding: 6px 8px !important;
+    border-radius: 4px !important;  
+  }
+  
+  .checkbills-btn {
+    background-color: #f44336 !important;
+    color: #fff !important;
+    margin: 10px !important;
+    width: 120px !important;
+    font-size: 16px !important;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.75 !important;
+    letter-spacing: 0.02857em !important;
+    text-transform: uppercase !important;
+    min-width: 64px !important;
+    padding: 6px 8px !important;
+    border-radius: 4px !important;  
+  }

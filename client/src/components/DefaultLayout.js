@@ -96,7 +96,7 @@ const DefaultLayout = (props) => {
 
   useEffect(() => {
     getAllTable()
-  }, [table]);
+  }, []);
 
   let countNoti = 0
   table.forEach((item) => {
@@ -106,8 +106,6 @@ const DefaultLayout = (props) => {
   });
 
   function handleCheck(table) {
-    dispatch({ type: 'DECREMENT_COUNT' });
-    localStorage.setItem('count', count - 1);
     axios
       .post("/api/tables/update-table", { tableId: table._id, status: "active" })
       .then(() => {
@@ -184,7 +182,7 @@ const DefaultLayout = (props) => {
                   )}
                 </Col>
                 <Col span={12}>
-                  <Typography style={{ color: 'red' }}>เช็คบิล</Typography>
+                  <Typography style={{ color: 'red' }}>ชำระเงิน</Typography>
                   {table.filter(item => item.status === "checkbills" && item.IDrestaurant === getIdrestaurant).length > 0 ? (
                     table
                       .filter(item => item.status === "checkbills" && item.IDrestaurant === getIdrestaurant)
@@ -196,7 +194,7 @@ const DefaultLayout = (props) => {
                             <CloseOutlined />
                           ]}
                         >
-                          {item.table} เช็คบิล
+                          {item.table} ชำระเงิน
                         </Card>
                       ))
                   ) : (

@@ -17,6 +17,9 @@ const initialState = {
     cartItems: localStorage.getItem("cartItems")
       ? JSON.parse(localStorage.getItem("cartItems"))
       : [],
+    cartItemsCustomer: localStorage.getItem("cartItemsCustomer")
+    ? JSON.parse(localStorage.getItem("cartItemsCustomer"))
+    : [],
     count: parseInt(localStorage.getItem('count')) || 0
   },
 }

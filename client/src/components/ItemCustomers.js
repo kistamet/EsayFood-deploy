@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardMedia, CardContent, Typography} from '@material-ui/core';
+import { Card, CardMedia, CardContent, Typography } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import { IconButton } from '@mui/material';
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -33,13 +34,39 @@ const useStyles = makeStyles((theme) => ({
 function ItemCustomers({ item }) {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [quantity, setQuantity] = React.useState(0);
+    const state = useSelector(state => state.rootReducer);
 
-    function addToCart() {
-        dispatch({ type: 'addToCart', payload: { ...item, quantity: quantity } });
-        setQuantity(1);
+    
+    function addToCartCustomer() {
+        dispatch({ type: 'addToCartCustomer', payload: { ...item, quantity: 1 } });
     }
+    function deleteFromCartCustomer(itemId, currentQuantity) {
+        const updatedCartItemsCustomer = cartItemsCustomer.map((item) => {
+          if (item._id === itemId) {
+            return {
+              ...item,
+              quantity: currentQuantity - 1
+            };
+          }
+          return item;
+        }).filter((item) => item.quantity > 0);
 
+        dispatch({ type: 'deleteFromCartCustomer', payload: { _id: itemId, quantity: currentQuantity - 1 } });
+        localStorage.setItem("cartItemsCustomer", JSON.stringify(updatedCartItemsCustomer));
+      }
+
+    const cartItemsCustomer = useSelector(
+        (state) => state.rootReducer.cartItemsCustomer
+    );
+    
+    console.log(cartItemsCustomer)
+    const itemCounts = cartItemsCustomer.reduce((counts, item) => {
+        counts[item.name] = (counts[item.name] || 0) + item.quantity;
+        return counts;
+      }, {});
+      useEffect(() => {
+        localStorage.setItem("cartItemsCustomer", JSON.stringify(cartItemsCustomer));
+      }, [cartItemsCustomer]);
     return (
         <Card className={classes.card}>
             <CardMedia className={classes.media} image={item.image} title={item.name} />
@@ -47,18 +74,27 @@ function ItemCustomers({ item }) {
                 <Typography variant="subtitle1" className={classes.name}>
                     {item.name}
                 </Typography>
-                <Typography variant="body2" className={classes.price}>
+                <Typography variant="body2 " className={classes.price}>
                     {item.price} ฿
                 </Typography>
             </CardContent>
-            <IconButton aria-label="remove item" disabled={quantity === 0} onClick={() => setQuantity(quantity - 1)} style={{ color: '#ff0000' }}>
+            <IconButton
+                aria-label="remove item"
+                onClick={() => deleteFromCartCustomer(item._id)}
+                style={{ color: "#ff0000" }}
+            >
                 <RemoveCircleIcon />
             </IconButton>
-            <Typography variant="body1">{quantity}</Typography>
-            <IconButton aria-label="add item" onClick={() => setQuantity(quantity + 1)} style={{ color: '#00ff00' }}>
+            <Typography variant="body1">
+            {itemCounts[item.name] || 0}
+            </Typography>
+            <IconButton
+                aria-label="add item"
+                onClick={addToCartCustomer}
+                style={{ color: "#00ff00" }}
+            >
                 <AddCircleOutlineIcon />
             </IconButton>
-            
         </Card>
     );
 }
