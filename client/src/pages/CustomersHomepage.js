@@ -150,7 +150,7 @@ function CustomerHomepage() {
           {itemsData
             .filter(
               (i) =>
-                i.IDrestaurant === restaurantId &&
+                i.IDrestaurant === restaurantId && i.stock > 0 && 
                 i.name.toLowerCase().includes(searchTerm.toLowerCase())
             )
             .map((item) => {

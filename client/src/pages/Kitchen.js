@@ -72,6 +72,8 @@ function Kitchen() {
       orderData.forEach((item) => {
         const stockData = []
         itemsData.forEach((i) => {
+          console.log(item.ObjectIdItem )
+          console.log(record)
           if (item.ObjectIdItem === record.ObjectIdItem && i._id === item.ObjectIdItem) {
             console.log(item.quantity)
             console.log(i.stock)
