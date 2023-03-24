@@ -12,7 +12,7 @@ function Kitchen() {
   const [itemsData, setItemsData] = useState([]);
 
   //const [stockData, setStockData] = useState([]);
-  console.log("11111111")
+
   const getAllorder = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios
@@ -73,7 +73,7 @@ function Kitchen() {
         const stockData = []
         itemsData.forEach((i) => {
           console.log(item.ObjectIdItem )
-          console.log(record)
+          console.log(record.ObjectIdItem)
           if (item.ObjectIdItem === record.ObjectIdItem && i._id === item.ObjectIdItem) {
             console.log(item.quantity)
             console.log(i.stock)

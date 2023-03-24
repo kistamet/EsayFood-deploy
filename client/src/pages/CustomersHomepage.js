@@ -28,7 +28,6 @@ function CustomerHomepage() {
   const [table, setTable] = useState([]);
   const location = useLocation();
   const state = useSelector(state => state.rootReducer);
-  const [isLoading, setIsLoading] = useState(true); // add a loading state
   const queryParams = new URLSearchParams(search);
   const uniqueTableID = queryParams.get("uniqueTableID");
   const tableID = queryParams.get("tableID");
@@ -103,7 +102,6 @@ function CustomerHomepage() {
 
   useEffect(() => {
     checkLinkValidity();
-    setIsLoading(false);
   }, [table, restaurantId, location.search]);
 
   function goToCartpage() {
@@ -115,18 +113,16 @@ function CustomerHomepage() {
   const handleSearch = event => {
     setSearchTerm(event.target.value);
   };
-  console.log(isLoading)
-  if (isLoading) { // display a loading indicator while isLoading is true
-    return <CustomersLayout>Loading...</CustomersLayout>;
-  }
 
   if (isLinkExpired) {
-    // setIsLoading(true);
+    // setIsLoading(true); 
     return (
       <CustomersLayout>
         <div>This link has expired.</div>
       </CustomersLayout>
     );
+
+
   }
   return (
     <CustomersLayout>
@@ -150,14 +146,14 @@ function CustomerHomepage() {
           {itemsData
             .filter(
               (i) =>
-                i.IDrestaurant === restaurantId && i.stock > 0 && 
+                i.IDrestaurant === restaurantId && i.stock > 0 &&
                 i.name.toLowerCase().includes(searchTerm.toLowerCase())
             )
             .map((item) => {
               return (
                 <Col span={6} xs={24} lg={6} md={12} sm={6}>
                   <div>
-                    <ItemCustomers item={item} />
+                    <ItemCustomers item={item} />                    
                   </div>
                 </Col>
               );

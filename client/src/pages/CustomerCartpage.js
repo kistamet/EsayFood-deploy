@@ -12,6 +12,9 @@ import { message } from "antd";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useCallback } from "react";
 import Chip from "@mui/material/Chip";
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 const style = {
   width: "100%",
   maxWidth: 360,
@@ -97,9 +100,15 @@ function CustomerCartpage() {
     const newLink = `/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${restaurantId}`;
     navigate(newLink);
   }
+  function handleDeleteCartItem(index) {
+    const updatedCartItems = cartItemsCustomer.filter((item, i) => i !== index);
+    localStorage.setItem('cartItemsCustomer', JSON.stringify(updatedCartItems));
+    setCartItemsCustomer(updatedCartItems);
+    dispatch({ type: "handleDeleteCartItem", payload: { index: index } });
+  }
   const mergedItems = orderData.reduce((acc, item) => {
     if (item.table === tableID && item.IDrestaurant === restaurantId) {
-      const existingItem = acc.find((i) => i.order === item.order);
+      const existingItem = acc.find((i) => i.order === item.order && i.status === item.status);
       if (existingItem) {
         existingItem.quantity += item.quantity;
         existingItem.price += item.price * item.quantity;
@@ -114,6 +123,8 @@ function CustomerCartpage() {
     }
     return acc;
   }, []);
+
+
   return (
     <CustomersLayout>
       {cartItemsCustomer.length > 0 ? (
@@ -157,38 +168,76 @@ function CustomerCartpage() {
       )}
 
       {cartItemsCustomer.map((item, index) => (
-        <Card
-          key={index}
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "8px",
-            width: "100%",
-            height: "80px",
-            marginTop: "10px",
-            flexBasis: "25%", // Set a fixed width for each card
-          }}
-        >
-          <Typography sx={{ fontSize: "16px" }}>x{item.quantity}</Typography>
-          <Typography
+        item.additionalDetails ? (
+          <Card
+            key={index}
             sx={{
-              fontWeight: "bold",
-              fontSize: "18px",
-              flex: "1",
-              marginLeft: "10px !important",
+              display: "flex",
+              justifyContent: "space-between",
+              flexDirection: "column",
+              alignItems: "start",
+              padding: "8px",
+              width: "100%",
+              height: "80px",
+              marginTop: "10px",
             }}
           >
-            {item.name}
-          </Typography>
-          <Typography
-            sx={{ color: "#888", fontSize: "16px", marginLeft: "10px" }}
+            <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+              <Typography sx={{ fontSize: "18px" }}>
+                x{item.quantity} {item.name}
+                {item.additionalDetails && (
+                  <Typography sx={{ color: "#888", fontSize: "16px" }}>
+                    {item.additionalDetails}
+                  </Typography>
+                )}
+              </Typography>
+              <Typography sx={{ color: "#888", fontSize: "16px" }}>
+                {item.quantity > 1
+                  ? ` ฿${(item.quantity * item.price).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                  : `฿${item.price.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            <IconButton onClick={() => handleDeleteCartItem(index)}>
+  <DeleteIcon style={{ color: "#CF4D4D" }} />
+</IconButton>
+              </Typography>
+            </div>
+          </Card>
+        ) : (
+          <Card
+            key={index}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "8px",
+              width: "100%",
+              height: "80px",
+              marginTop: "10px",
+              flexBasis: "25%", // Set a fixed width for each card
+            }}
           >
-            {item.quantity > 1
-              ? ` ฿${(item.quantity * item.price).toFixed(2)}`
-              : `฿${item.price.toFixed(2)}`}
-          </Typography>
-        </Card>
+            <Typography sx={{ fontSize: "16px" }}>x{item.quantity}</Typography>
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                fontSize: "18px",
+                flex: "1",
+                marginLeft: "10px !important",
+              }}
+            >
+              {item.name}
+            </Typography>
+            <Typography
+              sx={{ color: "#888", fontSize: "16px", marginLeft: "10px" }}
+            >
+              {item.quantity > 1
+                ? ` ฿${(item.quantity * item.price).toFixed(2)}`
+                : `฿${item.price.toFixed(2)}`}
+            </Typography>
+            <IconButton onClick={() => handleDeleteCartItem(index)}>
+  <DeleteIcon style={{ color: "#CF4D4D" }} />
+</IconButton>
+          </Card>
+        )
       ))}
       <br></br>
       <Divider color="primary" />
@@ -268,12 +317,13 @@ function CustomerCartpage() {
             variant="contained"
             startIcon={<AssignmentIcon />}
             sx={{
-              width: "100%",
-              height: "40px",
-              marginBottom: "16px",
-              backgroundColor: "#4D91CF",
+              width: "100% !important",
+              height: "40px !important",
+              marginBottom: "16px !important",
+              color: "white !important",
+              backgroundColor: "#4D91CF !important",
               "&:hover": {
-                backgroundColor: "#3472a0",
+                backgroundColor: "#3472a0 !importants",
               },
             }}
           >

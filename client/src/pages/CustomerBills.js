@@ -160,12 +160,12 @@ function CustomerBills() {
                         bottom: "50px",
                         left: "50%",
                         transform: "translateX(-50%)",
-                        width: "220px",
-                        height: "40px",
+                        width: "260px",
+                        height: "50px",
                         backgroundColor: "#4D91CF",
                     }}
                 >
-                    ยืนยัน
+                    เรียกพนักงานเพื่อชำระเงิน
                 </Button>
             </Card>
         </CustomersLayout>
