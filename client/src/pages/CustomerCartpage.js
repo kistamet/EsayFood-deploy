@@ -14,7 +14,7 @@ import { useCallback } from "react";
 import Chip from "@mui/material/Chip";
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import "../resourses/CustomerCart.css";
 const style = {
   width: "100%",
   maxWidth: 360,
@@ -140,27 +140,14 @@ function CustomerCartpage() {
           {cartItemsCustomer.reduce((total, item) => total + item.quantity, 0)})
         </Typography>
       ) : (
-        <Typography
-          sx={{
-            fontSize: "20px",
-            justifyContent: "start !important",
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-          }}
-        >
-          <CancelIcon sx={{ ml: 1, fontSize: 100, color: "#EEA414" }} />
+        <Typography className="typography-container">
+          <CancelIcon className="cancel-icon" />
           ไม่มีรายการอาหารในตะกร้า
           <Button
             onClick={goToHome}
             variant="contained"
-            startIcon={<AssignmentIcon />}
-            style={{
-              width: "150px",
-              height: "40px",
-              backgroundColor: "#EEA414",
-              borderRadius: "20px",
-            }}
+            startIcon={<AssignmentIcon className="button-icon" />}
+            className="buttonAddOrder-container"
           >
             สั่งอาหารเพิ่ม
           </Button>
@@ -195,9 +182,9 @@ function CustomerCartpage() {
                 {item.quantity > 1
                   ? ` ฿${(item.quantity * item.price).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
                   : `฿${item.price.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-            <IconButton onClick={() => handleDeleteCartItem(index)}>
-  <DeleteIcon style={{ color: "#CF4D4D" }} />
-</IconButton>
+                <IconButton onClick={() => handleDeleteCartItem(index)}>
+                  <DeleteIcon style={{ color: "#CF4D4D" }} />
+                </IconButton>
               </Typography>
             </div>
           </Card>
@@ -234,14 +221,14 @@ function CustomerCartpage() {
                 : `฿${item.price.toFixed(2)}`}
             </Typography>
             <IconButton onClick={() => handleDeleteCartItem(index)}>
-  <DeleteIcon style={{ color: "#CF4D4D" }} />
-</IconButton>
+              <DeleteIcon style={{ color: "#CF4D4D" }} />
+            </IconButton>
           </Card>
         )
       ))}
       <br></br>
       <Divider color="primary" />
-      <Typography sx={{ fontSize: "20px", justifyContent: "start !important" }}>
+      <Typography className="buttonOrderd">
         รายการอาหารที่สั่งไปแล้ว
       </Typography>
       {mergedItems.map((item, index) => (
@@ -294,38 +281,12 @@ function CustomerCartpage() {
           height: "120px",
         }}
       ></Typography>
-      <Card
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          position: "fixed",
-          bottom: 0,
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "400px",
-          height: "120px",
-          backgroundColor: "#f8f8f8",
-          boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.3)",
-          borderRadius: "16px 16px 0px 0px",
-          padding: "16px",
-        }}
-      >
+      <Card className="card-container">
         {cartItemsCustomer.length > 0 && (
           <Button
             onClick={onFinish}
             variant="contained"
-            startIcon={<AssignmentIcon />}
-            sx={{
-              width: "100% !important",
-              height: "40px !important",
-              marginBottom: "16px !important",
-              color: "white !important",
-              backgroundColor: "#4D91CF !important",
-              "&:hover": {
-                backgroundColor: "#3472a0 !importants",
-              },
-            }}
+            className="sendOrder-button"
           >
             ส่ง{" "}
             {cartItemsCustomer.reduce(
@@ -339,15 +300,7 @@ function CustomerCartpage() {
           <Button
             onClick={goToBills}
             variant="contained"
-            startIcon={<AssignmentIcon />}
-            sx={{
-              width: "100%",
-              height: "40px",
-              backgroundColor: "#CF4D8B",
-              "&:hover": {
-                backgroundColor: "#a73a6e",
-              },
-            }}
+            className="pay-button"
           >
             ชำระเงิน
           </Button>

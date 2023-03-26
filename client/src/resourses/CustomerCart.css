@@ -1,0 +1,110 @@
+.pay-button {
+    width: 100%  !important;
+    height: 40px  !important;
+    background-color: #CF4D8B  !important;
+    color: #f8f8f8
+}
+
+.pay-button:hover {
+    background-color: #a73a6e  !important;
+}
+
+.sendOrder-button {
+    width: 100%  !important;
+    height: 40px  !important;
+    background-color: #4D91CF  !important;
+    color: #f8f8f8  !important
+}
+
+.sendOrder-button:hover {
+    background-color: #3472a0  !important;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 120px;
+    background-color: #f8f8f8;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 16px 16px 0px 0px;
+    padding: 16px;
+}
+
+.typography-container {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: start !important;
+}
+
+.cancel-icon {
+    margin-left: 1px !important;
+    font-size: 100px  !important;
+    color: #eea414  !important;
+}
+
+.buttonAddOrder-container {
+    width: 150px  !important;
+    height: 40px  !important;
+    background-color: #eea414  !important;
+    border-radius: 20px  !important;
+    color: #f8f8f8  !important
+}
+
+.buttonAddOrder-container:hover {
+    background-color: #c89400  !important;
+}
+
+.buttonAddOrder-container:active {
+    background-color: #b08300  !important;
+}
+
+.buttonAddOrder-icon {
+    margin-right: 8px  !important;
+}
+
+.buttonOrderd {
+    font-size: 20px  !important;
+    justify-content: start  !important
+}
+
+.card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+  }
+  
+  .card-content > div:first-of-type {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .card-content .item-quantity {
+    font-size: 18px;
+  }
+  
+  .card-content .item-price {
+    color: #888;
+    font-size: 16px;
+  }
+  
+  .card-content > div:last-of-type {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
+    margin-left: 10px;
+  }
+  
+  .card-content .item-status {
+    margin-left: 10px !important;
+  }

@@ -36,10 +36,11 @@ function CustomerOrder() {
         const newLink = `/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${restaurantId}`;
         navigate(newLink);
       }
+
     return (
         <CustomersLayout>
             <div style={{ textAlign: "center" }}>
-                <CheckCircleOutlineIcon sx={{ ml: 1, fontSize: 220, color: '#EEA414' }} />
+                <CheckCircleOutlineIcon sx={{ ml: 1, fontSize: 220, color: '#EEA414 ' }} />
                 <Typography sx={{ fontSize: "40px", justifyContent: "start !important" }}>
                     สั่งอาหารสำเร็จ
                 </Typography>

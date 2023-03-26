@@ -13,19 +13,23 @@ import axios from "axios";
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import Avatar from '@mui/material/Avatar';
 import { green, pink } from '@mui/material/colors';
+
 const CustomersLayout = (props) => {
   const navigate = useNavigate();
   const { search } = useLocation();
   const { cartItems } = useSelector((state) => state.rootReducer);
   const queryParams = new URLSearchParams(search);
   const tableID = queryParams.get("tableID");
+  const uniqueTableID = queryParams.get("uniqueTableID");
+  const [restaurantId, setRestaurantId] = useState(null);
+  const location = useLocation();
+
   const dispatch = useDispatch()
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
   const [openModal, setOpenModal] = useState(false);
-
 
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
@@ -58,9 +62,14 @@ const CustomersLayout = (props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    getAllTable()
-  }, []);
+    const params = new URLSearchParams(location.search);
+    const id = params.get("restaurantId");
+    setRestaurantId(id);
+  }, [location.search]);
 
+  useEffect(() => {
+    getAllTable();
+  }, []);
   const Notifunction = (type) => {
     if (type === 'callstaff') {
       const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getIdrestaurant);
@@ -93,16 +102,33 @@ const CustomersLayout = (props) => {
 
   const handleBackClick = () => {
     dispatch({ type: "showLoading" });
-    window.history.back();
+    if (location.pathname === "/CustomerCartpage") {
+      const newLink = `/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${restaurantId}`;
+      navigate(newLink);
+    } else if (location.pathname === "/CustomerBills") {
+      const newLink = `/CustomerCartpage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${restaurantId}`;
+      navigate(newLink);
+    } else if (location.pathname === "/CustomerOrder") {
+      const newLink = `/CustomerCartpage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${restaurantId}`;
+      navigate(newLink);
+    } else {
+      window.history.back();
+    }
+  }
+
+
+  let title;
+  if (location.pathname === "/CustomerBills") {
+    title = "ชำระเงิน";
+  } else if (location.pathname === "/CustomerCartpage") {
+    title = "ตะกร้าสินค้า";
   }
   return (
 
-    <Grid container direction="column" minHeight="100vh">
-      <Grid item>
+    <Grid container spacing={5}>
+      <Grid item sx={{width: "100%",}}>
         <Grid
           container
-          alignItems="center"
-          justifyContent="space-between"
           sx={{
             padding: "20px",
             backgroundColor: "#fff",
@@ -113,33 +139,33 @@ const CustomersLayout = (props) => {
             <Button
               className="back-btn"
               variant="contained"
-              startIcon={<ArrowBack sx={{ fontSize: 20 }} />}
+              startIcon={<ArrowBack sx={{ fontSize: 10 }} />}
               onClick={handleBackClick}
             >
-              Back
             </Button>
           </Grid>
-          <Grid item sx={{ display: "flex", alignItems: "center", marginLeft: "120px" }}>
-            <Grid container direction="row " alignItems="center">
-              <TableRestaurantIcon />
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "bold !important",
-                  marginLeft: "10px !important ",
-                }}
-              >
-                {tableID}
-              </Typography>
-            </Grid>
+
+          <Grid item xs="auto">
+            <Typography variant="h6" className="title">
+              {title}
+            </Typography>
           </Grid>
+
+          <Grid item xs="auto" className="tableicon">
+            <TableRestaurantIcon />
+          </Grid>
+
+          <Grid item xs="auto" className="table-id">
+            <Typography variant="h6">{tableID}</Typography>
+          </Grid>
+
           <Grid item sx={{ position: "relative" }}>
-            <Avatar sx={{ bgcolor: pink[500] }}>
-              <IconButton onClick={handleOpenModal}>
+            <Avatar sx={{ bgcolor: pink[500], marginLeft: "20px" }}>
+              <Badge onClick={handleOpenModal}>
                 <Badge >
                   <Notifications sx={{ fontSize: "30px !important", color: "white !important" }} />
                 </Badge>
-              </IconButton>
+              </Badge>
             </Avatar>
             <Modal
               open={openModal}

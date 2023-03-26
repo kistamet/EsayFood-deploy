@@ -58,6 +58,43 @@ function CustomerBills() {
         }
         return acc;
     }, []);
+    const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
+    const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
+    const { count } = useSelector((state) => state.rootReducer);
+    const [table, setTable] = useState([]);
+  
+    const getAllTable = useCallback(() => {
+      dispatch({ type: "showLoading" });
+      axios
+        .get("/api/tables/get-all-table")
+        .then((response) => {
+          dispatch({ type: "hideLoading" });
+          setTable(response.data);
+        })
+        .catch((error) => {
+          dispatch({ type: "hideLoading" });
+          console.log(error);
+        });
+      dispatch({ type: "hideLoading" });
+    }, [dispatch]);
+  
+    useEffect(() => {
+      getAllTable()
+    }, []);
+    function CheckBills() {
+      const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getIdrestaurant);
+      if (callStaffTables.length > 0) {
+        dispatch({ type: 'INCREMENT_COUNT' });
+        localStorage.setItem('count', count + 1);
+        callStaffTables.forEach(item => {
+          axios
+            .post("/api/tables/update-table", { tableId: item._id, status: "checkbills" })
+            .then(() => { })
+            .catch(() => { });
+        });
+      }
+    }
+
     return (
         <CustomersLayout>
             <Typography sx={{ fontSize: "20px", justifyContent: "start !important" }}>
@@ -152,7 +189,7 @@ function CustomerBills() {
                     }}
                 ></Typography>
                 <Button
-                    // onClick={goToBills}
+                    onClick={CheckBills}
                     variant="contained"
                     // startIcon={<AssignmentIcon />}
                     style={{
@@ -162,7 +199,7 @@ function CustomerBills() {
                         transform: "translateX(-50%)",
                         width: "260px",
                         height: "50px",
-                        backgroundColor: "#4D91CF",
+                        backgroundColor: "#CF4D8B",
                     }}
                 >
                     เรียกพนักงานเพื่อชำระเงิน

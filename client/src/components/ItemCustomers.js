@@ -11,6 +11,7 @@ import Chip from "@mui/material/Chip";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { Modal } from "@mui/material";
 import { TextField, InputAdornment } from "@material-ui/core";
+import "../resourses/CustomersLayout.css";
 const useStyles = makeStyles((theme) => ({
     card: {
         display: 'flex',
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ItemCustomers({ item  }) {
+function ItemCustomers({ item }) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const state = useSelector(state => state.rootReducer);
@@ -83,7 +84,7 @@ function ItemCustomers({ item  }) {
         const payload = { ...item, quantity: 1, additionalDetails };
         dispatch({ type: 'addToCartCustomer', payload });
         setIsModalEdit(false);
-      };
+    };
     return (
         <Card className={classes.card}>
             <div onClick={() => console.log("Image clicked")}>
@@ -100,7 +101,7 @@ function ItemCustomers({ item  }) {
             <IconButton
                 aria-label="remove item"
                 onClick={() => deleteFromCartCustomer(item._id)}
-                style={{ color: "#ff0000 " }}
+                style={{ color: "#ff0000" }}
             >
                 <RemoveCircleIcon />
             </IconButton>
@@ -127,7 +128,7 @@ function ItemCustomers({ item  }) {
                 onClick={addToCartCustomer}
                 style={{ color: "#00ff00" }}
             >
-                <AddCircleOutlineIcon  />
+                <AddCircleOutlineIcon />
             </IconButton>
             <Modal open={isModalEdit} onClose={() => setIsModalEdit(false)}>
                 <Box
@@ -150,12 +151,23 @@ function ItemCustomers({ item  }) {
                     </Typography>
                     <TextField
                         id="outlined-basic"
-                        label="รายละเอียดเพิ่มเติม"
+                        label="เช่น ไม่รับผัก"
                         value={additionalDetails}
                         onChange={handleAdditionalDetailsChange}
                     />
-                    <Button variant="contained" onClick={handleSave}>
-                        Save
+                    <Button className="edit-btn"
+                        variant="contained"
+                        onClick={handleSave}
+                        sx={{ marginTop: "10px !important", marginRight: "10px !important" }}
+                    >
+                        บันทึก
+                    </Button>
+                    <Button className="cancel-btn" 
+                        variant="contained"
+                        onClick={() => setIsModalEdit(false)}
+                        sx={{ backgroundColor: "#fff !important", }}
+                    >
+                        ยกเลิก
                     </Button>
                 </Box>
             </Modal>
