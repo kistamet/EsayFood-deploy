@@ -15,11 +15,6 @@ import Chip from "@mui/material/Chip";
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "../resourses/CustomerCart.css";
-const style = {
-  width: "100%",
-  maxWidth: 360,
-  bgcolor: "background.paper",
-};
 
 function CustomerCartpage() {
   const [cartItemsCustomer, setCartItemsCustomer] = useState(
@@ -43,8 +38,9 @@ function CustomerCartpage() {
 
   const onFinish = () => {
     dispatch({ type: "showLoading" });
+    
     cartItemsCustomer.forEach((item) => {
-      console.log(item);
+      console.log(item.additionalDetails)
       axios
         .post("/api/bills/bill-order", {
           table: tableID,
@@ -54,6 +50,7 @@ function CustomerCartpage() {
           Idrestaurant: Idrestaurant,
           price: Number(item.price),
           quantity: Number(item.quantity),
+          details:item.additionalDetails
         })
         .then(() => { })
         .catch(() => {
@@ -176,6 +173,7 @@ function CustomerCartpage() {
                   <Typography sx={{ color: "#888", fontSize: "16px" }}>
                     {item.additionalDetails}
                   </Typography>
+                  
                 )}
               </Typography>
               <Typography sx={{ color: "#888", fontSize: "16px" }}>

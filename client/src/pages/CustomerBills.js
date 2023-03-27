@@ -7,9 +7,10 @@ import { useDispatch } from "react-redux";
 import { useCallback } from "react";
 import { Card, CardContent, Typography, Button } from "@mui/material";
 import Divider from "@mui/material/Divider";
-
+import { useNavigate } from "react-router-dom";
 function CustomerBills() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     //ข้อมูล order
     const [orderData, setOrderData] = useState([]);
     const [restaurantId, setRestaurantId] = useState(null);
@@ -17,6 +18,8 @@ function CustomerBills() {
     const { search } = useLocation();
     const queryParams = new URLSearchParams(search);
     const tableID = queryParams.get("tableID");
+    const uniqueTableID = queryParams.get("uniqueTableID");
+    
     const cartItemsCustomer = useSelector(
         (state) => state.rootReducer.cartItemsCustomer
     );
@@ -81,6 +84,12 @@ function CustomerBills() {
     useEffect(() => {
       getAllTable()
     }, []);
+
+    function goToFinished() {
+        const newLink = `/Customerfinished?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${restaurantId}`;
+        navigate(newLink);
+      }
+
     function CheckBills() {
       const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getIdrestaurant);
       if (callStaffTables.length > 0) {
@@ -93,6 +102,7 @@ function CustomerBills() {
             .catch(() => { });
         });
       }
+      goToFinished()
     }
 
     return (

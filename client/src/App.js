@@ -9,6 +9,7 @@ import CustomerHomepage from './pages/CustomersHomepage';
 import CustomerCartpage from './pages/CustomerCartpage';
 import CustomerOrder from './pages/CustomerOrder';
 import CustomerBills from './pages/CustomerBills';
+import Customerfinished from './pages/Customerfinished';
 import LoginRestaurant from './pages/LoginRestaurant';
 import ProfileRestaurant from './pages/ProfileRestaurant';
 import Tablerestaurant from './pages/Tablerestaurant';
@@ -20,6 +21,7 @@ import Table from './pages/Table';
 import { useParams } from 'react-router-dom';
 import { Navigate } from "react-router-dom";
 import RegisterRestaurant from './pages/RegisterRestaurant';
+
 function App() {
   return (
     <div className="App">
@@ -33,6 +35,7 @@ function App() {
           <Route path='/CustomersHomepage' element={<CustomerHomepage />} />
           <Route path='/CustomerCartpage' element={<CustomerCartpage />} />
           <Route path='/CustomerOrder' element={<CustomerOrder />} />
+          <Route path='/Customerfinished' element={<Customerfinished />} />
           <Route path='/CustomerBills' element={<CustomerBills />} />
           <Route path='/RegisterRestaurant' element={<RegisterRestaurant />} />
           <Route path='/LoginRestaurant' element={<LoginRestaurant />} />

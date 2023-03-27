@@ -48,7 +48,7 @@ function Kitchen() {
   //   stockData.push(Number(item.stock))
   //   console.log(stockData)
   // })
-
+ 
   useEffect(() => {
     getAllorder();
     getAllItems();
@@ -70,27 +70,20 @@ function Kitchen() {
       });
 
       orderData.forEach((item) => {
-        const stockData = []
         itemsData.forEach((i) => {
-          console.log(item.ObjectIdItem )
-          console.log(record.ObjectIdItem)
-          if (item.ObjectIdItem === record.ObjectIdItem && i._id === item.ObjectIdItem) {
-            console.log(item.quantity)
-            console.log(i.stock)
+          if (item.order === record.order && item.IDrestaurant === getIdrestaurant && item.table === record.table) {
+            const updatedStock = Number(i.stock) - Number(item.quantity)
             axios
-            .post("/api/menuitems/edit-item", {itemId : item.ObjectIdItem , stock : Number(i.stock) - Number(item.quantity)})
-            .then((response) => {
-              dispatch({ type: "hideLoading" });
-              getAllItems()
-            })
-            .catch((error) => {
-              dispatch({ type: "hideLoading" });
-              message.success('Somthing went wrong')
-              console.log(error);
-            });
+              .post("/api/menuitems/edit-item-stock", { itemId: i._id, stock: updatedStock })
+              .then((response) => {
+                getAllItems()
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           }
         })
-    })
+      })
   };
 
   const cancelOrder = (record) => {
@@ -132,7 +125,7 @@ function Kitchen() {
     },
     {
       title: 'เพิ่มเติม',
-      dataIndex: 'detail',
+      dataIndex: 'details',
       width: '25%',
     },
     {

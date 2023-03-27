@@ -108,32 +108,48 @@ function Tablerestaurant() {
   //get table avtive
   // const getStatusTable = JSON.parse(localStorage.getItem('pop-table'));
   //const [statusTable, setStatusTable] = useState([]);
-
+  const [statusTable, setStatusTable] = useState([]);
   // const getStatusOrder = JSON.parse(localStorage.getItem('pop-table-Order'));
   const [statusTableOrder, setStatusTableOrder] = useState([])
   //console.log(statusTable)
 
   //function สำหรับเปลี่ยนสีปุ่มเมื่อกด add หรือ มีออเดอร์ และเปลี่ยนเป็นสีเขียวเมื่อเสร็จแล้ว
-  function getTableColor(tableNumber, Idrestaurant, table, statusTableOrder) {
-    const isTableOccupied = table.some(item => item.table === tableNumber && item.IDrestaurant === Idrestaurant);
-    const isTableBeingPrepared = statusTableOrder.some(item => item.table === tableNumber && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ"));
-    const isTableCompletedOrCancelled = statusTableOrder.some(item => item.table === tableNumber && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก"));
-
-    if (isTableOccupied || isTableBeingPrepared) {
-      return '#3672f4';
-    } else if (isTableCompletedOrCancelled) {
-      return 'green';
-    } else {
-      return '';
-    }
-  }
-  const A1Color = getTableColor('A1', Idrestaurant, table, statusTableOrder);
-  const A2Color = getTableColor('A2', Idrestaurant, table, statusTableOrder);
-  const A3Color = getTableColor('A3', Idrestaurant, table, statusTableOrder);
-  const B1Color = getTableColor('B1', Idrestaurant, table, statusTableOrder);
-  const B2Color = getTableColor('B2', Idrestaurant, table, statusTableOrder);
-  const B3Color = getTableColor('B3', Idrestaurant, table, statusTableOrder);
-
+  const A1Color = (statusTable.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
+    ? '#3672f4'
+    : (statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+      ? 'green'
+      : '';
+  const A2Color = (statusTable.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
+    ? '#3672f4'
+    : (statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+      ? 'green'
+      : '';
+  const A3Color = (statusTable.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
+    ? '#3672f4'
+    : (statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+      ? 'green'
+      : '';
+  const B1Color = (statusTable.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
+    ? '#3672f4'
+    : (statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+      ? 'green'
+      : '';
+  const B2Color = (statusTable.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
+    ? '#3672f4'
+    : (statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+      ? 'green'
+      : '';
+  const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ||
+    statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
+    ? '#3672f4'
+    : (statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+      ? 'green'
+      : '';
   //active Button
   const handleButtonClick = (buttonName) => {
     const tableColor = table.some(item => item.table === buttonName && item.IDrestaurant === Idrestaurant) ||
@@ -218,7 +234,7 @@ function Tablerestaurant() {
         setTable(response.data);
         //get from app
         localStorage.setItem('pop-table', JSON.stringify(response.data))
-        // setStatusTable(response.data)
+         setStatusTable(response.data)
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -226,19 +242,18 @@ function Tablerestaurant() {
       });
     dispatch({ type: "hideLoading" });
   }, [dispatch]);
-
+  console.log(activeTable)
   const cancelTable = () => {
     dispatch({ type: "showLoading" });
     setActiveTable(null)
     setCashAmount(0)
+    console.log(activeTable)
     if (orderData.length > 0) {
       for (let i = 0; i < orderData.length; i++) {
         axios
           .post("/api/tables/cancel-table", { tablenumber: activeTable, customerName: activeTable })
           .then((response) => {
             dispatch({ type: "hideLoading" });
-            getAllTable()
-            getAllorder()
 
             // Remove the cancelled table from the buttonLabels array
             setButtonLabels((prevLabels) => prevLabels.filter((label) => label !== activeTable));
@@ -255,8 +270,6 @@ function Tablerestaurant() {
         .post("/api/tables/cancel-table", { tablenumber: activeTable })
         .then((response) => {
           dispatch({ type: "hideLoading" });
-          getAllTable()
-          getAllorder()
         })
         .catch((error) => {
           dispatch({ type: "hideLoading" });
@@ -264,7 +277,8 @@ function Tablerestaurant() {
           console.log(error);
         });
     }
-
+    getAllTable()
+    getAllorder()
     message.success(`Table ${activeTable} cancel successfully`);
   };
   const onFinish = (values) => {
@@ -645,9 +659,9 @@ function Tablerestaurant() {
                   <Button
                     htmlType="submit"
                     type="primary"
-                    disabled={!showCashInput || cashAmount <= total}
+                    disabled={!showCashInput || cashAmount <= total  || total === "" }
                   >
-                    ยืนยัน
+                    ยืนยัน {total}
                   </Button>
                 )}
                 {paymentMode === "เงินโอน" && (

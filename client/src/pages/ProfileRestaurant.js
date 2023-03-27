@@ -119,40 +119,6 @@ function ProfileRestaurant() {
                   />
                 </form>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <Card >
-                  
-                  <Avatar
-                    className={classes.avatar}
-                    src={image ? URL.createObjectURL(image) : "https://via.placeholder.com/150"}
-                  />
-                  <input
-                    accept="image/*"
-                    id="icon-button-file"
-                    type="file"
-                    style={{ display: 'none' }}
-                    onChange={(e) => handleImageUpload(e.target.files[0])}
-                  />
-                  <label htmlFor="icon-button-file">
-                    <IconButton
-                      className={classes.icon}
-                      color="primary"
-                      aria-label="upload picture"
-                      component="span"
-                    >
-                      <PhotoCamera />
-                    </IconButton>
-                  </label>
-                  
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleImageRemove}
-                  >
-                    Remove Image
-                  </Button>
-                </Card>
-              </Grid>
             </Grid>
             <Button
               className={classes.button}

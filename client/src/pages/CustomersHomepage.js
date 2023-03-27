@@ -65,12 +65,8 @@ function CustomerHomepage() {
   useEffect(() => {
     getAllItems();
     getAllTable();
-    const queryParams = new URLSearchParams(search);
-    const expires = queryParams.get("expires");
-    if (expires && new Date(expires) < new Date()) {
-      setIsLinkExpired(true);
-    }
-  }, [getAllItems, getAllTable, search]);
+
+  }, [getAllItems, getAllTable]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -83,20 +79,18 @@ function CustomerHomepage() {
     const tableIds = [];
     table.forEach((item) => {
       if (item.IDrestaurant === restaurantId) {
+        const queryParams = new URLSearchParams(location.search);
+        const uniqueTableID = queryParams.get("uniqueTableID");
         tableIds.push(item.uniqueTableID);
+        if (tableIds.includes(uniqueTableID)) {
+          setIsLinkExpired(false);
+        } else {
+          setIsLinkExpired(true);
+    
+        }
       }
     });
 
-    const queryParams = new URLSearchParams(location.search);
-    const uniqueTableID = queryParams.get("uniqueTableID");
-    const expires = queryParams.get("expires");
-
-    if (tableIds.includes(uniqueTableID)) {
-      setIsLinkExpired(false);
-    } else {
-      setIsLinkExpired(true);
-
-    }
 
   }
 
@@ -121,8 +115,6 @@ function CustomerHomepage() {
         <div>This link has expired.</div>
       </CustomersLayout>
     );
-
-
   }
   return (
     <CustomersLayout>

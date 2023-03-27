@@ -198,14 +198,14 @@ const CustomersLayout = (props) => {
 
           </Grid>
         </Grid>
-      </Grid>
-      <Grid item flexGrow={1}>
+        <Grid item flexGrow={1}>
         <Grid
 
           sx={{ padding: "20px", backgroundColor: "#fff", minHeight: "80vh" }}
         >
           {props.children}
         </Grid>
+      </Grid>
       </Grid>
     </Grid>
   );

@@ -48,6 +48,14 @@ router.post("/edit-item", async (req, res) => {
     }
 });
 
+router.post("/edit-item-stock", async (req, res) => {
+    try {
+      await menuItemModel.findOneAndUpdate({ _id: req.body.itemId }, { stock: req.body.stock })
+      res.send('Item updated successfully')
+    } catch (error) {
+      res.status(400).json(error);
+    }
+  });
 router.post("/delete-item", async (req, res) => {
     try {
         await menuItemModel.findOneAndDelete({_id : req.body.itemId})
