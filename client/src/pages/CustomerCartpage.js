@@ -121,7 +121,54 @@ function CustomerCartpage() {
     return acc;
   }, []);
 
+  const [isLinkExpired, setIsLinkExpired] = useState(false);
+  const [table, setTable] = useState([]);
+  const getAllTable = useCallback(() => {
+    dispatch({ type: "showLoading" });
+    axios
+      .get("/api/tables/get-all-table")
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        setTable(response.data);
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        console.log(error);
+      });
+    dispatch({ type: "hideLoading" });
+  }, [dispatch]);
 
+  const checkLinkValidity = () => {
+    const tableIds = [];
+    table.forEach((item) => {
+      if (item.IDrestaurant === restaurantId) {
+        const queryParams = new URLSearchParams(location.search);
+        const uniqueTableID = queryParams.get("uniqueTableID");
+        tableIds.push(item.uniqueTableID);
+        if (tableIds.includes(uniqueTableID)) {
+          setIsLinkExpired(false);
+        } else {
+          setIsLinkExpired(true);
+    
+        }
+      }
+    });
+  }
+  
+  useEffect(() => {
+    checkLinkValidity();
+    getAllTable()
+  }, [table, restaurantId, location.search]);
+
+  if (isLinkExpired) {
+    // setIsLoading(true); 
+    return (
+      <h1>
+        <div>This link has expired.</div>
+      </h1>
+    );
+  }
+  
   return (
     <CustomersLayout>
       {cartItemsCustomer.length > 0 ? (

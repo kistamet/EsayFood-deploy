@@ -48,7 +48,7 @@ function Kitchen() {
   //   stockData.push(Number(item.stock))
   //   console.log(stockData)
   // })
- 
+
   useEffect(() => {
     getAllorder();
     getAllItems();
@@ -69,27 +69,27 @@ function Kitchen() {
         console.log(error);
       });
 
-      orderData.forEach((item) => {
-        itemsData.forEach((i) => {
-          if (item.order === record.order && item.IDrestaurant === getIdrestaurant && item.table === record.table) {
-            const updatedStock = Number(i.stock) - Number(item.quantity)
-            axios
-              .post("/api/menuitems/edit-item-stock", { itemId: i._id, stock: updatedStock })
-              .then((response) => {
-                getAllItems()
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-        })
+    orderData.forEach((item) => {
+      itemsData.forEach((i) => {
+        if (item.order === record.order && item.IDrestaurant === getIdrestaurant && item.table === record.table) {
+          const updatedStock = Number(i.stock) - Number(item.quantity)
+          axios
+            .post("/api/menuitems/edit-item-stock", { itemId: i._id, stock: updatedStock })
+            .then((response) => {
+              getAllItems()
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
       })
+    })
   };
 
   const cancelOrder = (record) => {
     dispatch({ type: "showLoading" });
     axios
-      .post("/api/bills/bill-order-update", { orderId: record._id, status: "ยกเลิก" , price : "0" })
+      .post("/api/bills/bill-order-update", { orderId: record._id, status: "ยกเลิก", price: "0" })
       .then((response) => {
         dispatch({ type: "hideLoading" });
         message.success(`${record.order} has been canceled`)
@@ -140,7 +140,7 @@ function Kitchen() {
           </div>
         );
       },
-    },  
+    },
     {
       title: 'จำนวน',
       dataIndex: 'quantity',
@@ -157,28 +157,40 @@ function Kitchen() {
       width: "425px",
 
       render: (id, record) => <div className="d-flex justify-content-end">
+      {record.status === 'ส่งครัว' &&
         <Button className="d-flex justify-content-end"
           type="primary"
           onClick={() => cookingdOrder(record)}
           style={{
-            marginLeft: "10px", fontSize: "15px", backgroundColor: "blue"
-          }}  >กำลังทำ</Button>
-
-
-        <Button className="d-flex justify-content-between"
+            marginLeft: "10px", fontSize: "15px", backgroundColor: "#026FD3"
+          }}
+        >
+          กำลังทำ
+        </Button>
+      }
+    
+      {record.status === 'กำลังทำ' &&
+        <Button className="d-flex justify-content-end"
           type="primary"
           onClick={() => alreadyOrder(record)}
           style={{
             fontSize: "15px", backgroundColor: "green", marginLeft: "10px",
-          }}  >เสร็จแล้ว</Button>
-
-        <Button className="d-flex justify-content-end"
-          type="primary"
-          onClick={() => cancelOrder(record)}
-          style={{
-            marginLeft: "10px", fontSize: "15px", backgroundColor: "red"
-          }}  >ยกเลิก</Button>
-      </div>
+          }}
+        >
+          เสร็จแล้ว
+        </Button>
+      }
+    
+      <Button className="d-flex justify-content-end"
+        type="primary"
+        onClick={() => cancelOrder(record)}
+        style={{
+          marginLeft: "10px", fontSize: "15px", backgroundColor: "red"
+        }}
+      >
+        ยกเลิก
+      </Button>
+    </div>
 
     },
   ];

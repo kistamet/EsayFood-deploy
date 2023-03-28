@@ -104,7 +104,38 @@ function CustomerBills() {
       }
       goToFinished()
     }
+    const [isLinkExpired, setIsLinkExpired] = useState(false);
 
+    const checkLinkValidity = () => {
+      const tableIds = [];
+      table.forEach((item) => {
+        if (item.IDrestaurant === restaurantId) {
+          const queryParams = new URLSearchParams(location.search);
+          const uniqueTableID = queryParams.get("uniqueTableID");
+          tableIds.push(item.uniqueTableID);
+          if (tableIds.includes(uniqueTableID)) {
+            setIsLinkExpired(false);
+          } else {
+            setIsLinkExpired(true);
+      
+          }
+        }
+      });
+    }
+    
+    useEffect(() => {
+      checkLinkValidity();
+      getAllTable()
+    }, [table, restaurantId, location.search]);
+  
+    if (isLinkExpired) {
+      // setIsLoading(true); 
+      return (
+        <h1>
+          <div>This link has expired.</div>
+        </h1>
+      );
+    }
     return (
         <CustomersLayout>
             <Typography sx={{ fontSize: "20px", justifyContent: "start !important" }}>

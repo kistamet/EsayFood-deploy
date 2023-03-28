@@ -32,7 +32,7 @@ function CustomerHomepage() {
   const uniqueTableID = queryParams.get("uniqueTableID");
   const tableID = queryParams.get("tableID");
   const itemCount = state.cartItemsCustomer.reduce((total, item) => total + item.quantity, 0);
-  console.log(itemCount)
+
   const getAllItems = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios
@@ -75,47 +75,44 @@ function CustomerHomepage() {
 
   }, [location.search]);
 
-  const checkLinkValidity = () => {
-    const tableIds = [];
-    table.forEach((item) => {
-      if (item.IDrestaurant === restaurantId) {
-        const queryParams = new URLSearchParams(location.search);
-        const uniqueTableID = queryParams.get("uniqueTableID");
-        tableIds.push(item.uniqueTableID);
-        if (tableIds.includes(uniqueTableID)) {
-          setIsLinkExpired(false);
-        } else {
-          setIsLinkExpired(true);
-    
-        }
-      }
-    });
-
-
-  }
-
   useEffect(() => {
     checkLinkValidity();
   }, [table, restaurantId, location.search]);
 
+const checkLinkValidity = () => {
+
+  const tableIds = [];
+  table.forEach((item) => {
+    if (item.IDrestaurant === restaurantId) {
+      const queryParams = new URLSearchParams(location.search);
+      const uniqueTableID = queryParams.get("uniqueTableID");
+      tableIds.push(item.uniqueTableID);
+      if (tableIds.includes(uniqueTableID)) {
+        setIsLinkExpired(false);
+      } else {
+        setIsLinkExpired(true);
+      }
+    }
+  });
+};
+
+  if (isLinkExpired) {
+    return (
+      <h1>
+        <div>This link has expired.</div>
+      </h1>
+    );
+  }
   function goToCartpage() {
     const newLink = `/CustomerCartpage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${restaurantId}`;
     navigate(newLink);
   }
 
-  console.log(state.cartItemsCustomer)
+
   const handleSearch = event => {
     setSearchTerm(event.target.value);
   };
 
-  if (isLinkExpired) {
-    // setIsLoading(true); 
-    return (
-      <CustomersLayout>
-        <div>This link has expired.</div>
-      </CustomersLayout>
-    );
-  }
   return (
     <CustomersLayout>
       <div>

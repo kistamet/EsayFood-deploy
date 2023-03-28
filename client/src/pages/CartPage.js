@@ -9,13 +9,17 @@ import {
 } from "@ant-design/icons";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
-
+import { v4 as uuidv4 } from 'uuid';
+import { useCallback } from 'react';
 function CartPage() {
   const { cartItems } = useSelector((state) => state.rootReducer);
   const [billChargeModal, setBillChargeModal] = useState(false)
   const [billChargeTakeaway, setBillChargeTakeaway] = useState(false)
   //ข้อมูล order
   // const [orderData, setOrderData] = useState([]);
+
+  //ตาราง table
+  const [table, setTable] = useState([]);
 
   //time
   const now = new Date();
@@ -54,6 +58,7 @@ function CartPage() {
       temp = temp + (item.price * item.quantity)
     })
     setSubTotal(temp)
+    getAllTable()
   }, [cartItems]);
 
   const onCustomerNameChangeTakeAway = (event) => {
@@ -65,8 +70,25 @@ function CartPage() {
     setIsButtonDisabledTable(value === undefined);
   };
 
+  const getAllTable = useCallback(() => {
+    dispatch({ type: "showLoading" });
+    axios
+      .get("/api/tables/get-all-table")
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        setTable(response.data);
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        console.log(error);
+      });
+    dispatch({ type: "hideLoading" });
+  }, [dispatch]);
+
   const onFinish = (values, record) => {
     dispatch({ type: "showLoading" });
+    const uniqueTableID = uuidv4(); // generate new unique ID
+    const newLink = `http://localhost:3000/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${values.table}&restaurantId=${Idrestaurant}`;
     cartItems.forEach((item) => {
       console.log(item)
       axios.post('/api/bills/bill-order', { ...values, ObjectIdItem: item._id, time: timenow, order: item.name, status: "ส่งครัว", Idrestaurant: Idrestaurant, price: Number(item.price), quantity: Number(item.quantity) })
@@ -77,6 +99,20 @@ function CartPage() {
     })
     dispatch({ type: "hideLoading" });
     message.success("Bill charged Successfully");
+    axios
+    .post("/api/tables/add-table", { ...values, Idrestaurant: Idrestaurant, status: "active", time: timenow, Link: newLink, uniqueTableID: uniqueTableID })
+    .then((response) => {
+      dispatch({ type: "hideLoading" });
+      message.success('Table add successfully')
+    })
+    .catch((error) => {
+      if (error.response.data.message === "Table already exists") {
+        message.error(`Table ${values.table} is already  `)
+      } else {
+        message.error("Something went wrong");
+      }
+      dispatch({ type: "hideLoading" });
+    });
     navigate('/Tablerestaurant')
   };
 

@@ -43,7 +43,7 @@ function ItemCustomers({ item }) {
     const [isModalEdit, setIsModalEdit] = useState(false);
 
 
-    console.log(state)
+   
     function addToCartCustomer() {
         dispatch({ type: 'addToCartCustomer', payload: { ...item, quantity: 1 } });
     }
@@ -66,7 +66,7 @@ function ItemCustomers({ item }) {
         (state) => state.rootReducer.cartItemsCustomer
     );
 
-    console.log(cartItemsCustomer)
+
     const itemCounts = cartItemsCustomer.reduce((counts, item) => {
         counts[item.name] = (counts[item.name] || 0) + item.quantity;
         return counts;
