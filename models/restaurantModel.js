@@ -4,6 +4,7 @@ const restaurantSchema = new mongoose.Schema({
     namerestaurant: { type: String, required: true } ,
     restaurantId: { type: String, required: true },
     restaurantpassword: { type: String, required: true },
+    address: { type: String, required: false },
     menu: [{
         menuId: { type: mongoose.Schema.Types.ObjectId, ref: 'menuitems' },
         name: String,

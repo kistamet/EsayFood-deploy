@@ -47,6 +47,7 @@ router.post("/RegisterRestaurant", async (req, res) => {
                 namerestaurant: req.body.namerestaurant,
                 restaurantId: req.body.restaurantId,
                 restaurantpassword: req.body.restaurantpassword,
+                address: " ",
                 verified: false
             });
             newuser.menu.push({
@@ -63,5 +64,12 @@ router.post("/RegisterRestaurant", async (req, res) => {
     }
 });
 
-
+router.post("/update-Address", async (req, res) => {
+    try {
+        await restaurantModel.findOneAndUpdate(req.body)
+        res.send('Update stock successfull')
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
 module.exports = router;

@@ -43,6 +43,9 @@
 .green-color-class {
   background-color: green;
 }
+.orange-color-class {
+  background-color: orange;
+}
 
 .blue-color-class {
   background-color: #3672f4;
@@ -78,6 +81,40 @@
   align-items: center;
   margin-right: 5px;
   margin-top: 15px;
+}
+.add-table-button {
+  font-size: 20px;
+  color: rgb(238, 238, 238);
+  background-color: #3672f4;
+  border: 2px solid rgb(0, 0, 0);
+  padding: 10px 10px;
+  width: 50%;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+  margin-top: 15px;
+}
+.delete-table-button{
+  font-size: 20px;
+  color: rgb(236, 226, 226);
+  background-color: #f70707;
+  border: 2px solid black;
+  padding: 10px 10px;
+  width: 50%;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+  margin-top: 15px;
+}
+.delete-table-button:hover {
+  background-color: rgb(225, 225, 233);
+  cursor: pointer;
 }
 @media screen and (max-width: 1500px) {
   .custom-button {

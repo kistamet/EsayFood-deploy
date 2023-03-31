@@ -68,15 +68,17 @@ function Kitchen() {
         message.error('Something went wrong')
         console.log(error);
       });
-
+      console.log(record)
+      console.log(getIdrestaurant)
     orderData.forEach((item) => {
       itemsData.forEach((i) => {
-        if (item.order === record.order && item.IDrestaurant === getIdrestaurant && item.table === record.table) {
+        if ((item.order && i.name) === record.order && (item.IDrestaurant && i.IDrestaurant) === getIdrestaurant && item.table === record.table) {
           const updatedStock = Number(i.stock) - Number(item.quantity)
           axios
             .post("/api/menuitems/edit-item-stock", { itemId: i._id, stock: updatedStock })
             .then((response) => {
               getAllItems()
+              console.log(i._id)
             })
             .catch((error) => {
               console.log(error);
@@ -85,7 +87,6 @@ function Kitchen() {
       })
     })
   };
-
   const cancelOrder = (record) => {
     dispatch({ type: "showLoading" });
     axios

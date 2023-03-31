@@ -87,6 +87,7 @@ function CartPage() {
 
   const onFinish = (values, record) => {
     dispatch({ type: "showLoading" });
+    console.log(values)
     const uniqueTableID = uuidv4(); // generate new unique ID
     const newLink = `http://localhost:3000/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${values.table}&restaurantId=${Idrestaurant}`;
     cartItems.forEach((item) => {
@@ -98,21 +99,22 @@ function CartPage() {
         })
     })
     dispatch({ type: "hideLoading" });
-    message.success("Bill charged Successfully");
+    // message.success("Bill charged Successfully");
     axios
-    .post("/api/tables/add-table", { ...values, Idrestaurant: Idrestaurant, status: "active", time: timenow, Link: newLink, uniqueTableID: uniqueTableID })
-    .then((response) => {
-      dispatch({ type: "hideLoading" });
-      message.success('Table add successfully')
-    })
-    .catch((error) => {
-      if (error.response.data.message === "Table already exists") {
-        message.error(`Table ${values.table} is already  `)
-      } else {
-        message.error("Something went wrong");
-      }
-      dispatch({ type: "hideLoading" });
-    });
+      .post("/api/tables/add-table-active", { ...values, table:values.table , Idrestaurant: Idrestaurant, status: "active", time: timenow, Link: newLink, uniqueTableID: uniqueTableID })
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        message.success('Table add successfully')
+        getAllTable()
+      })
+      .catch((error) => {
+        if (error.response.data.message === "Table already exists") {
+          message.error(`Table is already  `)
+        } else {
+          message.error("Something went wrong");
+        }
+        dispatch({ type: "hideLoading" });
+      });
     navigate('/Tablerestaurant')
   };
 
@@ -184,16 +186,19 @@ function CartPage() {
       </div>
 
       <Modal title={<Typography style={{ color: '#2e186a' }}>บันทึกไปยังโต๊ะ</Typography>} visible={billChargeModal} footer={false} onCancel={() => setBillChargeModal(false)}>
-
         <Form layout="vertical" onFinish={onFinish}>
           <Form.Item name='table' label='โต๊ะ'>
             <Select onChange={onTableChange}>
-              <Select.Option value='A1'>A1</Select.Option>
-              <Select.Option value='A2'>A2</Select.Option>
-              <Select.Option value='A3'>A3</Select.Option>
-              <Select.Option value='B1'>B1</Select.Option>
-              <Select.Option value='B2'>B2</Select.Option>
-              <Select.Option value='B3'>B3</Select.Option>
+              {table.map((table) => {
+                if (table.IDrestaurant === Idrestaurant) {
+                  return (
+                    <Select.Option key={table.table} value={table.table}>
+                      โต๊ะ {table.table}
+                    </Select.Option>
+                  )
+                }
+                return null;
+              })}
             </Select>
           </Form.Item>
           <div className="d-flex justify-content-end">

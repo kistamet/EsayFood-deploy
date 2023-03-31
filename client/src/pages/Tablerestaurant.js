@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DefaultLayout from '../components/DefaultLayout'
-import { Col, Row, Button, Card, Form, Modal, Descriptions, Table, message, Select, Input, Tabs } from 'antd';
+import { Col, Row, Button, Card, Form, Modal, Descriptions, Table, message, Select, Input, Tabs, Typography } from 'antd';
 import "../resourses/Table.css";
 import {
   PlusCircleOutlined,
@@ -22,6 +22,13 @@ function Tablerestaurant() {
   const [activeTab, setActiveTab] = useState('1');
   //Qrcode Modal
   const [isModalVisibleQrCode, setIsModalVisibleQrCode] = useState(false);
+  //Add table
+  const [isModalVisibleAddtable, setIsModalVisibleAddtable] = useState(false);
+  //Delete table
+  const [isModalVisibleDeletetable, setIsModalVisibleDeletetable] = useState(false);
+
+  const [isButtonDisabledModalOKaddTable, setIsButtonDisabledModalOKaddTable] = useState(true);
+
   //state ที่เอาไว้ให้ปุ่ม enable หรือ disable
   const [isButtonDisabledQrCode, setIsButtonDisabledQrCode] = useState(true);
   const [isButtonDisabledAdd, setIsButtonDisabledAdd] = useState(true);
@@ -48,6 +55,7 @@ function Tablerestaurant() {
     dispatch({ type: "showLoading" });
     setActiveTab(key);
     queryDataTakeAway();
+    queryDataTable()
     getAllorder()
     setIsButtonDisabledQrCode(true)
     if (key === "1") {
@@ -69,6 +77,19 @@ function Tablerestaurant() {
       }
     });
   };
+
+
+  //ข้อมูลของ Table
+  const [ButtonTable, setButtonTable] = useState([])
+  const queryDataTable = () => {
+    table.forEach((item) => {
+      if (item.IDrestaurant === Idrestaurant) {
+        const labels = [...new Set(table.filter((order) => order.table).map((order) => order.table))];
+        setButtonTable(labels);
+      }
+    });
+  };
+
 
   // table active
   const [activeTable, setActiveTable] = useState(null);
@@ -105,71 +126,28 @@ function Tablerestaurant() {
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
 
-  //get table avtive
-  // const getStatusTable = JSON.parse(localStorage.getItem('pop-table'));
-  //const [statusTable, setStatusTable] = useState([]);
-  const [statusTable, setStatusTable] = useState([]);
-  // const getStatusOrder = JSON.parse(localStorage.getItem('pop-table-Order'));
+
   const [statusTableOrder, setStatusTableOrder] = useState([])
   //console.log(statusTable)
 
-  //function สำหรับเปลี่ยนสีปุ่มเมื่อกด add หรือ มีออเดอร์ และเปลี่ยนเป็นสีเขียวเมื่อเสร็จแล้ว
-  const A1Color = (statusTable.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "A1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
-  const A2Color = (statusTable.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "A2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
-  const A3Color = (statusTable.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "A3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
-  const B1Color = (statusTable.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "B1" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
-  const B2Color = (statusTable.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "B2" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
-  const B3Color = (statusTable.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant) ||
-    statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ")))
-    ? '#3672f4'
-    : (statusTableOrder.some(item => item.table === "B3" && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
-      ? 'green'
-      : '';
-  //active Button
-  const handleButtonClick = (buttonName) => {
-    const tableColor = table.some(item => item.table === buttonName && item.IDrestaurant === Idrestaurant) ||
-      statusTableOrder.some(item => item.table === buttonName && item.IDrestaurant === Idrestaurant && (item.status === "ส่งครัว" || item.status === "กำลังทำ"))
+  const handleButtonClickTable = (label) => {
+    const tableColor = table.some(item => item.table === label && item.IDrestaurant === Idrestaurant && (item.status === "active")  ) ||
+      statusTableOrder.some(item => item.table === label && item.IDrestaurant === Idrestaurant && (item.status === "active"))
       ? '#3672f4'
-      : (statusTableOrder.some(item => item.table === buttonName && item.IDrestaurant === Idrestaurant && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก")))
+      : (statusTableOrder.some(item => item.table === label && item.IDrestaurant === Idrestaurant && (item.status === "active")))
         ? 'green'
         : '';
-
-    //Disabel ปุ่มเมื่อกดเข้ามาที่หน้า table
-    if (activeTable === buttonName) {
+        console.log(label)
+        console.log(statusTableOrder)
+    if (activeTable === label) {
       setActiveTable(null);
       setButtonColor('primary');
-      setIsButtonDisabledQrCode(true);
-      setIsButtonDisabledBills(true);
-      setIsButtonDisabledCancel(true);
+      setIsButtonDisabledBills(true)
+      setIsButtonDisabledCancel(true)
       setIsButtonDisabledAdd(true);
-      console.log("if 1")
+      setIsButtonDisabledQrCode(true);
     } else {
-      setActiveTable(buttonName);
+      setActiveTable(label);
       setButtonColor('danger');
       getAllTable();
       setIsButtonDisabledQrCode(false);
@@ -177,6 +155,7 @@ function Tablerestaurant() {
       setIsButtonDisabledCancel(false);
       setIsButtonDisabledAdd(false);
       console.log("else 1")
+      console.log(tableColor)
       if (tableColor === '#3672f4' || tableColor === 'green') {
         setIsButtonDisabledQrCode(false);
         setIsButtonDisabledBills(false);
@@ -215,7 +194,7 @@ function Tablerestaurant() {
         setOrderData(response.data)
         //get from app
         localStorage.setItem('pop-table-Order', JSON.stringify(response.data))
-        setStatusTableOrder(response.data)
+        // setStatusTableOrder(response.data)
 
       })
       .catch((error) => {
@@ -234,7 +213,7 @@ function Tablerestaurant() {
         setTable(response.data);
         //get from app
         localStorage.setItem('pop-table', JSON.stringify(response.data))
-         setStatusTable(response.data)
+        setStatusTableOrder(response.data)
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
@@ -242,16 +221,19 @@ function Tablerestaurant() {
       });
     dispatch({ type: "hideLoading" });
   }, [dispatch]);
-  console.log(activeTable)
+
+
   const cancelTable = () => {
     dispatch({ type: "showLoading" });
-    setActiveTable(null)
     setCashAmount(0)
-    console.log(activeTable)
+    setIsButtonDisabledBills(true)
+    setIsButtonDisabledCancel(true)
+    setIsButtonDisabledAdd(true);
+    setIsButtonDisabledQrCode(true);
     if (orderData.length > 0) {
       for (let i = 0; i < orderData.length; i++) {
         axios
-          .post("/api/tables/cancel-table", { tablenumber: activeTable, customerName: activeTable })
+          .post("/api/tables/cancel-table", { tablenumber: activeTable, customerName: activeTable, table: activeTable , Idrestaurant:Idrestaurant })
           .then((response) => {
             dispatch({ type: "hideLoading" });
 
@@ -263,11 +245,12 @@ function Tablerestaurant() {
             message.error('Something went wrong')
             console.log(error);
           });
-
+          getAllorder()
+          getAllTable()
       }
     } else if (table.length >= 0) {
       axios
-        .post("/api/tables/cancel-table", { tablenumber: activeTable })
+        .post("/api/tables/cancel-table", { table: activeTable ,Idrestaurant:Idrestaurant })
         .then((response) => {
           dispatch({ type: "hideLoading" });
         })
@@ -276,11 +259,16 @@ function Tablerestaurant() {
           message.error('Something went wrong')
           console.log(error);
         });
+        getAllorder()
+        getAllTable()
     }
-    getAllTable()
+    console.log(orderData)
+    setActiveTable(null)
     getAllorder()
+    getAllTable()
     message.success(`Table ${activeTable} cancel successfully`);
   };
+
   const onFinish = (values) => {
     const uniqueTableID = uuidv4(); // generate new unique ID
     const newLink = `http://localhost:3000/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${activeTable}&restaurantId=${Idrestaurant}`;
@@ -291,7 +279,7 @@ function Tablerestaurant() {
     setCashAmount(0)
     dispatch({ type: "showLoading" });
     axios
-      .post("/api/tables/add-table", { ...values, Idrestaurant: Idrestaurant, table: activeTable, status: "active", time: timenow, Link: newLink, uniqueTableID: uniqueTableID })
+      .post("/api/tables/add-table-active", { ...values, Idrestaurant: Idrestaurant, table: activeTable, status: "active", time: timenow, Link: newLink, uniqueTableID: uniqueTableID })
       .then((response) => {
         dispatch({ type: "hideLoading" });
         message.success('Table add successfully')
@@ -336,7 +324,6 @@ function Tablerestaurant() {
     } else if (hasTableNumber) {
       reqObject.kind = "table";
     }
-
     axios
       .post("/api/bills/charge-bill", reqObject)
       .then(() => {
@@ -348,10 +335,7 @@ function Tablerestaurant() {
 
     for (let i = 0; i < orderData.length; i++) {
       axios
-        .post("/api/tables/cancel-table", {
-          tablenumber: activeTable,
-          customerName: activeTable,
-        })
+      .post("/api/tables/cancel-table", { tablenumber: activeTable, customerName: activeTable, table: activeTable , Idrestaurant:Idrestaurant })
         .then((response) => {
           dispatch({ type: "hideLoading" });
           getAllTable();
@@ -375,8 +359,9 @@ function Tablerestaurant() {
     getAllorder()
     getAllTable()
   }, []);
-
-
+  useEffect(() => {
+    queryDataTable();
+  }, []);
   //import time from "table"
   const timeTable = table.find((i) => i.table === activeTable && i.IDrestaurant === getIdrestaurant)
   const timeTableButton = timeTable?.time
@@ -397,6 +382,13 @@ function Tablerestaurant() {
       getTimetable = dataTimetable[0]
       temp = temp + (item.price * item.quantity)
       dataOrdertable.push(item)
+    }
+  })
+
+  let dataTable = [];
+  table.forEach((item) => {
+    if (item.IDrestaurant === Idrestaurant) {
+      dataTable.push(item.table)
     }
   })
 
@@ -428,8 +420,44 @@ function Tablerestaurant() {
         setLink(item.Link);
       }
     });
-    // setLink(newLink);
   };
+
+  const handleAddTable = () => {
+    setIsModalVisibleAddtable(true);
+  };
+
+  const handleDeleteTable = () => {
+    setIsModalVisibleDeletetable(true);
+  };
+
+  const handleModalAddtableOk = (values) => {
+    setIsModalVisibleAddtable(false);
+    const uniqueTableID = uuidv4(); // generate new unique ID
+    const newLink = `http://localhost:3000/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${activeTable}&restaurantId=${Idrestaurant}`;
+    setIsButtonDisabledQrCode(false);
+    setIsButtonDisabledBills(false);
+    setIsButtonDisabledCancel(false);
+    setIsButtonDisabledAdd(true);
+    setCashAmount(0)
+    dispatch({ type: "showLoading" });
+    axios
+      .post("/api/tables/add-table", { Idrestaurant: Idrestaurant, table: values.table, status: "Non active", time: "", Link: "", uniqueTableID: "" })
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        message.success(`Table ${values.table} added successfully`);
+        getAllTable()
+      })
+      .catch((error) => {
+        if (error.response.data.message === "Table already exists") {
+          message.error(`Table ${values.table} is already  `)
+        } else {
+          message.error("Something went wrong");
+        }
+        dispatch({ type: "hideLoading" });
+      });
+  };
+
+
 
   const handleModalOk = () => {
     setIsModalVisibleQrCode(false); // hide the modal
@@ -440,6 +468,34 @@ function Tablerestaurant() {
     setLink("");
   };
 
+  const onTableNameChange = (event) => {
+    const { value } = event.target;
+    setIsButtonDisabledModalOKaddTable(value.length === 0);
+  };
+
+  const handleModalDeleteOk = () => {
+    setIsModalVisibleDeletetable(false);
+    setActiveTable(null)
+    console.log(activeTable)
+    dispatch({ type: "showLoading" });
+    axios
+      .post("/api/tables/Delete-table", { table: activeTable })
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        message.success(`Table ${activeTable} Delete successfully`);
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        message.success('Somthing went wrong')
+        console.log(error);
+      });
+    getAllTable()
+  }
+
+  const handleModalDeleteCancel = () => {
+    setIsModalVisibleDeletetable(false);
+  };
+
   return (
     <DefaultLayout>
       <Row>
@@ -447,30 +503,77 @@ function Tablerestaurant() {
           <Row gutter={16}>
 
             <Col span={22}  >
-
               <Tabs activeKey={activeTab} onChange={handleTabChange} >
                 <TabPane tab={<span style={{ fontSize: '20px' }}>โต๊ะอาหาร</span>} key="1">
-                  <div >
-                    <Button className={`${activeTable === 'A1' ? buttonColor : ''} button`} style={{ backgroundColor: A1Color }} onClick={() => handleButtonClick('A1')} >
-                      A1
-                    </Button>
-                    <Button className={`${activeTable === 'A2' ? buttonColor : ''} button`} style={{ backgroundColor: A2Color }} onClick={() => handleButtonClick('A2')}  >
-                      A2
-                    </Button>
-                    <Button className={`${activeTable === 'A3' ? buttonColor : ''} button`} style={{ backgroundColor: A3Color }} onClick={() => handleButtonClick('A3')}>
-                      A3
-                    </Button>
-                    <Button className={`${activeTable === 'B1' ? buttonColor : ''} button`} style={{ backgroundColor: B1Color }} onClick={() => handleButtonClick('B1')}>
-                      B1
-                    </Button>
-                    <Button className={`${activeTable === 'B2' ? buttonColor : ''} button`} style={{ backgroundColor: B2Color }} onClick={() => handleButtonClick('B2')}>
-                      B2
-                    </Button>
-                    <Button className={`${activeTable === 'B3' ? buttonColor : ''} button`} style={{ backgroundColor: B3Color }} onClick={() => handleButtonClick('B3')}>
-                      B3
-                    </Button>
+                  <div>
+
+                    <div style={{ display: 'flex' }}>
+                      {/* ButtonAddTable */}
+                      <Button className="add-table-button" onClick={handleAddTable}>
+                        <span>เพิ่มโต๊ะ</span>
+                      </Button>
+
+                      <Modal title={<Typography style={{ color: '#2e186a' }}>เพิ่มโต๊ะอาหาร</Typography>} visible={isModalVisibleAddtable} footer={false} onCancel={() => setIsModalVisibleAddtable(false)}>
+                        <Form layout="vertical" onFinish={handleModalAddtableOk}>
+                          <Form.Item name='table' label='โต๊ะ' rules={[{ required: true, message: 'โปรดกรอกชื่อโต๊ะ' }]}>
+                            <Input onChange={onTableNameChange} />
+                          </Form.Item>
+                          <div className="d-flex justify-content-end">
+                            <Button htmlType="submit" type="primary" disabled={isButtonDisabledModalOKaddTable} >
+                              บันทึก
+                            </Button>
+                          </div>
+                        </Form>
+                      </Modal>
+
+
+                      {/* ButtonDeleteTable */}
+                      <Button
+                        className="delete-table-button"
+                        onClick={handleDeleteTable}
+                        disabled={table.length === 0 || activeTable === null}
+                      >
+                        <span>ลบโต๊ะ</span>
+                      </Button>
+                    </div>
+
+                    <Modal title={<Typography style={{ color: '#2e186a' }}>ลบโต๊ะอาหาร</Typography>} visible={isModalVisibleDeletetable} footer={false} onCancel={() => setIsModalVisibleDeletetable(false)}>
+                      <Form
+                        layout="vertical" >
+                        <div class="d-flex justify-content-around">
+                          <h3>คุณแน่ใจว่าต้องการลบ โต๊ะ {activeTable}</h3>
+                        </div>
+                        <div class="d-flex justify-content-around">
+                          <Button htmlType="submit" type="primary" onClick={handleModalDeleteOk} >ยืนยัน</Button>
+                          <Button htmlType="submit" type="primary" style={{ backgroundColor: "red" }} onClick={handleModalDeleteCancel} >ยกเลิก</Button>
+                        </div>
+                      </Form>
+                    </Modal>
+
+                    {dataTable.map((label, index) => {
+                      const completedColor = orderData.some((item) => item.table === label && (item.status === "กำลังทำ" || item.status === "ส่งครัว") && item.IDrestaurant === Idrestaurant)
+                        ? "green-color-class"
+                        : orderData.some((item) => item.table === label && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก") && item.IDrestaurant === Idrestaurant)
+                          ? "green-color-class"
+                          : table.some((item) => item.table === label && item.status === "active" && item.IDrestaurant === Idrestaurant)
+                            ? "blue-color-class"
+                            : "";
+
+                      return (
+                        <Button
+                          onClick={() => handleButtonClickTable(label)}
+                          className={`${activeTable === label ? buttonColor : ''} button ${completedColor}`}
+                          key={index}
+                          style={{ fontSize: '30px' }}
+                        >
+                          {label}
+                        </Button>
+
+                      );
+                    })}
                   </div>
                 </TabPane>
+
                 <TabPane tab={<span style={{ fontSize: '20px' }}>Take away</span>} key="2">
                   <div>
                     {buttonLabels.map((label, index) => {
@@ -659,7 +762,7 @@ function Tablerestaurant() {
                   <Button
                     htmlType="submit"
                     type="primary"
-                    disabled={!showCashInput || cashAmount <= total  || total === "" }
+                    disabled={!showCashInput || cashAmount < total || total === ""}
                   >
                     ยืนยัน {total}
                   </Button>

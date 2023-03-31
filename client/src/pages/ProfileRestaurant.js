@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import DefaultLayout from '../components/DefaultLayout';
 import { Button, TextField, Grid, Typography, Card, CardContent, Divider, IconButton, Avatar } from '@material-ui/core';
+import { message } from 'antd';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import axios from "axios";
-
+import { useDispatch } from "react-redux";
+import { useCallback } from 'react';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -39,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ProfileRestaurant() {
+  const dispatch = useDispatch()
   const namerestaurant = JSON.parse(localStorage.getItem("pop-name-restaurant"));
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
@@ -46,23 +49,31 @@ function ProfileRestaurant() {
   const [image, setImage] = useState(null);
   const classes = useStyles();
 
-  const updateRestaurant = async () => {
-    setLoading(true);
-    const formData = new FormData();
-    if (image) {
-      formData.append('image', image);
-    }
-    formData.append('name', namerestaurant);
-    formData.append('id', Idrestaurant);
+  const [username, setUsername] = useState(namerestaurant);
+  const [userId, setUserId] = useState(Idrestaurant);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [address, setAddress] = useState('');
 
-    try {
-      const res = await axios.put(`http://localhost:3001/restaurant/${Idrestaurant}`, formData);
-      console.log(res.data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const UpdateAddress = () => {
+    const formData = {
+      namerestaurant: username,
+      restaurantId: userId,
+      restaurantpassword: password,
+      address: address
+    };
+  
+    dispatch({ type: "showLoading" });
+  
+    axios.post('/api/restaurants/update-Address', formData)
+      .then(() => {
+        dispatch({ type: "hideLoading" });
+        message.success("Address updated successfully");
+      })
+      .catch(() => {
+        dispatch({ type: "hideLoading" });
+        message.error("Something went wrong");
+      });
   };
 
   const handleImageUpload = (file) => {
@@ -93,29 +104,28 @@ function ProfileRestaurant() {
                     fullWidth
                     label="Username"
                     defaultValue={namerestaurant}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                   <TextField
                     className={classes.input}
                     fullWidth
                     label="User Id"
                     defaultValue={Idrestaurant}
-                    onChange={(e) => setIdrestaurant(e.target.value)}
+                    onChange={(e) => setUserId(e.target.value)}
                   />
                   <TextField
                     className={classes.input}
                     fullWidth
                     label="Password"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
-                  <TextField
-                    className={classes.input}
-                    fullWidth
-                    label="Confirm Password"
-                  />
+
                   <TextField
                     className={classes.input}
                     fullWidth
                     label="Address"
                     required
+                    onChange={(e) => setAddress(e.target.value)}
                   />
                 </form>
               </Grid>
@@ -125,7 +135,7 @@ function ProfileRestaurant() {
               variant="contained"
               color="primary"
               disabled={loading}
-              onClick={updateRestaurant}
+              onClick={UpdateAddress}
             >
               {loading ? "Loading..." : "Save Changes"}
             </Button>

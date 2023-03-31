@@ -1,31 +1,32 @@
-import React from "react";
-import axios from "axios";
+import DefaultLayout from "../components/DefaultLayout";
+import React, { useEffect, useState } from "react";
+import { Modal, Form, Input , Button} from 'antd';
+function Table() {
 
-function Table({ imageSrc }) {
-  const handleSaveImage = async () => {
-    // Fetch the image data as a Blob
-    const response = await fetch(imageSrc);
-    const imageData = await response.blob();
+  const [buttons, setButtons] = useState([]);
 
-    // Create a FormData object and add the image data
-    const formData = new FormData();
-    formData.append("image", imageData, "image.jpg");
-
-    // Send a POST request to your server with the FormData
-    try {
-      const response = await axios.post("/api/images", formData);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleAddButton = (label) => {
+    setButtons([...buttons, { label }]);
   };
-
   return (
-    <div>
-      <img src={imageSrc} alt="" />
-      <button onClick={handleSaveImage}>Save Image</button>
-    </div>
-  );
+    <DefaultLayout>
+    <Form>
+      {buttons.map((button, index) => (
+        <Button key={index}>{button.label}</Button>
+      ))}
+
+      <Form.Item label="Name">
+        <Input
+          placeholder="Enter button name"
+          onPressEnter={(event) => {
+            handleAddButton(event.target.value);
+            event.target.value = "";
+          }}
+        />
+      </Form.Item>
+    </Form>
+  </DefaultLayout>
+  )
 }
 
-export default Table;
+export default Table
