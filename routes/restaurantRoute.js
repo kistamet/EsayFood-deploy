@@ -63,13 +63,28 @@ router.post("/RegisterRestaurant", async (req, res) => {
         res.status(400).json(error);
     }
 });
-
-router.post("/update-Address", async (req, res) => {
+router.get("/get-all-Restaurant", async (req, res) => {
     try {
-        await restaurantModel.findOneAndUpdate(req.body)
-        res.send('Update stock successfull')
+        const Restaurant = await restaurantModel.find();
+        res.send(Restaurant);
     } catch (error) {
         res.status(400).json(error);
     }
 });
+
+router.post("/update-data-Restaurant", async (req, res) => {
+    try {
+      const filter = { restaurantId: req.body.restaurantId };
+      const update = {
+        namerestaurant: req.body.namerestaurant,
+        restaurantpassword: req.body.restaurantpassword,
+        address: req.body.address
+      };
+  
+      await restaurantModel.findOneAndUpdate(filter, update);
+      res.send('Update successful');
+    } catch (error) {
+      res.status(400).json(error);
+    }
+  });
 module.exports = router;

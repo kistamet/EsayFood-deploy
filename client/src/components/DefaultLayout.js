@@ -249,6 +249,8 @@ const DefaultLayout = (props) => {
             localStorage.removeItem('pos-user')
             localStorage.removeItem('pop-name-restaurant')
             localStorage.removeItem('pop-name-restaurant2')
+            localStorage.removeItem('pop-address')
+            
             navigate('/LoginRestaurant')
           }}>
             Logout

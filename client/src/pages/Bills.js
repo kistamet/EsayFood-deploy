@@ -15,9 +15,12 @@ function Bills() {
   const [selectedBill, setSelectedBill] = useState(null)
   const componentRef = useRef();
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
+  const getNamerestaurant = JSON.parse(localStorage.getItem("pop-name-restaurant"));
+  const getAddress = JSON.parse(localStorage.getItem("pop-address"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
   const dispatch = useDispatch();
 
+  console.log(getAddress)
   const getAllBills = useCallback(() => {
     dispatch({ type: "showLoading" });
     axios
@@ -134,13 +137,11 @@ function Bills() {
             <div className="d-flex justify-content-between bill-header pb-2">
               <div>
                 <h5>
-                  <b>{Idrestaurant}</b>
+                  <b>{getNamerestaurant}</b>
                 </h5>
               </div>
-              <div>
-                <p>327 ถ. มหาไชย</p>
-                <p>แขวงสำราญราษฎร์ เขตพระนคร</p>
-                <p>กรุงเทพมหานคร 10200</p>
+              <div style={{ width: "50%" }}>
+                <p>{getAddress}</p>
               </div>
             </div>
             <div className="bill-customer-details my-2 dotted-border">
@@ -156,9 +157,9 @@ function Bills() {
                 {selectedBill.createdAt.toString().substring(0, 10)} {" "}
                 {(selectedBill.timecheckbills.toString().substring(0, 5))}
               </p>
-              <p >
+              {/* <p >
                 <b>Cashier</b> :{" "}
-              </p>
+              </p> */}
             </div>
             <Table dataSource={selectedBill.cartItems} columns={cartcolumns} pagination={false} />
 

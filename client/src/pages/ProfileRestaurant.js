@@ -14,11 +14,11 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     backgroundColor: 'rgb(211, 198, 198)',
-    width: 800,
+    width: 700,
     margin: 'auto',
   },
   title: {
-    textAlign: 'center',
+    textAlign: 'start',
     marginBottom: theme.spacing(2),
   },
   form: {
@@ -27,14 +27,7 @@ const useStyles = makeStyles((theme) => ({
   input: {
     marginBottom: theme.spacing(2),
   },
-  avatar: {
-    width: theme.spacing(20),
-    height: theme.spacing(20),
-    margin: 'auto',
-  },
-  icon: {
-    color: theme.palette.primary.main,
-  },
+
   button: {
     marginTop: theme.spacing(2),
   },
@@ -48,24 +41,24 @@ function ProfileRestaurant() {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
   const classes = useStyles();
+  const getAddress = JSON.parse(localStorage.getItem("pop-address"));
 
   const [username, setUsername] = useState(namerestaurant);
   const [userId, setUserId] = useState(Idrestaurant);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [address, setAddress] = useState('');
-
+  console.log(userId)
   const UpdateAddress = () => {
+    localStorage.setItem('pop-name-restaurant', JSON.stringify(username))
+    localStorage.setItem('pop-address', JSON.stringify(address ? address : getAddress))
     const formData = {
       namerestaurant: username,
       restaurantId: userId,
-      restaurantpassword: password,
-      address: address
+      address: address ? address : getAddress
     };
-  
+
     dispatch({ type: "showLoading" });
-  
-    axios.post('/api/restaurants/update-Address', formData)
+
+    axios.post('/api/restaurants/update-data-Restaurant', formData)
       .then(() => {
         dispatch({ type: "hideLoading" });
         message.success("Address updated successfully");
@@ -75,6 +68,7 @@ function ProfileRestaurant() {
         message.error("Something went wrong");
       });
   };
+
 
   const handleImageUpload = (file) => {
     setImage(file);
@@ -97,34 +91,22 @@ function ProfileRestaurant() {
               Edit Profile
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <form className={classes.form}>
+              <Grid item xs={12} sm={6} className={classes.layout}>
+                <form className={classes.form} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                   <TextField
                     className={classes.input}
                     fullWidth
-                    label="Username"
+                    label="ชื่อร้านอาหาร"
                     defaultValue={namerestaurant}
                     onChange={(e) => setUsername(e.target.value)}
                   />
                   <TextField
                     className={classes.input}
+                    multiline
                     fullWidth
-                    label="User Id"
-                    defaultValue={Idrestaurant}
-                    onChange={(e) => setUserId(e.target.value)}
-                  />
-                  <TextField
-                    className={classes.input}
-                    fullWidth
-                    label="Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-
-                  <TextField
-                    className={classes.input}
-                    fullWidth
-                    label="Address"
+                    label="ที่อยู่"
                     required
+                    defaultValue={getAddress}
                     onChange={(e) => setAddress(e.target.value)}
                   />
                 </form>
