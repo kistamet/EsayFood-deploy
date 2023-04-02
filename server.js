@@ -10,7 +10,7 @@ const restaurantRoute = require("./routes/restaurantRoute");
 const queueRoute = require("./routes/queueRoute");
 const tableRoute = require("./routes/tableRoute");
 
-
+app.use('/uploads', express.static('uploads'))
 app.use('/api/menuitems/', menuItemsRoute);
 app.use("/api/users/", userRoute);
 app.use("/api/bills/", billsRoute);
