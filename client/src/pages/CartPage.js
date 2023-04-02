@@ -116,6 +116,7 @@ function CartPage() {
         dispatch({ type: "hideLoading" });
       });
     navigate('/Tablerestaurant')
+
   };
 
   const onFinishtakeaway = (values, record) => {

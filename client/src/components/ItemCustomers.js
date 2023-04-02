@@ -43,7 +43,7 @@ function ItemCustomers({ item }) {
     const [isModalEdit, setIsModalEdit] = useState(false);
 
 
-   
+
     function addToCartCustomer() {
         dispatch({ type: 'addToCartCustomer', payload: { ...item, quantity: 1 } });
     }
@@ -85,10 +85,14 @@ function ItemCustomers({ item }) {
         dispatch({ type: 'addToCartCustomer', payload });
         setIsModalEdit(false);
     };
+
     return (
         <Card className={classes.card}>
+
             <div onClick={() => console.log("Image clicked")}>
-                <CardMedia className={classes.media} image={item.image} title={item.name} />
+                <CardMedia className={classes.media} title={item.name} >
+                    <img src={item.image} alt="" height="100" width="100" />
+                </CardMedia>
             </div>
             <CardContent className={classes.content}>
                 <Typography variant="subtitle1" className={classes.name}>
@@ -162,7 +166,7 @@ function ItemCustomers({ item }) {
                     >
                         บันทึก
                     </Button>
-                    <Button className="cancel-btn" 
+                    <Button className="cancel-btn"
                         variant="contained"
                         onClick={() => setIsModalEdit(false)}
                         sx={{ backgroundColor: "#fff !important", }}

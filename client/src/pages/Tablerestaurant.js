@@ -552,7 +552,7 @@ function Tablerestaurant() {
 
                     {dataTable.map((label, index) => {
                       const completedColor = orderData.some((item) => item.table === label && (item.status === "กำลังทำ" || item.status === "ส่งครัว") && item.IDrestaurant === Idrestaurant)
-                        ? "green-color-class"
+                        ? "blue-color-class"
                         : orderData.some((item) => item.table === label && (item.status === "เสร็จแล้ว" || item.status === "ยกเลิก") && item.IDrestaurant === Idrestaurant)
                           ? "green-color-class"
                           : table.some((item) => item.table === label && item.status === "active" && item.IDrestaurant === Idrestaurant)
