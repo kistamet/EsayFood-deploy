@@ -19,7 +19,7 @@ function CustomerBills() {
     const queryParams = new URLSearchParams(search);
     const tableID = queryParams.get("tableID");
     const uniqueTableID = queryParams.get("uniqueTableID");
-    
+    console.log("12")
     const cartItemsCustomer = useSelector(
         (state) => state.rootReducer.cartItemsCustomer
     );
@@ -126,7 +126,7 @@ function CustomerBills() {
     useEffect(() => {
       checkLinkValidity();
       getAllTable()
-    }, [table, restaurantId, location.search]);
+    }, []);
   
     if (isLinkExpired) {
       // setIsLoading(true); 

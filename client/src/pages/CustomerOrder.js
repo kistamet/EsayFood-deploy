@@ -16,6 +16,7 @@ function CustomerOrder() {
     const [cartItemsCustomer, setCartItemsCustomer] = useState(
         useSelector((state) => state.rootReducer.cartItemsCustomer)
     );
+    
     const [restaurantId, setRestaurantId] = useState(null);
     const { search } = useLocation();
     const queryParams = new URLSearchParams(search);
