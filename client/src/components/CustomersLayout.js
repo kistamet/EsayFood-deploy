@@ -13,6 +13,7 @@ import axios from "axios";
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import Avatar from '@mui/material/Avatar';
 import { green, pink } from '@mui/material/colors';
+import { notification } from 'antd';
 
 const CustomersLayout = (props) => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const CustomersLayout = (props) => {
 
   const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
-
+  const getrestaurantId = queryParams.get("restaurantId");
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -71,8 +72,10 @@ const CustomersLayout = (props) => {
     getAllTable();
   }, []);
   const Notifunction = (type) => {
+    setOpenModal(false);
+    NotifunctionAlert(type)
     if (type === 'callstaff') {
-      const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getIdrestaurant);
+      const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getrestaurantId);
       if (callStaffTables.length > 0) {
         dispatch({ type: 'INCREMENT_COUNT' });
         localStorage.setItem('count', count + 1);
@@ -85,7 +88,7 @@ const CustomersLayout = (props) => {
       }
       getAllTable();
     } else if (type === 'checkbills') {
-      const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getIdrestaurant);
+      const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getrestaurantId);
       if (callStaffTables.length > 0) {
         dispatch({ type: 'INCREMENT_COUNT' });
         localStorage.setItem('count', count + 1);
@@ -115,14 +118,34 @@ const CustomersLayout = (props) => {
       window.history.back();
     }
   }
-
-
   let title;
   if (location.pathname === "/CustomerBills") {
     title = "ชำระเงิน";
   } else if (location.pathname === "/CustomerCartpage") {
     title = "ตะกร้าสินค้า";
   }
+  const NotifunctionAlert = (action) => {
+    if (action === "callstaff") {
+      notification.open({
+        message: 'เรียกพนักงาน',
+        description: 'พนักงานกำลังเดินทางมายังโต๊ะของคุณ',
+        onClick: () => {
+          console.log('Notification Clicked!');
+        },
+        className: 'custom-notification' // add custom class here
+      });
+    } else if (action === "checkbills") {
+      notification.open({
+        message: 'ชำระเงิน',
+        description: 'กรุณาชำระเงินที่เคาน์เตอร์',
+        onClick: () => {
+          console.log('Notification Clicked!');
+        },
+        className: 'custom-notification' // add custom class here
+      });
+    }
+  }
+
   return (
 
     <Grid container spacing={5}>

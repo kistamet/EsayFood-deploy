@@ -12,6 +12,8 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { Modal } from "@mui/material";
 import { TextField, InputAdornment } from "@material-ui/core";
 import "../resourses/CustomersLayout.css";
+import "../resourses/CustomersItems.css";
+
 const useStyles = makeStyles((theme) => ({
     card: {
         display: 'flex',
@@ -81,7 +83,7 @@ function ItemCustomers({ item }) {
     };
 
     const handleSave = () => {
-        const payload = { ...item, quantity: 1, additionalDetails };
+        const payload = { ...item, quantity: 0, additionalDetails };
         dispatch({ type: 'addToCartCustomer', payload });
         setIsModalEdit(false);
     };
@@ -169,7 +171,6 @@ function ItemCustomers({ item }) {
                     <Button className="cancel-btn"
                         variant="contained"
                         onClick={() => setIsModalEdit(false)}
-                        sx={{ backgroundColor: "#fff !important", }}
                     >
                         ยกเลิก
                     </Button>
