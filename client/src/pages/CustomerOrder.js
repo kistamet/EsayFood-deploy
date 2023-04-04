@@ -21,7 +21,7 @@ function CustomerOrder() {
     const queryParams = new URLSearchParams(search);
     const uniqueTableID = queryParams.get("uniqueTableID");
     const tableID = queryParams.get("tableID");
-
+    const getrestaurantId = queryParams.get("restaurantId");
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const id = params.get("restaurantId");
@@ -30,11 +30,11 @@ function CustomerOrder() {
     }, [location.search]);
 
     function goToCart() {
-        const newLink = `/CustomerCartpage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${restaurantId}`;
+        const newLink = `/CustomerCartpage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${getrestaurantId}`;
         navigate(newLink);
       }
       function goToHome() {
-        const newLink = `/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${restaurantId}`;
+        const newLink = `/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${tableID}&restaurantId=${getrestaurantId}`;
         navigate(newLink);
       }
       const [isLinkExpired, setIsLinkExpired] = useState(false);
@@ -56,7 +56,7 @@ function CustomerOrder() {
       const checkLinkValidity = () => {
         const tableIds = [];
         table.forEach((item) => {
-          if (item.IDrestaurant === restaurantId) {
+          if (item.IDrestaurant === getrestaurantId) {
             const queryParams = new URLSearchParams(location.search);
             const uniqueTableID = queryParams.get("uniqueTableID");
             tableIds.push(item.uniqueTableID);
@@ -72,7 +72,7 @@ function CustomerOrder() {
       useEffect(() => {
         checkLinkValidity();
         getAllTable()
-      }, [table, restaurantId, location.search]);
+      }, [table, getrestaurantId, location.search]);
     
       if (isLinkExpired) {
         // setIsLoading(true); 
