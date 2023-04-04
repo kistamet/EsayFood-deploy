@@ -31,7 +31,7 @@ function App() {
           <Route path='/items' element={<ProtectedRoute><Items /></ProtectedRoute>} />
           <Route path='/cart' element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
           <Route path='/register' element={<Register />} />
-          <Route path='/login' element={<Login />} />
+          <Route path='/login' element={<LoginRestaurant />} />
           <Route path='/CustomersHomepage' element={<CustomerHomepage />} />
           <Route path='/CustomerCartpage' element={<CustomerCartpage />} />
           <Route path='/CustomerOrder' element={<CustomerOrder />} />
@@ -47,7 +47,7 @@ function App() {
           <Route path='/HistoryRestaurant' element={<HistoryRestaurant />} />
           <Route path='/table' element={<Table />} />
 
-          <Route path='/' element={<Login />} />
+          <Route path='/' element={<LoginRestaurant />} />
         </Routes>
       </BrowserRouter>
 
