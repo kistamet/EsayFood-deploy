@@ -19,7 +19,8 @@ function CustomerBills() {
     const queryParams = new URLSearchParams(search);
     const tableID = queryParams.get("tableID");
     const uniqueTableID = queryParams.get("uniqueTableID");
-    console.log("12")
+    const getIDrestaurant = queryParams.get("restaurantId");
+
     const cartItemsCustomer = useSelector(
         (state) => state.rootReducer.cartItemsCustomer
     );
@@ -91,7 +92,7 @@ function CustomerBills() {
       }
 
     function CheckBills() {
-      const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getIdrestaurant);
+      const callStaffTables = table.filter(item => item.table === tableID && item.IDrestaurant === getIDrestaurant);
       if (callStaffTables.length > 0) {
         dispatch({ type: 'INCREMENT_COUNT' });
         localStorage.setItem('count', count + 1);
