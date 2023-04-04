@@ -28,13 +28,15 @@ function CustomerCartpage() {
   const queryParams = new URLSearchParams(search);
   const uniqueTableID = queryParams.get("uniqueTableID");
   const tableID = queryParams.get("tableID");
+  const getIDrestaurant = queryParams.get("restaurantId");
   //ข้อมูล order
   const [orderData, setOrderData] = useState([]);
   const now = new Date();
   const timenow = now.toLocaleTimeString();
 
-  const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
-  const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
+
+  // const getIdrestaurant = JSON.parse(localStorage.getItem("pop-ID-restaurant"));
+  // const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
 
   const onFinish = () => {
     dispatch({ type: "showLoading" });
@@ -47,7 +49,7 @@ function CustomerCartpage() {
           time: timenow,
           order: item.name,
           status: "ส่งครัว",
-          Idrestaurant: Idrestaurant,
+          Idrestaurant: getIDrestaurant,
           price: Number(item.price),
           quantity: Number(item.quantity),
           details:item.additionalDetails
@@ -158,7 +160,7 @@ function CustomerCartpage() {
   useEffect(() => {
     checkLinkValidity();
     getAllTable()
-  }, [table, restaurantId, location.search]);
+  }, []);
 
   if (isLinkExpired) {
     // setIsLoading(true); 

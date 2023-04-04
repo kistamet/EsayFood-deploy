@@ -5,6 +5,12 @@ import { useDispatch } from "react-redux";
 import { useCallback } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import {
+  LoadingOutlined
+} from "@ant-design/icons";
+import PlaylistAddCheckCircleIcon from '@mui/icons-material/PlaylistAddCheckCircle';
+
 function Customerfinished() {
   const [restaurantId, setRestaurantId] = useState(null);
   const [isLinkExpired, setIsLinkExpired] = useState(false);
@@ -40,7 +46,7 @@ function Customerfinished() {
           setIsLinkExpired(false);
         } else {
           setIsLinkExpired(true);
-    
+
         }
       }
     });
@@ -56,35 +62,41 @@ function Customerfinished() {
     setRestaurantId(id);
 
   }, [location.search]);
-  
-  if (isLinkExpired) { 
+
+  if (isLinkExpired) {
     return (
       <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <Card
-        sx={{
-          backgroundColor: "#0DFFD3",
-          fontSize: "20px",
-          width: "80%",
-          maxWidth: "500px",
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          flexDirection: "column",
         }}
       >
-        <CardContent>
-        <Typography sx={{ fontSize: "20px", textAlign: "center"  }}>
-            ทำการชำระเงินเสร็จสิ้น
-          </Typography>
-          <Typography sx={{ fontSize: "20px", textAlign: "center" }}>
-            ขอบคุณที่ใช้บริการ
-          </Typography>
-        </CardContent>
-      </Card>
-    </div>
+        <div style={{ marginBottom: "20px" }}>
+          <PlaylistAddCheckCircleIcon style={{ fontSize: "150px" ,color: "#0DFFD3" }} />
+        </div>
+        <div style={{ marginLeft: "20px" }}>
+          <Card
+            sx={{
+              backgroundColor: "#0DFFD3",
+              fontSize: "20px",
+              width: "100%",
+              maxWidth: "500px",
+            }}
+          >
+            <CardContent>
+              <Typography sx={{ fontSize: "20px", textAlign: "center" }}>
+                ทำการชำระเงินเสร็จสิ้น
+              </Typography>
+              <Typography sx={{ fontSize: "20px", textAlign: "center" }}>
+                ขอบคุณที่ใช้บริการ
+              </Typography>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     );
   }
   return (
@@ -94,11 +106,15 @@ function Customerfinished() {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
+        flexDirection: "column",
       }}
     >
+      <div style={{ marginBottom: "20px" }}>
+        <LoadingOutlined style={{ fontSize: "100px" }} />
+      </div>
       <Card
         sx={{
-          backgroundColor: "#DDFF0D",
+          backgroundColor: "#EEA414",
           fontSize: "20px",
           width: "80%",
           maxWidth: "500px",
@@ -106,12 +122,12 @@ function Customerfinished() {
       >
         <CardContent>
           <Typography sx={{ fontSize: "20px", textAlign: "center" }}>
-            กรุณารอพนักงานสักครู่
+            <HourglassEmptyIcon /> กรุณารอพนักงานสักครู่
           </Typography>
         </CardContent>
       </Card>
     </div>
   );
-}
+};
 
 export default Customerfinished;
