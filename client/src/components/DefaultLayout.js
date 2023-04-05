@@ -98,12 +98,25 @@ const DefaultLayout = (props) => {
     getAllTable()
   }, []);
 
+
   let countNoti = 0
   table.forEach((item) => {
     if (item.IDrestaurant === Idrestaurant && (item.status === "callstaff" || item.status === "checkbills"  ) ) {
       countNoti += 1
     }
   });
+  
+  // const [checkcountNoti, setCheckCountNoti] = useState(0);
+  // const checkNoti = () => {
+  //   console.log("456")
+  //   table.forEach((item) => {
+  //     if (item.IDrestaurant === Idrestaurant && (item.status === "callstaff" || item.status === "checkbills"  ) ) {
+  //       setCheckCountNoti(prevCount => prevCount + 1);
+  //     }
+  //   });
+  // }
+
+
 
   function handleCheck(table) {
     axios
@@ -116,6 +129,7 @@ const DefaultLayout = (props) => {
       });
     getAllTable()
   }
+
 
   function handleClose() {
     // logic to handle the "Close" action

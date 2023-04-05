@@ -131,7 +131,7 @@ function Tablerestaurant() {
   //console.log(statusTable)
 
   const handleButtonClickTable = (label) => {
-    const tableColor = table.some(item => item.table === label && item.IDrestaurant === Idrestaurant && (item.status === "active")  ) ||
+    const tableColor = table.some(item => item.table === label && item.IDrestaurant === Idrestaurant && (item.status === "active"  )  ) ||
       statusTableOrder.some(item => item.table === label && item.IDrestaurant === Idrestaurant && (item.status === "active"))
       ? '#3672f4'
       : (statusTableOrder.some(item => item.table === label && item.IDrestaurant === Idrestaurant && (item.status === "active")))

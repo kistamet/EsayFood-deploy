@@ -20,25 +20,30 @@ function Customerfinished() {
   const queryParams = new URLSearchParams(search);
   const uniqueTableID = queryParams.get("uniqueTableID");
   const tableID = queryParams.get("tableID");
+  const getIDrestaurant = queryParams.get("restaurantId");
   const location = useLocation();
-  const getAllTable = useCallback(() => {
+  const getAllTable = (() => {
+    console.log("123")
     dispatch({ type: "showLoading" });
     axios
       .get("/api/tables/get-all-table")
       .then((response) => {
         dispatch({ type: "hideLoading" });
         setTable(response.data);
+      
       })
       .catch((error) => {
         dispatch({ type: "hideLoading" });
         console.log(error);
       });
     dispatch({ type: "hideLoading" });
-  }, [dispatch]);
+  });
+
   const checkLinkValidity = () => {
+    console.log("456")
     const tableIds = [];
     table.forEach((item) => {
-      if (item.IDrestaurant === restaurantId) {
+      if (item.IDrestaurant === getIDrestaurant) {
         const queryParams = new URLSearchParams(location.search);
         const uniqueTableID = queryParams.get("uniqueTableID");
         tableIds.push(item.uniqueTableID);
@@ -52,9 +57,12 @@ function Customerfinished() {
     });
   }
   useEffect(() => {
+    getAllTable();
+  }, []);
+  
+  useEffect(() => {
     checkLinkValidity();
-    getAllTable()
-  }, [table, restaurantId, location.search]);
+  }, [table]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
