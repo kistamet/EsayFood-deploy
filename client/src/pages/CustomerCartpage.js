@@ -158,10 +158,12 @@ function CustomerCartpage() {
   }
 
   useEffect(() => {
-    checkLinkValidity();
     getAllTable()
   }, []);
-
+  useEffect(() => {
+    checkLinkValidity();
+  }, [table]);
+  console.log(isLinkExpired)
   if (isLinkExpired) {
     // setIsLoading(true); 
     return (

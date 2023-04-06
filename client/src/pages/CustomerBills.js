@@ -126,9 +126,11 @@ function CustomerBills() {
     }
     
     useEffect(() => {
-      checkLinkValidity();
-      getAllTable()
-    }, []);
+        getAllTable()
+      }, []);
+      useEffect(() => {
+        checkLinkValidity();
+      }, [table]);
   
     if (isLinkExpired) {
       // setIsLoading(true); 

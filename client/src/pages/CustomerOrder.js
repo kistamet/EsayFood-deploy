@@ -71,9 +71,11 @@ function CustomerOrder() {
         });
       }
       useEffect(() => {
-        checkLinkValidity();
         getAllTable()
-      }, [table, getrestaurantId, location.search]);
+      }, []);
+      useEffect(() => {
+        checkLinkValidity();
+      }, [table]);
     
       if (isLinkExpired) {
         // setIsLoading(true); 
