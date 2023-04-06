@@ -102,6 +102,7 @@ function Items() {
     formData.append('stock', values.stock);
     formData.append('image', image); // Pass the image file to the FormData object
     formData.append('Idrestaurant', Idrestaurant);
+    console.log(image)
 
     if (editingItem === null) {
       axios

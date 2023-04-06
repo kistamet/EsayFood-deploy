@@ -39,9 +39,6 @@
       "last 1 safari version"
     ]
   },
-  "transform": {
-    "\\.js$": "<rootDir>/node_modules/babel-jest"
-  },
   "proxy": "http://localhost:5000",
   "devDependencies": {
     "@babel/core": "^7.21.4",
