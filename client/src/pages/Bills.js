@@ -261,8 +261,8 @@ function Bills() {
             <div className="dotted-border"></div>
 
             <div className="text-center">
-              <p>Thanks</p>
-              <p>Visit Again :)</p>
+              <p>Thank you</p>
+              <p>Come again soon :)</p>
             </div>
           </div>
 

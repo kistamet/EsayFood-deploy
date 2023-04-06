@@ -10,7 +10,6 @@ import {
   LoadingOutlined
 } from "@ant-design/icons";
 import PlaylistAddCheckCircleIcon from '@mui/icons-material/PlaylistAddCheckCircle';
-
 function Customerfinished() {
   const [restaurantId, setRestaurantId] = useState(null);
   const [isLinkExpired, setIsLinkExpired] = useState(false);
@@ -108,6 +107,7 @@ function Customerfinished() {
     );
   }
   return (
+    <CustomersLayout>
     <div
       style={{
         display: "flex",
@@ -135,6 +135,7 @@ function Customerfinished() {
         </CardContent>
       </Card>
     </div>
+    </CustomersLayout>
   );
 };
 
