@@ -271,7 +271,7 @@ function Tablerestaurant() {
 
   const onFinish = (values) => {
     const uniqueTableID = uuidv4(); // generate new unique ID
-    const newLink = `https://easyfood.onrender.com/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${activeTable}&restaurantId=${Idrestaurant}`;
+    const newLink = `http://localhost:3000/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${activeTable}&restaurantId=${Idrestaurant}`;
     setIsButtonDisabledQrCode(false);
     setIsButtonDisabledBills(false);
     setIsButtonDisabledCancel(false);
@@ -433,7 +433,7 @@ function Tablerestaurant() {
   const handleModalAddtableOk = (values) => {
     setIsModalVisibleAddtable(false);
     const uniqueTableID = uuidv4(); // generate new unique ID
-    const newLink = `https://easyfood.onrender.com/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${activeTable}&restaurantId=${Idrestaurant}`;
+    const newLink = `http://localhost:3000/CustomersHomepage?uniqueTableID=${uniqueTableID}&tableID=${activeTable}&restaurantId=${Idrestaurant}`;
     setIsButtonDisabledQrCode(false);
     setIsButtonDisabledBills(false);
     setIsButtonDisabledCancel(false);
@@ -774,6 +774,7 @@ function Tablerestaurant() {
                   >
                     ยืนยัน
                   </Button>
+                  
                 )}
               </div>
             </div>

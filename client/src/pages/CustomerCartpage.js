@@ -40,7 +40,7 @@ function CustomerCartpage() {
 
   const onFinish = () => {
     dispatch({ type: "showLoading" });
-    
+
     cartItemsCustomer.forEach((item) => {
       console.log(item.additionalDetails)
       axios
@@ -52,7 +52,7 @@ function CustomerCartpage() {
           Idrestaurant: getIDrestaurant,
           price: Number(item.price),
           quantity: Number(item.quantity),
-          details:item.additionalDetails
+          details: item.additionalDetails
         })
         .then(() => { })
         .catch(() => {
@@ -143,7 +143,7 @@ function CustomerCartpage() {
   const checkLinkValidity = () => {
     const tableIds = [];
     table.forEach((item) => {
-      if (item.IDrestaurant === restaurantId) {
+      if (item.IDrestaurant === getIDrestaurant) {
         const queryParams = new URLSearchParams(location.search);
         const uniqueTableID = queryParams.get("uniqueTableID");
         tableIds.push(item.uniqueTableID);
@@ -151,12 +151,12 @@ function CustomerCartpage() {
           setIsLinkExpired(false);
         } else {
           setIsLinkExpired(true);
-    
+
         }
       }
     });
   }
-  
+
   useEffect(() => {
     checkLinkValidity();
     getAllTable()
@@ -170,7 +170,7 @@ function CustomerCartpage() {
       </h1>
     );
   }
-  
+
   return (
     <CustomersLayout>
       {cartItemsCustomer.length > 0 ? (
@@ -222,7 +222,7 @@ function CustomerCartpage() {
                   <Typography sx={{ color: "#888", fontSize: "16px" }}>
                     {item.additionalDetails}
                   </Typography>
-                  
+
                 )}
               </Typography>
               <Typography sx={{ color: "#888", fontSize: "16px" }}>
@@ -343,13 +343,13 @@ function CustomerCartpage() {
             รายการ
           </Button>
         )}
-        {cartItemsCustomer.length === 0 && (
+        {cartItemsCustomer.length === 0 && mergedItems.length > 0 && (
           <Button
             onClick={goToBills}
             variant="contained"
             className="pay-button"
           >
-            ชำระเงิน
+            ชำระเงิน 
           </Button>
         )}
       </Card>

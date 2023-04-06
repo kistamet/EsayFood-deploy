@@ -14,6 +14,8 @@ import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import Avatar from '@mui/material/Avatar';
 import { green, pink } from '@mui/material/colors';
 import { notification } from 'antd';
+import MenuIcon from '@mui/icons-material/Menu';
+import ListIcon from '@mui/icons-material/List';
 
 const CustomersLayout = (props) => {
   const navigate = useNavigate();
@@ -186,7 +188,7 @@ const CustomersLayout = (props) => {
             <Avatar sx={{ bgcolor: pink[500], marginLeft: "20px" }}>
               <Badge onClick={handleOpenModal}>
                 <Badge >
-                  <Notifications sx={{ fontSize: "30px !important", color: "white !important" }} />
+                  <ListIcon sx={{ fontSize: "30px !important", color: "white !important" }} />
                 </Badge>
               </Badge>
             </Avatar>

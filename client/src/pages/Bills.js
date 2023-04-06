@@ -8,7 +8,7 @@ import {
 import { useCallback } from 'react';
 import { Button, Table, Modal, Divider } from "antd";
 import { useReactToPrint } from 'react-to-print';
-
+import { Card, CardContent, Typography } from "@mui/material";
 function Bills() {
   const [billsData, setBillsData] = useState([]);
   const [printBillModalVisibility, setPrintBillModalVisibilty] = useState(false);
@@ -20,6 +20,9 @@ function Bills() {
   const [Idrestaurant, setIdrestaurant] = useState(getIdrestaurant);
   const dispatch = useDispatch();
 
+  const [selectedTable, setSelectedTable] = useState(null)
+
+  const [orderData, setOrderData] = useState([]);
   console.log(getAddress)
   const getAllBills = useCallback(() => {
     dispatch({ type: "showLoading" });
@@ -35,6 +38,21 @@ function Bills() {
       });
   }, [dispatch]);
 
+
+  const getAllorder = useCallback(() => {
+    dispatch({ type: "showLoading" });
+    axios
+        .get("/api/bills/get-all-order")
+        .then((response) => {
+            dispatch({ type: "hideLoading" });
+            setOrderData(response.data);
+        })
+        .catch((error) => {
+            dispatch({ type: "hideLoading" });
+            console.log(error);
+        });
+    dispatch({ type: "hideLoading" });
+}, []);
   const columns = [
     {
       title: "ชื่อลูกค้า / โต๊ะ",
@@ -65,6 +83,7 @@ function Bills() {
           <EyeOutlined className="mx-2" onClick={() => {
             setSelectedBill(record)
             setPrintBillModalVisibilty(true)
+            setSelectedTable(record.table)
           }} />
         </div>
       ),
@@ -110,10 +129,12 @@ function Bills() {
 
   useEffect(() => {
     getAllBills();
-  }, [getAllBills]);
+    getAllorder()
+  }, []);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
 
 
   return (
@@ -161,10 +182,69 @@ function Bills() {
                 <b>Cashier</b> :{" "}
               </p> */}
             </div>
-            <Table dataSource={selectedBill.cartItems} columns={cartcolumns} pagination={false} />
-
+            <Card
+                sx={{
+                    boxShadow: "none",
+                    border: "1px solid #ddd",
+                    width: "100%",
+                    justifyContent: "start !important",
+                }}
+            >
+                {selectedBill.cartItems.map((item, index) => (
+                    <CardContent
+                        key={index}
+                        sx={{
+                            display: "flex ",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            padding: "8px",
+                        }}
+                    >
+                        <Typography sx={{ fontSize: "16px" }}>x{item.quantity}</Typography>
+                        <Typography
+                            sx={{
+                                fontWeight: "bold",
+                                fontSize: "18px",
+                                flex: "1",
+                                marginLeft: "10px !important",
+                            }}
+                        >
+                            {item.order}
+                        </Typography>
+                        <Typography sx={{ color: "#888", fontSize: "16px" }}>
+                            ฿
+                            {item.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                        </Typography>
+                    </CardContent>
+                ))}
+                <Divider color="primary" />
+                <CardContent
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "8px",
+                    }}
+                >
+                    <Typography sx={{ fontSize: "18px", fontWeight: "bold" }}>
+                        Total
+                    </Typography>
+                    <Typography sx={{ fontSize: "18px", fontWeight: "bold" }}>
+                        ฿
+                        {selectedBill.cartItems
+                            .reduce(
+                                (total, item) =>
+                                    item.table === selectedTable && item.IDrestaurant === getIdrestaurant
+                                        ? total + item.price * item.quantity
+                                        : total,
+                                0
+                            )
+                            .toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                    </Typography>
+                </CardContent>
+            </Card>
             <div className="dotted-border">
-              <p><b>Total</b> : {selectedBill.subTotal}</p>
+
               {selectedBill.paymentMode === 'เงินสด' ? (
                 <>
                   <p><b>รับเงิน</b> : {selectedBill.cash}</p>
