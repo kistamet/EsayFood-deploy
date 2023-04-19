@@ -520,14 +520,12 @@ function Tablerestaurant() {
                           </Form.Item>
                           <div className="d-flex justify-content-end">
                             <Button htmlType="submit" type="primary" disabled={isButtonDisabledModalOKaddTable} >
-                              บันทึก
+                              บันทึก!
                             </Button>
                           </div>
                         </Form>
                       </Modal>
 
-
-                      {/* ButtonDeleteTable */}
                       <Button
                         className="delete-table-button"
                         onClick={handleDeleteTable}
